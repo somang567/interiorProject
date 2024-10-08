@@ -2,9 +2,29 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
+<th:block layout:fragment="css">
+  <style>
+    .main_img {
+      display: flex;
+      overflow: hidden;
+      width: 100vw;
+    }
+
+    .main_img img {
+      position: absolute;
+      object-fit: cover;
+      width: 100vw;
+      height: 70%;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</th:block>
   <div layout:fragment="content">
-    <img th:src="@{/img/main1.jpg}" alt="메인이미지1">
-    <img th:src="@{/img/main2.jpg}" alt="메인이미지2">
-    <img th:src="@{/img/main3.jpg}" alt="메인이미지3">
+    <div class="main_img">
+      <img th:src="@{/img/main1.jpg}" alt="메인이미지1">
+      <img th:src="@{/img/main2.jpg}" alt="메인이미지2">
+      <img th:src="@{/img/main3.jpg}" alt="메인이미지3">
+    </div>
   </div>
 </html>
