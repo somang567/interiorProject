@@ -3,27 +3,41 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 <th:block layout:fragment="css">
-  <style>
-    .main_img {
-      display: flex;
-      overflow: hidden;
-      width: 100vw;
-    }
+    <style>
+        .main_img {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 50%;
+        }
 
-    .main_img img {
-      object-fit: cover;
-      width: 100vw;
-      height: 70%;
-      top: 0;
-      left: 0;
-    }
-  </style>
+        .main_slide {
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .main_slide ul {
+            width: 300vw;
+            font-size: 0;
+            margin: 0;
+            padding-left: 0;
+        }
+
+        .main_slide > ul > li {
+            display: inline-block;
+            font-size: 0;
+        }
+    </style>
 </th:block>
-  <div layout:fragment="content">
+<div layout:fragment="content">
     <div class="main_img">
-      <img th:src="@{/img/main1.jpg}" alt="메인이미지1">
-      <img th:src="@{/img/main2.jpg}" alt="메인이미지2">
-      <img th:src="@{/img/main3.jpg}" alt="메인이미지3">
+        <div class="main_slide">
+            <ul>
+                <li><img th:src="@{/img/main1.jpg}" alt="메인이미지1"></li>
+                <li><img th:src="@{/img/main2.jpg}" alt="메인이미지2"></li>
+                <li><img th:src="@{/img/main3.jpg}" alt="메인이미지3"></li>
+            </ul>
+        </div>
     </div>
-  </div>
+</div>
 </html>
