@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성</title>
+    <link th:href="@{/css/write.css}" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<!--<form action="board2.html" method="post">-->
+    <table>
+        <tr>
+            <td>
+                <h2>게시글 작성</h2>
+            </td>
+        </tr>
+        <tr>
+            <td class="header">제목</td>
+        </tr>
+        <tr>
+            <td><input type="text" placeholder="제목을 입력하세요" name="title"></td>
+        </tr>
+        <tr>
+            <td class="header">내용</td>
+        </tr>
+        <tr>
+            <td><textarea placeholder="내용을 입력하세요" name="detail"></textarea></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="등록" onclick="alert('게시글 작성 완료!')"></td>
+        </tr>
+    </table>
+<!--</form>-->
+</body>
+
+</html>
