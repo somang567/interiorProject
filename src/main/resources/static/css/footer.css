@@ -1,0 +1,36 @@
+@import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
+
+body {
+  margin: 0;
+}
+
+.bg {
+  background-color: #6e6e6e;
+  height: 160px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+}
+
+.footer img {
+  width: 170px;
+  height: 70px;
+  padding-top: 30px;
+}
+
+.name {
+  display: flex;
+  padding-top: 3%;
+  font-family: 'NanumSquare';
+}
+
+.name h4 h5{
+  text-align: center;
+  line-height: 55px;
+}
+
+hr {
+  width: 90vw;
+}
