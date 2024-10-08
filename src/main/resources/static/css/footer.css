@@ -5,7 +5,7 @@ body {
 }
 
 .bg {
-  background-color: #6e6e6e;
+  background-color: #9e9e9e;
   height: 160px;
 }
 
@@ -15,22 +15,42 @@ body {
 }
 
 .footer img {
-  width: 170px;
-  height: 70px;
+  width: 200px;
   padding-top: 30px;
+  padding-right: 30px;
 }
 
 .name {
   display: flex;
   padding-top: 3%;
+  bottom: 0;
   font-family: 'NanumSquare';
 }
 
-.name h4 h5{
+.name>h4, h5 {
   text-align: center;
   line-height: 55px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: black;
+}
+.name> h4 {
+  font-size: 20px;
+}
+.name> h5 {
+  font-size: 14px;
+  margin-top: 30px;
+  margin-bottom: 0;
 }
 
 hr {
   width: 90vw;
+  margin: auto;
+  margin-top: 10px;
+  color: white;
+  opacity: 0.1;
+  border: 0;
+  border-top: solid;
 }
