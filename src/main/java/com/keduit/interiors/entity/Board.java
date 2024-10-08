@@ -13,7 +13,8 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
     private String title;
     private String content;
+    private String author;
 }

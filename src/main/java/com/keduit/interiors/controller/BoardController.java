@@ -24,4 +24,9 @@ public class BoardController {
         boardService.write(board);
         return ""; // 게시글 목록 만들어서 넣어야함. BoardList
     }
+
+    @GetMapping("/board/list")
+    public String boardList() {
+        return "boards/list";
+    }
 }
