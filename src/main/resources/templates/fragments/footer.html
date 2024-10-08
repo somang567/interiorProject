@@ -1,3 +1,128 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block layout:fragment="css">
+    <style>
+        @import url('https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css');
+
+        body {
+          margin: 0;
+        }
+
+        .header {
+          background-color: #c5baaa;
+          opacity: 70%;
+          display: flex;
+          width: 100%;
+          height: 100px;
+          align-items: center;
+          justify-content: space-between;
+          font-family: 'S-CoreDream-3Light';
+          font-size: 20px;
+          font-weight: bold;
+          text-align: center;
+        }
+
+        .header>img {
+          margin-left: 10px;
+          width: 15vw;
+          max-height: 90px;
+        }
+        .header button {
+          margin-right: 60px;
+          padding: 10px 20px;
+          text-align: center;
+          text-transform: uppercase;
+          transition: 0.5s;
+          background-size: 200% auto;
+          color: black;
+          border-radius: 10px;
+          background: none;
+          border: 0;
+        }
+
+        .header-ul {
+          list-style: none;
+          padding: 0;
+          display: flex;
+          width: 50%;
+          justify-content: space-around;
+          height: 70%;
+          align-items: center;
+          position: relative;
+        }
+        .header-ul li {
+          width: 23%;
+        }
+        .header-ul li a {
+          color: black;
+          font-style: normal;
+          text-decoration: none;
+          height: 100%;
+          display: block;
+        }
+        .SMN_effect-49 a {
+          transition: 0.35s;
+        }
+
+        .btn_login img{
+          margin: 0;
+          width: 30px;
+          height: 30px;
+        }
+
+        a:hover, a:focus {
+          outline: none;
+        }
+
+        .SMN_effect-49 a {
+          transition: 0.35s;
+        }
+
+        .SMN_effect-49 a:hover {
+          text-shadow: 0 0 15px #FFFFFF;
+          -moz-transform: scale(1.05);
+          -webkit-transform: scale(1.05);
+          -o-transform: scale(1.05);
+          transform: scale(1.05);
+        }
+
+        .btn_login:hover {
+          transition: 1s;
+        }
+        .drop {
+          display: none;
+        }
+        .dropdown {
+          list-style: none;
+          padding: 0 0 0 5%;
+          position: absolute;
+        }
+        .dropdown li {
+          font-size: 15px;
+          width: 100%;
+          text-align: left;
+        }
+
+        .header-ul li:hover .dropdown {
+          display: block;
+        }
+
+    </style>
+</th:block>
+<footer class="bg">
+    <div>
+        <div class="footer">
+            <img src="/header/logo.png" alt="">
+            <div class="name">
+                <h5>팀장 | </h5>&nbsp;
+                <h4>박민영 </h4>&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="name">
+                <h5>팀원 | </h5>&nbsp;
+                <h4>임진아, 정종민, 김태준, 이기련</h4>
+            </div>
+        </div>
+        <hr>
+    </div>
+</footer>
 </html>
