@@ -3,26 +3,25 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <link th:href="@{/css/header.css}" rel="stylesheet">
 
-<div class="header" th:fragment="header">
-    <img th:src="@{/img/logo.png}" alt="로고" class="logo">
-    <ul class="header-ul menu align-center expanded text-center SMN_effect-49">
-      <li>
-        <a href="#">상품찾기</a>W
-      </li>
-      <li><a href="#">팁&매거진</a></li>
-      <li><a href="#">업체찾기</a></li>
-      <li>
-        <a href="#">게시판</a>
-        <div class="drop">
-          <ul class="dropdown">
-            <li>셀프인테리어</li>
-            <li>업체홍보</li>
-            <li>질문</li>
-          </ul>
-        </div>
-      </li>
-    </ul>
-    <button class="btn_login"><img src="/header/login.png" alt="로그인"></button>
+    <div class="header" th:fragment="header">
+        <img th:src="@{/img/logo.png}" alt="로고" class="logo">
+        <ul class="header-ul menu align-center expanded text-center SMN_effect-49">
+          <li>
+            <a href="#">상품찾기</a>W
+          </li>
+          <li><a href="#">팁&매거진</a></li>
+          <li><a href="#">업체찾기</a></li>
+          <li>
+            <a href="#">게시판</a>
+            <div class="drop">
+              <ul class="dropdown">
+                <li>셀프인테리어</li>
+                <li>업체홍보</li>
+                <li>질문</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <button class="btn_login"><img th:src="~{img/login.png}" alt="로그인"></button>
   </div>
-</body>
 </html>
