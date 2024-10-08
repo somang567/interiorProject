@@ -1,15 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="static/css/header.css">
-  <script src="header.js"></script>
-  <title>main</title>
-</head>
-<body>
-<head>
-  <div class="header">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link th:href="@{/css/header.css}" rel="stylesheet">
+
+<div class="header" th:fragment="header">
     <img src="/header/logo.png" alt="" class="logo">
     <ul class="header-ul menu align-center expanded text-center SMN_effect-49">
       <li>
@@ -30,6 +24,5 @@
     </ul>
     <button class="btn_login"><img src="/header/login.png" alt="로그인"></button>
   </div>
-</head>
 </body>
 </html>
