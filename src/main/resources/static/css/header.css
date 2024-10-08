@@ -37,6 +37,7 @@ body {
 }
 
 .header-ul {
+  margin-bottom: 0;
   list-style: none;
   padding: 0;
   display: flex;

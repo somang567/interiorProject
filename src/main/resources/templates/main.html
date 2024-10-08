@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
-<!--<th:block layout:fragment="css">
+<th:block layout:fragment="css">
   <style>
     .main_img {
       display: flex;
@@ -11,7 +11,6 @@
     }
 
     .main_img img {
-      position: absolute;
       object-fit: cover;
       width: 100vw;
       height: 70%;
@@ -19,7 +18,7 @@
       left: 0;
     }
   </style>
-</th:block>-->
+</th:block>
   <div layout:fragment="content">
     <div class="main_img">
       <img th:src="@{/img/main1.jpg}" alt="메인이미지1">
