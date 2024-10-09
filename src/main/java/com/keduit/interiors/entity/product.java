@@ -1,3 +1,4 @@
+/*
 package com.keduit.interiors.entity;
 
 import com.keduit.interiors.constant.CS;
@@ -46,3 +47,4 @@ public class product extends BaseEntity{
 	}
 
 }
+*/

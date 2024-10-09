@@ -1,3 +1,4 @@
+/*
 package com.keduit.interiors.entity;
 
 import com.keduit.interiors.constant.Role;
@@ -44,3 +45,4 @@ public class Member extends BaseEntity {
 		return member;
 	}
 }
+*/

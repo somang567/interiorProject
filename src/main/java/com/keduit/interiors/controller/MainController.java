@@ -8,8 +8,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class MainController {
 
+/*  @GetMapping("/")
+  public String main(Optional<Integer> page, Model model) {
+    Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
+    *//*model.addAttribute("item", items);*//*
+
+    return "main";
+  }*/
+
   @GetMapping("/")
   public String main() {
+
     return "main";
   }
 }

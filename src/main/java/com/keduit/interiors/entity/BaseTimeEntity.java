@@ -1,3 +1,4 @@
+/*
 package com.keduit.interiors.entity;
 
 import lombok.Getter;
@@ -30,3 +31,4 @@ public abstract class BaseTimeEntity {
   @LastModifiedDate
   private String updateDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
 }
+*/

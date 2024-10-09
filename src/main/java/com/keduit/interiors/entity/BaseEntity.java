@@ -1,3 +1,4 @@
+/*
 package com.keduit.interiors.entity;
 
 import lombok.Getter;
@@ -22,3 +23,4 @@ public abstract class BaseEntity extends BaseTimeEntity{
   @LastModifiedBy
   private String modifiedBy;
 }
+*/
