@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/product")
 public class ProductController {
 	@GetMapping("/productMain")
-	public String productMain(){
+	public String productMain(){ // 자제 찾기 메인페이지
 		return "/product/productMain";
 	}
 	@PostMapping("/main")
-	public String detailPage(){
+	public String detailPage(){ // 상세보기 페이지
 		return "";
 	}
 }
