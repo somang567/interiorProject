@@ -1,13 +1,7 @@
-* {
-    box-sizing: border-box;
+#container{
+    width: 100%;
+    height: 100%;
 }
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
 .carousel_slide {
     width: 100vw;
     height: 30vh;
@@ -52,12 +46,17 @@ body {
     align-items: center; /* 중앙 정렬 */
     justify-content: center; /* 중앙 정렬 */
 }
-.SearchContainer{
+.SearchContainer {
     width: 100vw;
-    height: 100vh;
+    height: auto; /* 내용에 맞게 자동 높이 */
     background-color: white;
+    display: flex;
+    flex-direction: column; /* 검색창과 드롭다운을 세로로 배치 */
+    align-items: center; /* 중앙 정렬 */
 }
-.SearchBox{
+
+/* 검색 박스 */
+.SearchBox {
     width: 50vw;
     height: 10vh;
     background-color: white;
@@ -66,27 +65,100 @@ body {
     margin: 0 auto;
     margin-top: 5vh;
 }
-.SearchInput{
-    width: 100vw;
+
+/* 검색 입력 */
+.SearchInput {
+    width: 100%;
     text-align: center;
     font-size: 3vw;
     border: none;
     display: inline-block;
+    background-color: rgba(248, 247, 247, 0.96);
 }
-.Search_line{
+
+/* 검색 밑줄 */
+.Search_line {
+    width: 60vw;
+    height: 0.6vw;
+    border-radius: 5%;
+    display: flex;
+    background: black;
+    color: black;
+    margin-top: 1vh; /* 밑줄 위에 간격 */
+}
+
+/* 검색 버튼 */
+.Search {
     width: 1vw;
     display: flex;
-    background-color: cadetblue;;
+    background-color: black;
+    color: black;
 }
-.Search{
-    width: 1vw;
-    display: flex;
-}
-.dropdown_container{
-    width: 100vw;
-    height: 40vw;
+
+/* 드롭다운 영역 */
+.dropdown_container {
+    width: 50vw; /* 검색 박스와 동일한 너비 */
+    height: auto; /* 내용에 따라 높이 조정 */
     display: block;
-    position: absolute;
-    top: 40vw;
-    background-color: blueviolet;
+    position: relative;
+    background-color: white;
+    margin-top: 2vh; /* 검색창과 드롭다운 사이의 간격 */
+}
+
+/* 드롭다운 버튼 */
+.dropdown_toggle {
+    background-color: white;
+    color: black;
+    width: 100%; /* 드롭다운 너비는 검색 박스와 동일하게 */
+    padding: 1vw; /* 드롭다운 버튼에 여백 */
+    text-align: left; /* 텍스트는 왼쪽 정렬 */
+    border: 1px solid #ddd; /* 테두리 */
+    cursor: pointer; /* 마우스 커서 포인터로 변경 */
+}
+
+/* 드롭다운 메뉴 */
+.dropdown_subContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* 메뉴 항목을 세로로 나열 */
+    justify-content: space-between;
+    background-color: white;
+    color: black;
+    padding: 1vw; /* 내부 여백 */
+    border: 1px solid #dddddd;
+}
+.item_container {
+    width: 80vw; /* 화면 너비의 80% */
+    height: auto; /* 높이는 내용물에 맞게 조정 */
+    margin: 0 auto; /* 중앙 배치 */
+    display: flex;
+    flex-direction: column; /* 아이템 박스들을 세로로 배치 */
+    gap: 2vw; /* itemBox 사이 간격 */
+}
+
+/* 각 item (상품) */
+.item {
+    width: 80%; /* 그리드 셀 크기 */
+    height: 20vw; /* 고정된 높이 */
+    background-color: lightgray; /* 배경색 */
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    font-size: 1.5vw; /* 텍스트 크기 */
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* 카테고리 버튼 스타일 */
+
+/* 각 itemBox: 한 줄에 3개씩 아이템이 들어가게 설정 */
+.itemBox {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3개의 열로 분할 */
+    gap: 2vw; /* 각 아이템 사이에 일정 간격 */
+    width: 80%; /* 부모의 전체 너비 */
+    height: auto; /* 높이는 자동으로 조정 */
+    background-color: #f0f0f0; /* 배경색 */
+    padding: 1vw; /* 안쪽 여백 */
+    margin: 0 auto;
 }

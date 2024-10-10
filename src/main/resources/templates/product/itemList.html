@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<th:block layout:fragment="content">
+<div id="container" layout:fragment="content">
     <div id="carouselExampleIndicators" class="carousel slide carousel_slide" data-ride="carousel">
         <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -39,15 +39,15 @@
         <div class="SearchBox">
             <input type="text" method="post" placeholder="찾으시는 상품을 입력해주세요." class="SearchInput">
             <div class="Search">
-                <img src="/static/img/Search.png" alt="돋보기" style="display: inline-flex; ">
+                <img src="/img/Search.png" alt="돋보기" style="display: inline-flex; ">
             </div>
         </div>
         <hr class="Search_line">
     </div>
     <div class="dropdown dropdown_container">
-        <div>
+        <div class="dropdown_subContainer">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
+                컬러
             </button>
             <ul class="dropdown-menu">
                 <li><button class="dropdown-item" type="button">Action</button></li>
@@ -56,7 +56,7 @@
             </ul>
 
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
+                질감
             </button>
             <ul class="dropdown-menu">
                 <li><button class="dropdown-item" type="button">Action</button></li>
@@ -65,4 +65,49 @@
             </ul>
         </div>
     </div>
-</th:block>
+
+    <div class="item_Contatiner">
+        <div class="itemBox">
+            <button class="item">상품1
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품2
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품3
+                <img src="" alt="">
+            </button>
+        </div>
+        <div class="itemBox">
+            <button class="item">상품4
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품5
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품6
+                <img src="" alt="">
+            </button>
+        </div>
+
+        <div class="itemBox">
+            <button class="item">상품7
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품8
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품9
+                <img src="" alt="">
+            </button>
+        </div>
+
+        </div>
+    </div>
+</body>
