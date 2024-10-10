@@ -1,0 +1,92 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.carousel_slide {
+    width: 100vw;
+    height: 30vh;
+    margin: 0 auto;
+    position: relative;
+    background-color: lightgray;
+}
+
+.selection {
+    flex: 1; /* 내용이 있는 부분이 공간을 차지하도록 */
+    width: 100vw;
+    background-color: white;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 중앙 정렬 */
+}
+
+.categoriBox {
+    height: 40vh; /* 원하는 높이로 조정 */
+    width: 100vw;
+    background-color: white;
+    margin: 0 auto;
+    display: flex; /* 플렉스 박스 사용 */
+    justify-content: space-around; /* 균일한 배치 */
+    align-items: center; /* 세로 정렬 */
+}
+
+.type {
+    display: flex;
+    flex-direction: column; /* 세로 방향 정렬 */
+    align-items: center; /* 중앙 정렬 */
+}
+
+.categori_image_box {
+    width: 8vw;
+    height: 12vh;
+    border-radius: 50%; /* 둥근 형태 유지 */
+    background-color: darkgray;
+    display: flex;
+    flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    justify-content: center; /* 중앙 정렬 */
+}
+.SearchContainer{
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+}
+.SearchBox{
+    width: 50vw;
+    height: 10vh;
+    background-color: white;
+    justify-content: center;
+    display: flex;
+    margin: 0 auto;
+    margin-top: 5vh;
+}
+.SearchInput{
+    width: 100vw;
+    text-align: center;
+    font-size: 3vw;
+    border: none;
+    display: inline-block;
+}
+.Search_line{
+    width: 1vw;
+    display: flex;
+    background-color: cadetblue;;
+}
+.Search{
+    width: 1vw;
+    display: flex;
+}
+.dropdown_container{
+    width: 100vw;
+    height: 40vw;
+    display: block;
+    position: absolute;
+    top: 40vw;
+    background-color: blueviolet;
+}
