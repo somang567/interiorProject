@@ -1,4 +1,4 @@
-package com.keduit.interiors.service;
+/*package com.keduit.interiors.service;
 
 import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.repository.MemberRepository;
@@ -44,3 +44,4 @@ public class MemberService implements UserDetailsService {
             .build();
   }
 }
+*/
