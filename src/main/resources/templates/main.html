@@ -46,8 +46,19 @@
             border-radius: 8px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0px 0px 20px black;
+            box-shadow: 0px 0px 10px black;
+            /*animation: fadeOut 2s forwards;*/
+            /*animation-timeline: scroll();*/
         }
+
+        /*@keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }*/
 
         .product .find_prod_img img {
             width: 100%;
@@ -103,6 +114,99 @@
             line-height: 30px;
         }
 
+        /* 팁&매거진 아코디언 */
+        .tip {
+            position: relative;
+            display: flex;
+            cursor: pointer;
+            width: 100%;
+            height: 90vw;
+            max-height: 600px;
+            overflow: hidden;
+        }
+
+        .ar-item {
+            position: relative;
+            overflow: hidden;
+            width: 10%;
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            opacity: 0.5;
+            border: 0;
+            transition: 0.5s;
+        }
+
+        .ar-item:hover {
+            opacity: 0.75;
+        }
+
+        .tip :is(h2,p) {
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .ar-item h2 {
+            font-size: clamp(12px, 4vw, 24px);
+            font-weight: 400;
+            color: rgb(255 255 255 / 96%);
+        }
+
+        .ar-item p {
+            font-size: clamp(10px, 2vw, 14px);
+            color: rgb(255 255 255 / 66%);
+        }
+
+        .ar-item.active {
+            width: 60%;
+            opacity: 1;
+        }
+
+        .ar-item span {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            min-width: 44px;
+            height: 44px;
+            color: rgb(0 0 0 / 80%);
+            background: rgb(255 255 255 / 70%);
+            border-radius: 50%;
+            font-size: 28px;
+        }
+
+        .ar-item .arco-tip {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            border-radius: 60px;
+            z-index: 1;
+            opacity: 0;
+            visibility: hidden;
+            padding: 20px 30px 20px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: linear-gradient(90deg, rgb(0 0 0 / 0%), rgb(0 0 0 / 25%));
+            backdrop-filter: blur(10px);
+            transition: 0.25s;
+        }
+
+        .ar-item.active .arco-tip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ar-item img {
+            position: absolute;
+            z-index: 0;
+            top: 50%;
+            left: 50%;
+            translate: -50% -50%;
+            height: 100%;
+            width: 70vw;
+            object-fit: cover;
+            filter: grayscale(0.6);
+        }
     </style>
 
 </th:block>
@@ -140,6 +244,44 @@
             // 3초마다 이미지가 자동으로 넘어가도록 설정
             setInterval(showNextItem, 8000);  // 8초마다 showNextItem 함수 실행
         });
+
+        // 팁&매거진 아코디언
+        window.addEventListener('DOMContentLoaded', function () {
+            const items = document.querySelectorAll('.ar-item');
+
+            const resetItems = () => {
+                // 모든 아이템에서 'active' 클래스를 제거
+                items.forEach(item => item.classList.remove('active'));
+            };
+
+            const Click = (element, index) => {
+                // 만약 이미 활성화된 상태라면, 그 아이템을 닫음
+                if (element.classList.contains('active')) {
+                    element.classList.remove('active');
+                    localStorage.removeItem('accordionIndex');
+                } else {
+                    // 모든 항목을 초기화하고, 새로 클릭된 항목만 활성화
+                    resetItems();
+                    element.classList.add('active');
+                    localStorage.setItem('accordionIndex', index);
+                }
+            };
+
+            // 각 버튼에 클릭 이벤트 바인딩
+            items.forEach((item, index) => {
+                item.addEventListener('click', function () {
+                    Click(item, index);
+                });
+            });
+
+            // 로컬 스토리지에서 저장된 인덱스를 불러옴
+            const activeItemIndex = localStorage.getItem('accordionIndex');
+            if (activeItemIndex !== null) {
+                items[activeItemIndex].classList.add('active');
+            }
+        });
+
+
     </script>
 
 </th:block>
@@ -202,5 +344,57 @@
     <br>
     <h3 style="padding-left: 3%; margin: 25px 0 25px 0;">TIP&매거진</h3>
     <br>
+    <section class="tip">   <!-- accordion -->
+        <button class="ar-item" onclick="Click(this,0)">    <!-- accordion-item-->
+            <img th:src="@{/img/main.jpg}" alt="">
+            <div class="arco-tip">    <!-- content -->
+                <span>블라블라블라</span>
+                <div>
+                    <h2>뿌잉</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
+                </div>
+            </div>
+        </button>
+        <button class="ar-item" onclick="Click(this,1)">    <!-- accordion-item-->
+            <img th:src="@{/img/main1.jpg}" alt="">
+            <div class="arco-tip">    <!-- content -->
+                <span>블라11</span>
+                <div>
+                    <h2>뿌잉</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
+                </div>
+            </div>
+        </button>
+        <button class="ar-item" onclick="Click(this,2)">    <!-- accordion-item-->
+            <img th:src="@{/img/main2.jpg}" alt="">
+            <div class="arco-tip">    <!-- content -->
+                <span>P</span>
+                <div>
+                    <h2>뿌잉</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
+                </div>
+            </div>
+        </button>
+        <button class="ar-item" onclick="Click(this,3)">    <!-- accordion-item-->
+            <img th:src="@{/img/arco2.jpg}" alt="">
+            <div class="arco-tip">    <!-- content -->
+                <span>P</span>
+                <div>
+                    <h2>뿌잉</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
+                </div>
+            </div>
+        </button>
+        <button class="ar-item" onclick="Click(this,4)">    <!-- accordion-item-->
+            <img th:src="@{/img/arco1.jpg}" alt="">
+            <div class="arco-tip">    <!-- content -->
+                <span>P</span>
+                <div>
+                    <h2>뿌잉</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
+                </div>
+            </div>
+        </button>
+    </section>
 </div>
 </html>
