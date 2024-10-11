@@ -1,4 +1,4 @@
-/*
+
 package com.keduit.interiors.repository;
 
 
@@ -7,4 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MegazineRepository extends JpaRepository<Megazine, Long> {
 }
- */
+
