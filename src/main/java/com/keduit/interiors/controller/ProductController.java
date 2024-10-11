@@ -20,25 +20,25 @@ public class ProductController {
 	}
 
 	// 벽지 상품리스트 페이지
-	@GetMapping("/itemList")
+	@GetMapping("/itemList2")
 	public String SecondItemPage(){
 		return "/product/WallItemList";
 	}
 
 	// 수납 상품리스트 페이지
-	@GetMapping("/itemList")
+	@GetMapping("/itemList3")
 	public String ThreeItemPage(){
 		return "/product/StockItemList";
 	}
 
 	// 가구 상품리스트 페이지
-	@GetMapping("/itemList")
+	@GetMapping("/itemList4")
 	public String FourItemPage(){
 		return "/product/FurnitureItemList";
 	}
 
 	// 바닥재 상품리스트 페이지
-	@GetMapping("/itemList")
+	@GetMapping("/itemList5")
 	public String FiveItemPage(){
 		return "/product/FloorItemList";
 	}
