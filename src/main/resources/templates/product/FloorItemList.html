@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<head>
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+<div id="container" layout:fragment="content">
+    <div id="carouselExampleIndicators" class="carousel slide carousel_slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner img_size">
+            <div class="carousel-item active">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <a class="carousel-control-prev image_prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only"></span>
+        </a>
+        <a class="carousel-control-next image_next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only"></span>
+        </a>
+    </div>
+    <div class="SearchContainer">
+        <div class="SearchBox">
+            <input type="text" method="post" placeholder="찾으시는 상품을 입력해주세요." class="SearchInput">
+            <div class="Search">
+                <img src="/img/Search.png" alt="돋보기" style="display: inline-flex; ">
+            </div>
+        </div>
+        <hr class="Search_line">
+    </div>
+    <div class="dropdown dropdown_container">
+        <div class="dropdown_subContainer">
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                컬러
+            </button>
+            <ul class="dropdown-menu">
+                <li><button class="dropdown-item" type="button">Action</button></li>
+                <li><button class="dropdown-item" type="button">Another action</button></li>
+                <li><button class="dropdown-item" type="button">Something else here</button></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="item_Contatiner">
+        <div class="itemBox">
+            <button class="item">상품1
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품2
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품3
+                <img src="" alt="">
+            </button>
+        </div>
+        <div class="itemBox">
+            <button class="item">상품4
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품5
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품6
+                <img src="" alt="">
+            </button>
+        </div>
+
+        <div class="itemBox">
+            <button class="item">상품7
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품8
+                <img src="" alt="">
+            </button>
+
+            <button class="item">상품9
+                <img src="" alt="">
+            </button>
+        </div>
+
+    </div>
+</div>
+</body>

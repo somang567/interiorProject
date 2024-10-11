@@ -9,7 +9,6 @@
 
 import com.keduit.interiors.constant.Role;
 import com.keduit.interiors.dto.MemberDTO;
-import com.keduit.interiors.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
