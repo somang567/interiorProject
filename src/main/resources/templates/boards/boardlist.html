@@ -2,18 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
-<head>
-    <th:block layout:fragment="css">
-        <style>
-            .list_text {
-                width: 500px;
-                margin: 0 auto;
-                margin: 40px;
-            }
-        </style>
-    </th:block>
-</head>
-<body>
+<th:block layout:fragment="css">
+    <style>
+        .list_text {
+            width: 500px;
+            margin: 0 auto;
+            margin: 40px;
+        }
+    </style>
+</th:block>
 <div layout:fragment="content">
     <div class="list_text">
         <table>
@@ -43,5 +40,4 @@
     }
     /*]]>*/
 </script>
-</body>
 </html>
