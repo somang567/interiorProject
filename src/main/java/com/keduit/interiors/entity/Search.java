@@ -1,12 +1,8 @@
 package com.keduit.interiors.entity;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 // entity <-- (repository, service) --> controller : 엔티티와 컨트롤러를 레포지토리&서비스가 연결해줌.
 // Entity : 테이블 매핑. 데이터베이스 테이블의 구조를 나타내며, 해당 데이터를 어떻게 저장할지를 결정함
