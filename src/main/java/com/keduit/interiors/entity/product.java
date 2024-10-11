@@ -25,15 +25,17 @@ public class product extends BaseEntity{
 	private Member member;
 
 	@Lob
-	@Column(nullable = false , length = 50)
+	@Column(name = "product_name", nullable = false , length = 50)
 	private String product_name;
 
 	@Lob
-	@Column(nullable = false)
+	@Column(name = "product_Detail", nullable = false)
 	private String product_Detail;     // 상품 상세설명
 
+	@Column(name = "price")
 	private int price;
 
+	@Column(name = "cs_status")
 	private CS csStatus;
 
 	private static ModelMapper modelMapper = new ModelMapper();

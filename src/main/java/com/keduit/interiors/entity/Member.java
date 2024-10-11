@@ -1,14 +1,7 @@
-//package com.keduit.interiors.entity;
-
-//import com.keduit.interiors.constant.Role;
-//import com.keduit.interiors.dto.MemberDTO;
-//import lombok.Getter;
-//import lombok.Setter;
-//import lombok.ToString;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-
+package com.keduit.interiors.entity;
 import com.keduit.interiors.constant.Role;
 import com.keduit.interiors.dto.MemberDTO;
+import com.keduit.interiors.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
