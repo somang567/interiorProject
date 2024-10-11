@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<th:block layout:fragment="css">
+  <!-- css 적용 -->
+  <style>
+    .search-main {
+      margin: 40px auto;
+      padding: 20px;
+      width: 80vw;
+      height: 40vh;
+      background-color: papayawhip;
+      text-align: center;
+    }
+
+    #search-dosi, #search-googun {
+      width: 300px;
+      height: 50px;
+      margin: 10px;
+      padding: 10px 30px;
+      border: none;
+      border-radius: 20px;
+      font-size: large;
+    }
+
+    .search-main > h1 {
+      font-size: 50px;
+      padding: 20px;
+    }
+
+    #magnifier {
+      width: 100px;
+      height: 100px;
+      margin-right: 10%;
+      display: inline-block;
+    }
+
+    #company-name {
+      width: 400px;
+    }
+
+    #company-name, .search-btn {
+      height: 50px;
+      margin: 10px 15px;
+      padding: 10px 30px;
+      border-radius: 20px;
+      border-width: 1px;
+      border: none;
+      font-size: large;
+      background-color: white;
+    }
+
+    .search-btn:hover {
+      background-color: #C5BAAA;
+    }
+
+    .search-result-btn {
+      margin: 40px auto;
+      padding: 15px;
+      width: 80vw;
+      height: 30vh;
+      background-color: #C5BAAA;
+      border-radius: 30px;
+    }
+
+
+  </style>
+</th:block>
+
+<th:block layout:fragment="script">
+  <script>
+    const googuns = {
+      서울: ["강북구", "관악구", "광진구", "금천구", "동작구", "마포구", "서초구", "성동구", "영등포구", "용산구", "은평구"],
+      인천: ["부평구"],
+      대전: ["동구", "서구", "유성구", "대덕구"],
+      부산: ["강서구", "기장군", "사하구"],
+      충북: ["옥천군"],
+      전북: ["익산시"],
+      세종: ["세종시"]
+    };
+
+    function searchDosi() {
+      const dosiSelect = document.getElementById("search-dosi");
+      const googunSelect = document.getElementById("search-googun");
+
+      const dosiSelected = dosiSelect.value;
+
+      // 구/군 목록 초기화
+      googunSelect.innerHTML = '<option value="">구/군</option>';
+
+      // 선택된 도시의 구/군 목록 추가
+      if(googuns[dosiSelected]) {
+        googuns[dosiSelected].forEach(googun => {
+          const option = document.createElement("option");
+          option.value = googun;
+          option.textContent = googun;
+          googunSelect.appendChild(option);
+        });
+      }
+    }
+
+    function resetSelection() {
+      document.getElementById("search-dosi").value = '';
+      document.getElementById("search-googun").innerHTML = '<option value="">구/군</option>';
+      document.getElementById("company-name").value = '';
+    }
+
+    function searchCompany() {
+      const companyName = document.getElementById("company-name").value;
+      // 여기서 API 호출이나 검색 로직을 추가할 수 있음.
+      // alert(`검색할 업체명: ${companyName}`);
+    }
+  </script>
+</th:block>
+
+<div layout:fragment="content">
+  <div class="search-main">
+    <h1><b>시공업체 찾기</b></h1>
+    <br>
+    <img id="magnifier" th:src="@{/img/magnifier.png}" alt="돋보기">
+    <select id="search-dosi" onchange="searchDosi()">도/시
+      <option value="">도/시</option>
+      <option value="서울">서울특별시</option>
+      <option value="인천">인천광역시</option>
+      <option value="대전">대전광역시</option>
+      <option value="부산">부산광역시</option>
+      <option value="충북">충청북도</option>
+      <option value="전북">전라북도</option>
+      <option value="세종">세종특별자치시</option>
+    </select>
+
+    <select id="search-googun">
+      <option value="">구/군</option>
+    </select>
+    <p></p>
+
+    <!-- 업체명 입력 필드 추가 -->
+    <input type="text" id="company-name" placeholder="업체명을 입력하세요." />
+
+    <!-- 검색 버튼 추가 -->
+    <button class="search-btn" onclick="searchCompany()">검색</button>
+  </div>
+
+  <div class="search-result">
+    <div class="search-result-btn">
+      <h3>api 들어가야함1</h3>
+      <br>
+      <p>(지도 마커 아이콘)</p>
+      <p>api</p>
+      <p>api</p>
+    </div>
+
+    <div class="search-result-btn">
+      <h3>api 들어가야함2</h3>
+      <br>
+      <p>(지도 마커 아이콘)</p>
+      <p>api</p>
+      <p>api</p>
+    </div>
+
+    <div class="search-result-btn">
+      <h3>api 들어가야함3</h3>
+      <br>
+      <p>(지도 마커 아이콘)</p>
+      <p>api</p>
+      <p>api</p>
+    </div>
+  </div>
+
+</div>
+</html>
