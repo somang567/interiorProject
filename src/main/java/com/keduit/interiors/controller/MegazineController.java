@@ -1,4 +1,4 @@
-/*
+
 package com.keduit.interiors.controller;
 
 import com.keduit.interiors.repository.MegazineRepository;
@@ -34,4 +34,4 @@ public class MegazineController {
     return "megazine/megazineMain";
   }
 }
- */
+
