@@ -5,12 +5,10 @@
 <head>
     <title>게시글 상세보기</title>
 </head>
-<body>
 <div layout:fragment="content">
     <h1 th:text="${board.title}">제목이 들어갈 부분</h1>
     <p th:text="${board.content}">내용이 들어갈 부분</p>
     <a th:href="@{/board/delete(id=${board.id})}">삭제</a>
     <a th:href="@{/board/modify/{id}(id=${board.id})}">수정</a>
 </div>
-</body>
 </html>

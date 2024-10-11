@@ -21,6 +21,8 @@ public class Board {
     private String title;
     private String content;
     private String author;
+    private String filename;
+    private String filepath;
 
     @Column(updatable = false)
     private LocalDateTime createdDate; // 작성일자

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
-<div layout:fragment="content">
+<th:block layout:fragment="script">
     <script th:inline="javascript">
 
         /*<![CDATA[*/
@@ -15,7 +15,8 @@
         /*]]>*/
 
     </script>
-    <body>
-    </body>
+</th:block>
+<div layout:fragment="content">
+
 </div>
 </html>
