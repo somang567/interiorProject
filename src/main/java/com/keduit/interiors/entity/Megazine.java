@@ -1,9 +1,12 @@
+/*
 package com.keduit.interiors.entity;
+
+import com.keduit.interiors.entity.BaseEntity;
 
 import javax.persistence.*;
 import java.lang.reflect.Member;
 
-public class Megazine extends BaseEntity{
+public class Megazine extends BaseEntity {
 
   @Id
   @Column(name = "magazine_id")
@@ -36,3 +39,5 @@ public class Megazine extends BaseEntity{
   @JoinColumn(name="member_id")
   private Member member;
 }
+
+ */

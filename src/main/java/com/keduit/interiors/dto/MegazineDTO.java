@@ -1,3 +1,4 @@
+/*
 package com.keduit.interiors.dto;
 
 import com.keduit.interiors.entity.Megazine;
@@ -44,6 +45,6 @@ public class MegazineDTO {
   public static MegazineDTO of(Megazine item){
     return modelMapper.map(item, MegazineDTO.class);
   }
-
 }
+ */
 
