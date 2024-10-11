@@ -20,4 +20,17 @@ public class BoardService {
     public List<Board> boardList() {
         return boardRepository.findAll();
     }
+
+    public Board boardview(Long id) {
+        return boardRepository.findById(id).get();
+    }
+
+    public void boardDelete(Long id) {
+        boardRepository.deleteById(id);
+    }
+
+    public List<Board> findAll() {
+        return boardRepository.findAll();
+    }
+
 }

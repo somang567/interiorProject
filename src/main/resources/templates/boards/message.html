@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<div layout:fragment="content">
+    <script th:inline="javascript">
+
+        /*<![CDATA[*/
+
+        var message = [[${message}]];
+
+        alert(message);
+
+        location.replace([[${searchUrl}]]);
+        /*]]>*/
+
+    </script>
+    <body>
+    </body>
+</div>
+</html>
