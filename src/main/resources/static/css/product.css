@@ -125,7 +125,6 @@
     background-color: white;
     color: black;
     padding: 1vw; /* 내부 여백 */
-    border: 1px solid #dddddd;
 }
 .item_container {
     width: 80vw; /* 화면 너비의 80% */
@@ -161,4 +160,5 @@
     background-color: #f0f0f0; /* 배경색 */
     padding: 1vw; /* 안쪽 여백 */
     margin: 0 auto;
+    border: 1px solid #2c2c2c;
 }
