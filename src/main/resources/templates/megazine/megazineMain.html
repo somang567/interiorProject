@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+    <title>MegazineMain</title>
+</head>
+<body>
+<div layout:fragment="content">
+<div class="row">
+    <h2>매거진 페이지입니다.</h2>
+    <!--
+  status: 반복의 상태 정보를 담는 변수
+   ${} 구문은 Thymeleaf의 표현식 언어로, Spring MVC 모델에서 제공하는 데이터를 참조합니다.
+   <th:block th:each="item, status: ${items.getContent()}">
+    <div class="col-md-4 margin">
+      <div class="card">
+        <a th:href="'/item/' + ${item.id}" class="text-dark">
+          <img th:src="${item.imgUrl}" th:alt="${item.itemNm}" class="card-img-top" height="400">
+          <div class="card-body">
+            <h4 class="card-title">[[${item.itemNm}]]</h4>
+            <p class="card-text">[[${item.itemDetail}]]</p>
+            <h4 class="card-title text-danger">[[${item.price}]]원</h4>
+          </div>
+        </a>
+      </div>
+    </div>
+  </th:block>
+  -->
+</div>
+</div>
+</body>
+</html>
