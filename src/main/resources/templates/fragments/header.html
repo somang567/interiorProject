@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec=xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-    <div th:fragment="header" class="header" >
-        <img th:src="@{/img/logo.png}" alt="로고" class="logo">
-        <ul class="header-ul menu align-center expanded text-center SMN_effect-49">
-          <li>
-            <a href="#">상품찾기</a>
-          </li>
-          <li><a href="#">팁&매거진</a></li>
-          <li><a href="#">업체찾기</a></li>
-          <li>
+<div th:fragment="header" class="header">
+    <img th:src="@{/img/logo.png}" alt="로고" class="logo">
+    <ul class="header-ul menu align-center expanded text-center SMN_effect-49">
+        <li>
+            <a href="">상품찾기</a>
+        </li>
+        <li><a href="#">팁&매거진</a></li>
+        <li><a href="#">업체찾기</a></li>
+        <li>
             <a href="#">게시판</a>
-          </li>
-        </ul>
-        <button class="btn_login"><img th:src="@{/img/login.png}" alt="로그인"></button>
-  </div>
+        </li>
+    </ul>
+    <!--    <button class="btn_login" sec:authorize="isAnonymous()"><img th:src="@{/img/login.png}" alt="로그인"></button>-->
+    <!--    <button class="btn_logout" sec:authorize="isAuthenticated()"></button>-->
+    <ul class="login_out">
+        <!-- 로그인 X -->
+        <!-- sec:authorize="isAnonymous()" -->
+        <li sec:authorize="isAnonymous()"><a href="">로그인</a></li>
+        <li sec:authorize="isAnonymous()"><a href="">회원가입</a></li>
+
+        <!-- 로그인 O -->
+        <!-- sec:authorize="isAuthenticated()" -->
+        <li sec:authorize="isAuthenticated()"><a href="">마이페이지</a></li>
+        <li sec:authorize="isAuthenticated()"><a href="">로그아웃</a></li>
+    </ul>
+</div>
 </html>
