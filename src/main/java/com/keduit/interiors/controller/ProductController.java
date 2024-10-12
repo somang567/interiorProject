@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/item")
 public class ProductController {
 	// 상품찾기 메인 페이지 ( 상품리스트 페이지 가기 전 )
 	@GetMapping("/productMain")
@@ -14,31 +14,31 @@ public class ProductController {
 	}
 
 	// 타일 상품리스트 페이지
-	@GetMapping("/itemList")
+	@GetMapping("/Tail")
 	public String FirstItemPage(){
 		return "/product/TailItemList";
 	}
 
 	// 벽지 상품리스트 페이지
-	@GetMapping("/itemList2")
+	@GetMapping("/Wall")
 	public String SecondItemPage(){
 		return "/product/WallItemList";
 	}
 
 	// 수납 상품리스트 페이지
-	@GetMapping("/itemList3")
+	@GetMapping("/Stock")
 	public String ThreeItemPage(){
 		return "/product/StockItemList";
 	}
 
 	// 가구 상품리스트 페이지
-	@GetMapping("/itemList4")
+	@GetMapping("/furniture")
 	public String FourItemPage(){
 		return "/product/FurnitureItemList";
 	}
 
 	// 바닥재 상품리스트 페이지
-	@GetMapping("/itemList5")
+	@GetMapping("/floor")
 	public String FiveItemPage(){
 		return "/product/FloorItemList";
 	}

@@ -35,17 +35,84 @@
     flex-direction: column; /* 세로 방향 정렬 */
     align-items: center; /* 중앙 정렬 */
 }
-
+.select_categori_button{
+    width: 15vw;
+    height: 15vw;
+    border-radius: 50%;
+}
 .categori_image_box {
-    width: 8vw;
-    height: 12vh;
+    width: 15vw;
+    height: 15vw;
+    padding: 3vw;
+    margin-bottom: 1vw;
     border-radius: 50%; /* 둥근 형태 유지 */
-    background-color: darkgray;
+    background-image: url("../img/wall.jpg");
+    background-size: cover;
     display: flex;
     flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
     align-items: center; /* 중앙 정렬 */
     justify-content: center; /* 중앙 정렬 */
 }
+.categori_image_box2 {
+    width: 15vw;
+    height: 15vw;
+    padding: 3vw;
+    margin-bottom: 1vw;
+    border-radius: 50%; /* 둥근 형태 유지 */
+    background-image: url("../img/tail.jpg");
+    background-size: cover;
+    display: flex;
+    flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.categori_image_box3 {
+    width: 15vw;
+    height: 15vw;
+    padding: 3vw;
+    margin-bottom: 1vw;
+    border-radius: 50%; /* 둥근 형태 유지 */
+    background-image: url("../img/stock.jpg");
+    background-size: cover;
+    display: flex;
+    flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.categori_image_box4 {
+    width: 15vw;
+    height: 15vw;
+    padding: 3vw;
+    margin-bottom: 1vw;
+    border-radius: 50%; /* 둥근 형태 유지 */
+    background-image: url("../img/furniture.jpg");
+    background-size: cover;
+    display: flex;
+    flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.categori_image_box5 {
+    width: 15vw;
+    height: 15vw;
+    padding: 3vw;
+    margin-bottom: 1vw;
+    border-radius: 50%; /* 둥근 형태 유지 */
+    background-image: url("../img/floor.jpg");
+    background-size: cover;
+    display: flex;
+    flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    justify-content: center; /* 중앙 정렬 */
+}
+.item_name{
+    font-size: 1.5vw;
+    font-weight: 800;
+}
+
 .SearchContainer {
     width: 100vw;
     height: auto; /* 내용에 맞게 자동 높이 */
@@ -65,67 +132,35 @@
     margin: 0 auto;
     margin-top: 5vh;
 }
-
-/* 검색 입력 */
-.SearchInput {
-    width: 100%;
-    text-align: center;
-    font-size: 3vw;
-    border: none;
-    display: inline-block;
-    background-color: rgba(248, 247, 247, 0.96);
+.bi.bi-search{
+    width: 7vw;
+    color: black;
 }
 
+.btn.btn-outline-success{
+    border-color: black;
+}
+.btn.btn-outline-success:hover{
+    background-color: beige;
+    border-color: #2c2c2c;
+}
+
+.form-control.me-2{
+    width: 50vw;
+}
 /* 검색 밑줄 */
 .Search_line {
     width: 60vw;
-    height: 0.6vw;
+    height: 0.4vw;
     border-radius: 5%;
     display: flex;
     background: black;
     color: black;
     margin-top: 1vh; /* 밑줄 위에 간격 */
+    opacity: 1;
 }
 
-/* 검색 버튼 */
-.Search {
-    width: 1vw;
-    display: flex;
-    background-color: black;
-    color: black;
-}
 
-/* 드롭다운 영역 */
-.dropdown_container {
-    width: 50vw; /* 검색 박스와 동일한 너비 */
-    height: auto; /* 내용에 따라 높이 조정 */
-    display: block;
-    position: relative;
-    background-color: white;
-    margin-top: 2vh; /* 검색창과 드롭다운 사이의 간격 */
-}
-
-/* 드롭다운 버튼 */
-.dropdown_toggle {
-    background-color: white;
-    color: black;
-    width: 100%; /* 드롭다운 너비는 검색 박스와 동일하게 */
-    padding: 1vw; /* 드롭다운 버튼에 여백 */
-    text-align: left; /* 텍스트는 왼쪽 정렬 */
-    border: 1px solid #ddd; /* 테두리 */
-    cursor: pointer; /* 마우스 커서 포인터로 변경 */
-}
-
-/* 드롭다운 메뉴 */
-.dropdown_subContainer {
-    width: 100%;
-    display: flex;
-    flex-direction: column; /* 메뉴 항목을 세로로 나열 */
-    justify-content: space-between;
-    background-color: white;
-    color: black;
-    padding: 1vw; /* 내부 여백 */
-}
 .item_container {
     width: 80vw; /* 화면 너비의 80% */
     height: auto; /* 높이는 내용물에 맞게 조정 */
@@ -139,13 +174,14 @@
 .item {
     width: 80%; /* 그리드 셀 크기 */
     height: 20vw; /* 고정된 높이 */
-    background-color: lightgray; /* 배경색 */
+    background-color: whitesmoke; /* 배경색 */
     display: flex;
     justify-content: center; /* 수평 중앙 정렬 */
     align-items: center; /* 수직 중앙 정렬 */
     font-size: 1.5vw; /* 텍스트 크기 */
     text-align: center;
     margin: 0 auto;
+    border: 1px solid #2c2c2c;
 }
 
 /* 카테고리 버튼 스타일 */
@@ -154,11 +190,13 @@
 .itemBox {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3개의 열로 분할 */
-    gap: 2vw; /* 각 아이템 사이에 일정 간격 */
+    gap: 1vw; /* 각 아이템 사이에 일정 간격 */
     width: 80%; /* 부모의 전체 너비 */
     height: auto; /* 높이는 자동으로 조정 */
-    background-color: #f0f0f0; /* 배경색 */
-    padding: 1vw; /* 안쪽 여백 */
+    background-color: #ffffff; /* 배경색 */
+    padding: 2vw; /* 안쪽 여백 */
     margin: 0 auto;
+    margin-top: 1vw;
     border: 1px solid #2c2c2c;
+    opacity: 1;
 }
