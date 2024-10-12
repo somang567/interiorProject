@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
 <th:block layout:fragment="css">
@@ -15,7 +14,8 @@
       text-align: center;
     }
 
-    #search-dosi, #search-googun {
+    #search-dosi,
+    #search-googun {
       width: 300px;
       height: 50px;
       margin: 10px;
@@ -25,7 +25,7 @@
       font-size: large;
     }
 
-    .search-main > h1 {
+    .search-main>h1 {
       font-size: 50px;
       padding: 20px;
     }
@@ -41,7 +41,8 @@
       width: 400px;
     }
 
-    #company-name, .search-btn {
+    #company-name,
+    .search-btn {
       height: 50px;
       margin: 10px 15px;
       padding: 10px 30px;
@@ -64,8 +65,6 @@
       background-color: #C5BAAA;
       border-radius: 30px;
     }
-
-
   </style>
 </th:block>
 
@@ -92,7 +91,7 @@
       googunSelect.innerHTML = '<option value="">구/군</option>';
 
       // 선택된 도시의 구/군 목록 추가
-      if(googuns[dosiSelected]) {
+      if (googuns[dosiSelected]) {
         googuns[dosiSelected].forEach(googun => {
           const option = document.createElement("option");
           option.value = googun;
@@ -108,10 +107,62 @@
       document.getElementById("company-name").value = '';
     }
 
+    // searchCompany() : 사용자 입력을 확인하고 api 호출하는 함수
     function searchCompany() {
-      const companyName = document.getElementById("company-name").value;
-      // 여기서 API 호출이나 검색 로직을 추가할 수 있음.
-      // alert(`검색할 업체명: ${companyName}`);
+      const citySelected = document.getElementById("search-dosi").value;
+      const districtSelected = document.getElementById("search-googun").value;
+
+      // 도/시와 구/군을 선택하지 않았을때 뜨는 경고메세지
+      if (!citySelected || !districtSelected) {
+        alert("도/시, 구/군을 선택해주세요.");
+        return;
+      }
+
+      // JSON 파일 경로
+      // const jsonFilePath = 'file:///Users/lkiki/Desktop/interior_API/${dosiSelected}_${googunSelected}.json';
+
+      // AJAX 요청
+      fetch(`/api/data/${citySelected}/${districtSelected}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('네트워크 응답이 좋지 않습니다.');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // 업체명으로 필터링 (업체명이 입력된 경우에만)
+          // const filteredData = companyName
+          //   ? data.filter(item => item.company_name.includes(companyName))
+          //   : data; // 업체명이 없으면 전체 데이터 반환
+
+          // 결과 표시
+          displayResults(data);
+        })
+        .catch(error => {
+          console.error('문제가 발생했습니다.', error);
+        });
+    }
+
+    // displayResults() : 결과를 화면에 표시하는 함수
+    function displayResults(data) {
+      const resultContainer = document.querySelector(".search-result");
+      resultContainer.innerHTML = '';       // 기존 결과 초기화
+
+      if (data.length == 0) {
+        resultContainer.innerHTML = '<p>검색 결과가 없습니다.</p>';
+        return;
+      }
+
+      data.forEach(item => {
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'search-result-btn';
+        resultDiv.innerHTML = `
+          <h3>${item.company_name}</h3>
+          <p>${item.road_address}</p>
+          <p>${item.contact}</p>
+        `;
+        resultContainer.appendChild(resultDiv);
+      });
     }
   </script>
 </th:block>
@@ -172,4 +223,5 @@
   </div>
 
 </div>
+
 </html>
