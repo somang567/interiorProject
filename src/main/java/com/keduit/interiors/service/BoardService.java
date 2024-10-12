@@ -3,6 +3,8 @@ package com.keduit.interiors.service;
 import com.keduit.interiors.entity.Board;
 import com.keduit.interiors.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +16,7 @@ import java.util.UUID;
 public class BoardService {
 
     @Autowired
-    private BoardRepository boardRepository; // 객체를 생성 - 스프링 부트에서 제공하는 Autowired를 사용하면 스프링이 알아서 읽어와서 자동으로 주입을 해준다
+    private BoardRepository boardRepository;
 
     public void write(Board board, MultipartFile file) throws Exception {
         String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
@@ -33,11 +35,11 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public List<Board> boardList() {
-        return boardRepository.findAll();
+    public Page<Board> boardList(Pageable pageable) {
+        return boardRepository.findAll(pageable);
     }
 
-    public Board boardview(Long id) {
+    public Board boardView(Long id) {
         return boardRepository.findById(id).get();
     }
 
@@ -47,6 +49,10 @@ public class BoardService {
 
     public List<Board> findAll() {
         return boardRepository.findAll();
+    }
+
+    public Page<Board> boardSearchList(String searchKeyword, Pageable pageable) {
+        return boardRepository.findByTitleContaining(searchKeyword, pageable);
     }
 
 }

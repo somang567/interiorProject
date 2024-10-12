@@ -3,6 +3,10 @@ package com.keduit.interiors.controller;
 import com.keduit.interiors.entity.Board;
 import com.keduit.interiors.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 @Controller
 public class BoardController {
@@ -33,15 +36,30 @@ public class BoardController {
     }
 
     @GetMapping("/board/list")
-    public String boardList(Model model) {
-        List<Board> boards = boardService.findAll(); // 게시글 목록 조회
-        model.addAttribute("list", boards); // 모델에 추가
-        return "boards/boardlist"; // 리스트 페이지 반환
+    public String boardList(Model model,
+                            @PageableDefault(page = 0, size = 20, sort = "id",
+                                    direction = Sort.Direction.DESC) Pageable pageable,
+                            String searchKeyword) {
+        Page<Board> list = null;
+        if(searchKeyword != null){
+            list = boardService.boardSearchList(searchKeyword, pageable);
+        } else {
+            list = boardService.boardList(pageable);
+        }
+
+        int nowPage = list.getPageable().getPageNumber() + 1; // 현재 페이지
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, list.getTotalPages());
+        model.addAttribute("list", list);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        return "boards/boardlist";
     }
 
     @GetMapping("/board/view")
     public String boardview(Model model, Long id) {
-        model.addAttribute("board", boardService.boardview(id));
+        model.addAttribute("board", boardService.boardView(id));
         return "boards/boardview";
     }
 
@@ -53,13 +71,13 @@ public class BoardController {
 
     @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("board", boardService.boardview(id));
+        model.addAttribute("board", boardService.boardView(id));
         return "boards/boardmodify";
     }
 
     @PostMapping("/board/update/{id}")
     public String boardUpdate(@PathVariable("id") Long id, Board board, MultipartFile file) throws Exception {
-        Board boardTemp = boardService.boardview(id);
+        Board boardTemp = boardService.boardView(id);
         boardTemp.setTitle(board.getTitle());
         boardTemp.setContent(board.getContent());
 

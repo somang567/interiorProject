@@ -2,17 +2,104 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
-<th:block layout:fragment="css">
-    <style>
-        .list_text {
-            width: 500px;
-            margin: 0 auto;
-            margin: 40px;
-        }
-    </style>
-</th:block>
 <div layout:fragment="content">
+    <th:block layout:fragment="css">
+        <style>
+            .list_text {
+                width: 50vw;
+                margin: 0 auto;
+                margin-top: 4vw;
+                text-align: center;
+                position: relative;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 2vw;
+                text-align: center;
+            }
+
+            th, td {
+                padding: 1.2vw;
+                text-align: center;
+                border-bottom: 0.1vw solid #ddd;
+            }
+
+            th {
+                background-color: #f4f4f4;
+                font-weight: bold;
+            }
+
+            .write-button {
+                position: absolute;
+                right: 0;
+                top: -3vw;
+                padding: 0.8vw 1.6vw;
+                background-color: #3498db;
+                color: white;
+                text-decoration: none;
+                border-radius: 0.5vw;
+            }
+
+            .write-button:hover {
+                background-color: #2980b9;
+            }
+
+            .pagination-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 2vw;
+            }
+
+            .pagination {
+                display: flex;
+                align-items: center;
+            }
+
+            .pagination a {
+                margin: 0 0.5vw;
+                text-decoration: none;
+                color: #3498db;
+            }
+
+            .pagination strong {
+                margin: 0 0.5vw;
+                color: red;
+            }
+
+            .search-form {
+                display: flex;
+                align-items: center;
+                margin-left: 2vw;
+            }
+
+            .search-form input[type="text"] {
+                padding: 0.8vw;
+                border: 0.1vw solid #ddd;
+                border-radius: 0.4vw;
+                margin-right: 1vw;
+            }
+
+            .search-form button {
+                padding: 0.8vw 1.6vw;
+                background-color: #3498db;
+                color: white;
+                border: none;
+                border-radius: 0.4vw;
+                cursor: pointer;
+            }
+
+            .search-form button:hover {
+                background-color: #2980b9;
+            }
+        </style>
+    </th:block>
+
     <div class="list_text">
+        <a href="/board/write" class="write-button">글쓰기</a>
+
         <table>
             <thead>
             <tr>
@@ -29,6 +116,33 @@
             </tr>
             </tbody>
         </table>
+
+        <div class="pagination-container">
+            <!-- 페이지네이션 -->
+            <div class="pagination">
+                <!-- 이전 페이지 -->
+                <a th:if="${nowPage > 1}"
+                   th:href="@{/board/list(page=${nowPage-2}, searchKeyword=${param.searchKeyword})}">이전</a>
+
+                <!-- 페이지 번호 -->
+                <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+                    <a th:if="${page != nowPage}"
+                       th:href="@{/board/list(page=${page-1}, searchKeyword=${param.searchKeyword})}"
+                       th:text="${page}"></a>
+                    <strong th:if="${page == nowPage}" th:text="${page}"></strong>
+                </th:block>
+
+                <!-- 다음 페이지 -->
+                <a th:if="${nowPage < endPage}"
+                   th:href="@{/board/list(page=${nowPage}, searchKeyword=${param.searchKeyword})}">다음</a>
+            </div>
+
+            <!-- 검색 폼 -->
+            <form class="search-form" th:action="@{/board/list}" method="get">
+                <input type="text" name="searchKeyword" th:value="${param.searchKeyword}" placeholder="검색어 입력">
+                <button type="submit">검색</button>
+            </form>
+        </div>
     </div>
 </div>
 </html>
