@@ -19,7 +19,7 @@ body {
     text-align: center;
 }
 
-.header > img {
+.header > a > img {
     margin-left: 10px;
     width: 15vw;
     max-height: 90px;

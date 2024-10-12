@@ -3,7 +3,9 @@
       xmlns:sec=xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <div th:fragment="header" class="header">
-    <img th:src="@{/img/logo.png}" alt="로고" class="logo">
+    <a href="/">
+        <img th:src="@{/img/logo.png}" alt="로고" class="logo">
+    </a>
     <ul class="header-ul menu align-center expanded text-center SMN_effect-49">
         <li>
             <a href="">상품찾기</a>
@@ -11,7 +13,7 @@
         <li><a href="#">팁&매거진</a></li>
         <li><a href="#">업체찾기</a></li>
         <li>
-            <a href="#">게시판</a>
+            <a href="/board/list">게시판</a>
         </li>
     </ul>
     <!--    <button class="btn_login" sec:authorize="isAnonymous()"><img th:src="@{/img/login.png}" alt="로그인"></button>-->
