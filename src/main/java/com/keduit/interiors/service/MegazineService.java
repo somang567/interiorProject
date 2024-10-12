@@ -59,7 +59,6 @@ public class MegazineService {
   @Transactional(readOnly = true)
   public Page<Megazine> getListItemPage(Pageable pageable){
     return megazineRepository.findAll(pageable); //모든 아이템을 가져온다.
-
     //.getListItemPage(pageable);
   }
 
@@ -69,7 +68,6 @@ public class MegazineService {
 
   // 지정된 패턴을 사용해 포맷터를 만든다
   DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("a hh:mm");
-
 
 
 

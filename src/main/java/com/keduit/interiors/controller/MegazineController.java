@@ -6,6 +6,7 @@ import com.keduit.interiors.dto.MegazineDTO;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.repository.MegazineRepository;
 import com.keduit.interiors.service.MegazineService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,5 +38,11 @@ public class MegazineController {
     return "megazine/megazineMain";
   }
 
+
+  @GetMapping("/user/write/new")
+  public String magazineNew(Model model){
+    model.addAttribute("itemDTO", new MegazineDTO());
+    return "megazine/megazineForm";
+  }
 }
 

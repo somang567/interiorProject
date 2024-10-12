@@ -13,9 +13,9 @@
         $(document).ready(function(){
 
         console.log("javascript 스크립트 입니다------------------------------");
-        //등록 버튼 클릭하면 /board/register로 이동.
+        //등록 버튼 클릭하면 /megazines/register로 이동.
             $("#regBtn").on("click", function() {
-					self.location = "/megazines/register";
+					self.location = "/megazine/user/write/new";
         });
         const result = [[${result}]];
         console.log("result ------> " + result);
@@ -238,8 +238,8 @@ justify-content: end;
 
         <div class="count_and_btn">
             <h3 class="total_cnt">전체 매거진 글 수</h3>
-            <button id="regBtn" type="button"
-                    class="btn btn-primary btn-xs pull-right display-right float-right register-btn">글쓰기</button>
+            <a id="regBtn" href="/user/write/new"
+                    class="btn btn-primary btn-xs pull-right display-right float-right register-btn">글쓰기</a>
         </div>
 
         <!-- 시작 부분 -->
@@ -250,118 +250,16 @@ justify-content: end;
             <div class="col-md-4 margin">
                 <div class="card">
                     <a th:href="'/megazineItem/' + ${megazineItem.id}" class="text-dark">
-                        <img th:src="${megazineItem.imgUrl}" th:alt="${megazineItem.itemNm}" class="card-img-top" height="400">
+                        <img th:src="${megazineItem.imageUrl}" th:alt="${megazineItem.title}" class="card-img-top" height="400">
                         <div class="card-body">
-                            <h4 class="card-title">[[${megazineItem.itemNm}]]</h4>
-                            <p class="card-text">[[${megazineItem.itemDetail}]]</p>
-                            <h4 class="card-title text-danger">[[${megazineItem.price}]]원</h4>
+                            <h4 class="card-title">[[${megazineItem.title}]]</h4>
+                            <p class="card-text">[[${megazineItem.user}]]</p>
+                            <h4 class="card-title text-danger">[[${megazineItem.regTime}]]</h4>
                         </div>
                     </a>
                 </div>
             </div>
         </th:block>
-
-
-
-
-
-
-
-
-
-        <div class="elementWrap">
-
-            <div class="mga_element">
-                <div class="mga_img">이미지 입니다.</div>
-                <h4>Title</h4>
-                <h4>Content</h4>
-                <div class="mga_sub_elements">
-                    <p class="scrap_cnt"></p>
-                    <p class="view_cnt"></p>
-                </div>
-            </div>
-
-            <div class="mga_element">
-                <div class="mga_img">이미지 입니다.</div>
-                <h4>Title</h4>
-                <h4>Content</h4>
-                <div class="mga_sub_elements">
-                    <p class="scrap_cnt"></p>
-                    <p class="view_cnt"></p>
-                </div>
-            </div>
-
-            <div class="mga_element">
-                <div class="mga_img">이미지 입니다.</div>
-                <h4>Title</h4>
-                <h4>Content</h4>
-                <div class="mga_sub_elements">
-                    <p class="scrap_cnt"></p>
-                    <p class="view_cnt"></p>
-                </div>
-            </div>
-
-            <div class="mga_element">
-                <div class="mga_img">이미지 입니다.</div>
-                <h4>Title</h4>
-                <h4>Content</h4>
-                <div class="mga_sub_elements">
-                    <p class="scrap_cnt"></p>
-                    <p class="view_cnt"></p>
-                </div>
-            </div>
-
-            <div class="mga_element">
-                <div class="mga_img">이미지 입니다.</div>
-                <h4>Title</h4>
-                <h4>Content</h4>
-                <div class="mga_sub_elements">
-                    <p class="scrap_cnt"></p>
-                    <p class="view_cnt"></p>
-                </div>
-            </div>
-
-            <div class="mga_element">
-                <div class="mga_img">이미지 입니다.</div>
-                <h4>Title</h4>
-                <h4>Content</h4>
-                <div class="mga_sub_elements">
-                    <p class="scrap_cnt"></p>
-                    <p class="view_cnt"></p>
-                </div>
-            </div>
-
-            <div class="mga_element">
-                <div class="mga_img">이미지 입니다.</div>
-                <h4>Title</h4>
-                <h4>Content</h4>
-                <div class="mga_sub_elements">
-                    <p class="scrap_cnt"></p>
-                    <p class="view_cnt"></p>
-                </div>
-            </div>
-
-            <div class="mga_element">
-                <div class="mga_img">이미지 입니다.</div>
-                <h4>Title</h4>
-                <h4>Content</h4>
-                <div class="mga_sub_elements">
-                    <p class="scrap_cnt"></p>
-                    <p class="view_cnt"></p>
-                </div>
-            </div>
-
-            <div class="mga_element">
-                <div class="mga_img">이미지 입니다.</div>
-                <h4>Title</h4>
-                <h4>Content</h4>
-                <div class="mga_sub_elements">
-                    <p class="scrap_cnt"></p>
-                    <p class="view_cnt"></p>
-                </div>
-            </div>
-
-
         </div><!--wrap-->
     </div><!--wrap-->
 </div>
@@ -391,15 +289,14 @@ justify-content: end;
     <!-- /.modal-dialog -->
 </div>
 
-
-    <div class="card" style="width: 18rem;">
+  <!--  <div class="card" style="width: 18rem;">
         <img src="..." class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title">Card title</h5>
             <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
             <a href="#" class="btn btn-primary">Go somewhere</a>
         </div>
-    </div>
+    </div>-->
 
 </body>
 </html>

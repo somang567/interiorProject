@@ -23,6 +23,9 @@ public class Megazine extends BaseEntity {
   @Column(nullable = false, length = 500)
   private String title;
 
+  @Column(nullable = false, length = 200)
+  private String user;
+
   @Column(nullable = false, length = 5000)
   private String content;
 

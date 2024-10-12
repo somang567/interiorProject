@@ -11,12 +11,14 @@ import org.modelmapper.ModelMapper;
 @Setter
 @ToString
 public class MegazineDTO {
-
+//매거진 글 등록 관련 DTO
 
   private Long mno; //메거진 id
 
   private String title; //제목
 
+  private String user;  //글 등록한 사용자
+  
   private String content; //내용
 
   private int viewCount;  //조회수
