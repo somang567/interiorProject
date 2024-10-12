@@ -4,31 +4,113 @@
       layout:decorate="~{layout/layout}">
 
 <head>
-    <!-- 외부 CSS 파일 연결 -->
+    <link rel="stylesheet" href="/css/productDetail.css">
 </head>
 
-<body>
-<div id="container" layout:fragment="content">
-    <!-- 상품 카테고리 영역 -->
-    <div class="itemCategoriBox">
-        <p style="font-size: 1.3vw; font-weight: bold">상품 카테고리</p>
-        <button class="categoriOne">마루</button>  > 우드톤
+<div class="item_detailContainer" layout:fragment="content">
+    <div id="carouselExampleIndicators" class="carousel slide carousel_slide">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 
-    <!-- 상품 상세 내용 영역 -->
-    <div class="itemDetail">
-        <!-- 상품 이미지 영역 -->
-        <div class="itemImg">
-            <img src="" alt="상품 이미지"> <!-- 상품 이미지를 표시 -->
+    <div class="categori_container">
+        <p class="itemExplain" STYLE="font-size:2vw; font-weight: 700">상품 카테고리</p>
+        <button class="item_categorize">마루</button> <p style="font-size: 1vw; font-weight: 800;">> 우드톤</p>
+    </div>
+
+    <div class="itemDetail_container">
+        <div id="carouselExample" class="carousel slide carousel_itemSlide">
+            <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
         </div>
-        <!-- 상품 상세 설명 영역 -->
-        <div class="detail">
-            <p>상품 제목</p>
-            <p>상품 가격</p>
-            <p>상품 색상</p>
-            <p>상품 설명</p>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+
+        <div class="itemDetailExpain">
+            <p style="font-size: 2vw; color:  black; font-weight: 800; padding-top: 4vw">상품제목</p>
+            <div class="itemPrice">
+                <p style="font-size: 2vw; color:  red; font-weight: 800; padding-left: 5vw;">60%</p>
+                <p style="font-size: 2vw; color:  black; font-weight: 800;padding-left: 2vw;">17,000원</p>
+            </div>
+            <div class="itemColor" style="padding-top: 2vw;">
+                <p style="font-size: 2vw; color: black; font-weight: 800;">상품색상</p>
+                <div class="ItemImageBox" style="padding-top: 2vw;">
+                    <button class="itemColorButton">
+
+                    </button>
+                    <button class="itemColorButton">
+
+                    </button>
+                </div>
+
+                <div class="ItemSizeContainer" style="padding-top: 2vw;">
+                    <p style="font-size: 2vw; color: black; font-weight: 800;">상품사이즈 선택</p>
+                    <div class="ItemSizeBox" style="padding-top: 2vw;">
+                        <button class="itemSize1">
+                            <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
+                        </button>
+                        <button class="itemSize2">
+                            <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
+                        </button>
+                        <button class="itemSize3">
+                            <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="itemStock" style="padding-top: 2vw;">
+                    <p style="font-size: 2vw; font-weight: 600">현재 재고 수량 : </p>
+                </div>
+                <div class="warningItemDetail" style="padding-top: 2vw;">
+                    <p style="font-size: 2vw; font-weight: 600">- 상품 주의사항</p>
+                    <p style="font-size: 1vw; font-weight: 600">Lorem ipsum dolor sit amet,
+                        consectetur adipisicing elit. Assumenda commodi
+                        consectetur culpa distinctio dolor ducimus eius enim facilis,
+                        necessitatibus obcaecati omnis provident,
+                        sint sit sunt tempore! Mollitia nobis quae quaerat?</p>
+                </div>
+            </div>
         </div>
     </div>
+    <div class="snsShare">
+        <p style="font-size: 2vw; font-weight: 800; margin-top: 3.5vw; text-align: center;">SNS 공유하기</p>
+
+    </div>
 </div>
-</body>
-</html>

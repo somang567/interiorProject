@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @ToString
-public class productDTO {
+public class ProductDTO {
 	private Long id;
 
 	@NotBlank(message = "상품 이름 입력은 필수입니다.")

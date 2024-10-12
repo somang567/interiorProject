@@ -1,21 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout}">
+      layout:decorate="~{layout/layout}"
+>
 
 <head>
     <link rel="stylesheet" href="/css/product.css">
 </head>
 
-<body>
-<div layout:fragment="content">
-    <div id="carouselExampleIndicators" class="carousel slide carousel_slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner img_size">
+<!-- 사용자 JS 추가 -->
+<th:block layout:fragment="script">
+    <script>
+        $(document).ready(function (){
+            $('#wall_button').click(function (){
+                window.location.href = '/item/Wall';
+            });
+
+            $('#tail_button').click(function (){
+                window.location.href = '/item/Tail';
+            });
+
+            $('#stock_button').click(function (){
+                window.location.href = '/item/Stock';
+            });
+
+            $('#furniture_button').click(function (){
+                window.location.href = '/item/furniture';
+            });
+
+            $('#floor_button').click(function (){
+                window.location.href = '/item/floor';
+            });
+        });
+    </script>
+</th:block>
+
+<div class="Item_ContainerMain" layout:fragment="content">
+    <div id="carouselExampleIndicators" class="carousel slide carousel_slide">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
             <div class="carousel-item active">
                 <img src="..." class="d-block w-100" alt="...">
             </div>
@@ -26,16 +53,15 @@
                 <img src="..." class="d-block w-100" alt="...">
             </div>
         </div>
-        <a class="carousel-control-prev image_prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only"></span>
-        </a>
-        <a class="carousel-control-next image_next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only"></span>
-        </a>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-
     <div class="selection">
         <p style="text-align: center; color: black; font-size: 2vw; font-weight: bold; padding-top: 5vh;">찾으시는 상품 있으실까요 ?</p>
         <p style="text-align: center; color:black; font-size: 2vw;font-weight: bold; padding-bottom: 5vh;">모든 자재들을 한 눈에 확인해보세요 !!</p>
@@ -43,31 +69,31 @@
         <div class="categoriBox">
             <div class="type">
                 <div class="categori_image_box">
-                    <button class="select_categori_button"></button>
+                    <button class="select_categori_button" id="wall_button" type="button"></button>
                 </div>
                 <p class="item_name">벽지</p>
             </div>
             <div class="type">
                 <div class="categori_image_box2">
-                    <button class="select_categori_button"></button>
+                    <button class="select_categori_button" id="tail_button" type="button"></button>
                 </div>
                 <p class="item_name">타일</p>
             </div>
             <div class="type">
                 <div class="categori_image_box3">
-                    <button class="select_categori_button"></button>
+                    <button class="select_categori_button" id="stock_button" type="button"></button>
                 </div>
                 <p class="item_name">수납</p>
             </div>
             <div class="type">
                 <div class="categori_image_box4">
-                    <button class="select_categori_button"></button>
+                    <button class="select_categori_button" id="furniture_button" type="button"></button>
                 </div>
                 <p class="item_name">가구</p>
             </div>
             <div class="type">
                 <div class="categori_image_box5">
-                    <button class="select_categori_button"></button>
+                    <button class="select_categori_button" id="floor_button" type="button"></button>
                 </div>
                 <p class="item_name">바닥재</p>
             </div>

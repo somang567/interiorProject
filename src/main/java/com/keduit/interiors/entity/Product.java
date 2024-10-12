@@ -1,13 +1,14 @@
 package com.keduit.interiors.entity;
 
 import com.keduit.interiors.constant.CS;
-import com.keduit.interiors.dto.productDTO;
+import com.keduit.interiors.dto.ProductDTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -38,9 +39,16 @@ public class Product extends BaseEntity{
 	@Column(name = "cs_status")
 	private CS csStatus;
 
-	private static ModelMapper modelMapper = new ModelMapper();
+	@OneToMany(mappedBy = "product_id",cascade = CascadeType.ALL , orphanRemoval = true)
+	private List<ProductImg> productImgList = new ArrayList<>();
 
-	private void updateItem(productDTO product){
+	// 상품 이미지 추가 메소드
+	public void addProductImage(ProductImg productImg) {
+		productImgList.add(productImg);
+		productImg.setProduct_id(this); // 양방향 관계 설정
+	}
+
+	private void updateItem(ProductDTO product){
 		this.product_name = product.getProductName();
 		this.product_Detail = product.getProductDetail();
 		this.price = product.getPrice();
