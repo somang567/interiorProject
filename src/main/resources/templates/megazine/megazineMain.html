@@ -1,34 +1,405 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+      layout:decorate="~{layout/layout}">
 <head>
     <meta charset="UTF-8">
     <title>MegazineMain</title>
 </head>
+
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        $(document).ready(function(){
+
+        console.log("javascript 스크립트 입니다------------------------------");
+        //등록 버튼 클릭하면 /board/register로 이동.
+            $("#regBtn").on("click", function() {
+					self.location = "/megazines/register";
+        });
+        const result = [[${result}]];
+        console.log("result ------> " + result);
+        checkModal(result);
+
+        // 등록, 수정, 삭제 후 모달처리
+				function checkModal(result) {
+				//history.state는 웹 브라우저의 History API의 일부로, 현재 활성화된 히스토리 항목의 상태 객체를 반환합니다.
+				//이 객체는 pushState() 또는 replaceState() 메서드를 사용하여 설정한 데이터에 접근할 수 있게 해줍니다.
+					if (result === '' || history.state) {
+						return;
+					}
+
+					if (parseInt(result) > 0) {
+						$(".modal-body").html(
+								"게시글 " + parseInt(result) + " 번이 등록 되었습니다.");
+					}
+
+					$("#myModal").modal("show");
+				}
+
+                $(".move").on("click", function(e){
+                    e.preventDefault();	// 1. 링크의 기본 클릭 동작을 방지합니다.
+                    $("input[name='mno']").remove();	// 2. 기존에 있는 mno 입력 필드를 제거합니다.
+                    actionForm.append("<input type='hidden' name='mno' value='"+$(this).attr("href")+"'>"); // 3. 클릭한 링크의 href 값을 가진 숨겨진 입력 필드를 추가합니다.
+                    actionForm.attr("action","/megazines/get");	// 4. actionForm의 제출 URL을 설정합니다.
+                    actionForm.submit(); // 5. actionForm을 제출합니다.
+                });
+        });
+    </script>
+</th:block>
+
+
+
+
+
+
+<th:block layout:fragment="css">
+    <style>
+        *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.wrap{
+    width:80vw;
+    height:100%;
+    margin: 0 auto;
+
+}
+.mga_banner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:100%;
+    height:24vw;
+    text-align: center;
+    margin-bottom: 5vw;
+    color: rgb(255, 255, 255);
+    background-color: rgb(98, 98, 98);
+}
+.banner_title{
+    font-size: 2vw;
+}
+.main_title1{
+    color:rgb(0, 0, 0);
+}
+.famous_lists{
+    display: flex;
+    justify-content: space-between;
+    width:100%;
+    height:15vw;
+    margin-top: 2vw;
+    margin-bottom: 5vw;
+    background-color: antiquewhite;
+}
+.fmgabox_list{
+    width:25vw;
+    height:100%;
+    background-color: rgb(176, 140, 85);
+    list-style-type: none;
+}
+/*검색하는 부분*/
+.main_title2{
+    color:rgb(0, 0, 0);
+    margin-top: 2vw;
+}
+.mga_search{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width:100%;
+    height:6vw;
+    border: 0.1vw solid rgb(206, 206, 206);
+    border-radius: 1vw;
+    margin-top: 2vw;
+}
+.mga_search_li{
+    list-style-type:none;
+    width:8vw;
+    height:2.2vw;
+    /*background-color: aqua;*/
+    border-bottom: 0.1vw solid gray ;
+}
+.mga_search_li_btn{
+    list-style-type:none;
+    width:8vw;
+    height:2.2vw;
+    /*background-color: aqua;*/
+    text-align: center;
+}
+.search_btn{
+    width:5vw;
+    height:100%;
+    border-radius: 0.2vw;
+    background-color: rgb(67, 67, 67);
+    border: none;
+    font-size: 1vw;
+    color: white;
+}
+.search_btn:hover{
+    background-color:#EE7828;
+    transition: all 1s ease;
+}
+/*전체 매거진 글 수*/
+.total_cnt{
+    margin: 5vw 0 1vw 0;
+    font-size:1vw;
+}
+.elementWrap{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3개의 열 */
+    gap: 3vw; /* 박스 간의 간격 */
+    width:100%;
+    height:60vw;
+    margin: 0 auto;
+}
+.mga_element{
+    width: 24vw;
+    height:18vw;
+    background-color: aqua;
+}
+.mga_img{
+    width:100%;
+    height:10vw;
+    background-color: blue;
+}
+.count_and_btn{
+display:flex;
+justify-content: space-between;
+width:100%;
+height:10vw;
+}
+#regBtn{
+display:flex;
+justify-content: end;
+    height:2vw;
+}
+.carousel{
+    width:100%;
+    height:30vw;
+    background-color:grey;
+}
+</style>
+</th:block>
+
+
 <body>
 <div layout:fragment="content">
 <div class="row">
-    <h2>매거진 페이지입니다.</h2>
-    <!--
-  status: 반복의 상태 정보를 담는 변수
-   ${} 구문은 Thymeleaf의 표현식 언어로, Spring MVC 모델에서 제공하는 데이터를 참조합니다.
-   <th:block th:each="item, status: ${items.getContent()}">
-    <div class="col-md-4 margin">
-      <div class="card">
-        <a th:href="'/item/' + ${item.id}" class="text-dark">
-          <img th:src="${item.imgUrl}" th:alt="${item.itemNm}" class="card-img-top" height="400">
-          <div class="card-body">
-            <h4 class="card-title">[[${item.itemNm}]]</h4>
-            <p class="card-text">[[${item.itemDetail}]]</p>
-            <h4 class="card-title text-danger">[[${item.price}]]원</h4>
-          </div>
-        </a>
-      </div>
+
+
+    <div id="carouselExampleIndicators" class="carousel slide">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="..." class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div><!-- end of carousel -->
+
+
+    <div class="wrap">
+
+        <h2 class="main_title1">요즘 유행하는 매거진</h2>
+
+        <!-- 크롤링 카드뉴스 넣을 부분/ 이후 진행 -->
+        <ul class="famous_lists">
+            <li class="fmgabox_list"></li>
+            <li class="fmgabox_list"></li>
+            <li class="fmgabox_list"></li>
+        </ul>
+
+        <h2 class="main_title2">Megazine Search</h2>
+        <ul class="mga_search">
+            <li class="mga_search_li">등록순 ▼</li>
+            <li class="mga_search_li">주거형태 ▼</li>
+            <li class="mga_search_li">평수 ▼</li>
+            <li class="mga_search_li">스타일 ▼</li>
+            <li class="mga_search_li_btn"><button class="search_btn">적용</button></li>
+        </ul>
+
+        <div class="count_and_btn">
+            <h3 class="total_cnt">전체 매거진 글 수</h3>
+            <button id="regBtn" type="button"
+                    class="btn btn-primary btn-xs pull-right display-right float-right register-btn">글쓰기</button>
+        </div>
+
+        <!-- 시작 부분 -->
+
+        <!-- status: 반복의 상태 정보를 담는 변수 -->
+        <!-- ${} 구문은 Thymeleaf의 표현식 언어로, Spring MVC 모델에서 제공하는 데이터를 참조합니다. -->
+        <th:block th:each="megazineItem, status: ${megazineItems.getContent()}">
+            <div class="col-md-4 margin">
+                <div class="card">
+                    <a th:href="'/megazineItem/' + ${megazineItem.id}" class="text-dark">
+                        <img th:src="${megazineItem.imgUrl}" th:alt="${megazineItem.itemNm}" class="card-img-top" height="400">
+                        <div class="card-body">
+                            <h4 class="card-title">[[${megazineItem.itemNm}]]</h4>
+                            <p class="card-text">[[${megazineItem.itemDetail}]]</p>
+                            <h4 class="card-title text-danger">[[${megazineItem.price}]]원</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </th:block>
+
+
+
+
+
+
+
+
+
+        <div class="elementWrap">
+
+            <div class="mga_element">
+                <div class="mga_img">이미지 입니다.</div>
+                <h4>Title</h4>
+                <h4>Content</h4>
+                <div class="mga_sub_elements">
+                    <p class="scrap_cnt"></p>
+                    <p class="view_cnt"></p>
+                </div>
+            </div>
+
+            <div class="mga_element">
+                <div class="mga_img">이미지 입니다.</div>
+                <h4>Title</h4>
+                <h4>Content</h4>
+                <div class="mga_sub_elements">
+                    <p class="scrap_cnt"></p>
+                    <p class="view_cnt"></p>
+                </div>
+            </div>
+
+            <div class="mga_element">
+                <div class="mga_img">이미지 입니다.</div>
+                <h4>Title</h4>
+                <h4>Content</h4>
+                <div class="mga_sub_elements">
+                    <p class="scrap_cnt"></p>
+                    <p class="view_cnt"></p>
+                </div>
+            </div>
+
+            <div class="mga_element">
+                <div class="mga_img">이미지 입니다.</div>
+                <h4>Title</h4>
+                <h4>Content</h4>
+                <div class="mga_sub_elements">
+                    <p class="scrap_cnt"></p>
+                    <p class="view_cnt"></p>
+                </div>
+            </div>
+
+            <div class="mga_element">
+                <div class="mga_img">이미지 입니다.</div>
+                <h4>Title</h4>
+                <h4>Content</h4>
+                <div class="mga_sub_elements">
+                    <p class="scrap_cnt"></p>
+                    <p class="view_cnt"></p>
+                </div>
+            </div>
+
+            <div class="mga_element">
+                <div class="mga_img">이미지 입니다.</div>
+                <h4>Title</h4>
+                <h4>Content</h4>
+                <div class="mga_sub_elements">
+                    <p class="scrap_cnt"></p>
+                    <p class="view_cnt"></p>
+                </div>
+            </div>
+
+            <div class="mga_element">
+                <div class="mga_img">이미지 입니다.</div>
+                <h4>Title</h4>
+                <h4>Content</h4>
+                <div class="mga_sub_elements">
+                    <p class="scrap_cnt"></p>
+                    <p class="view_cnt"></p>
+                </div>
+            </div>
+
+            <div class="mga_element">
+                <div class="mga_img">이미지 입니다.</div>
+                <h4>Title</h4>
+                <h4>Content</h4>
+                <div class="mga_sub_elements">
+                    <p class="scrap_cnt"></p>
+                    <p class="view_cnt"></p>
+                </div>
+            </div>
+
+            <div class="mga_element">
+                <div class="mga_img">이미지 입니다.</div>
+                <h4>Title</h4>
+                <h4>Content</h4>
+                <div class="mga_sub_elements">
+                    <p class="scrap_cnt"></p>
+                    <p class="view_cnt"></p>
+                </div>
+            </div>
+
+
+        </div><!--wrap-->
+    </div><!--wrap-->
+</div>
+
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">처리가 완료되었습니다.</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
     </div>
-  </th:block>
-  -->
+    <!-- /.modal-dialog -->
 </div>
-</div>
+
+
+    <div class="card" style="width: 18rem;">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+
 </body>
 </html>

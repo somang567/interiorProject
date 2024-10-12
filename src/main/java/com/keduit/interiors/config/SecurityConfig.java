@@ -1,3 +1,4 @@
+/*
 package com.keduit.interiors.config;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -37,7 +38,7 @@ public class SecurityConfig {
 
     http.authorizeRequests()
         .mvcMatchers("/", "/members/**",
-            "/img/**","error", "favicon.ico", "/boards/list/**"  ).permitAll()
+            "/img/**","error", "favicon.ico", "/boards/list/**" ,"/megazines/**" ).permitAll()
         .anyRequest().authenticated();  //이 메서드는 위에서 정의한 특정 URL 패턴 이외의 모든 요청에 대해 인증을 요구합니다. 즉, 사용자가 인증된 상태여야만 다른 모든 요청을 수행할 수 있습니다.
 
     //메서드는 인증 및 인가 관련 예외를 처리하기 위한 설정을 시작하는 메서드입니다. 이 메서드를 호출하면, 인증 실패나 인가 실패 시의 동작을 정의할 수 있는 체인으로 이동합니다.
@@ -63,4 +64,6 @@ public class SecurityConfig {
   }
 
 }
+
+*/
 

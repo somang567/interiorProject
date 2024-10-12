@@ -1,3 +1,5 @@
+
+/*
 package com.keduit.interiors.config;
 
 import org.springframework.security.core.AuthenticationException;
@@ -30,3 +32,4 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     }
   }
 }
+*/

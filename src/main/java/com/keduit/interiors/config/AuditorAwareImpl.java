@@ -1,4 +1,4 @@
-package com.keduit.interiors.config;
+/*package com.keduit.interiors.config;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
@@ -19,3 +19,4 @@ public class AuditorAwareImpl implements AuditorAware {
     return Optional.of(userId);
   }
 }
+*/
