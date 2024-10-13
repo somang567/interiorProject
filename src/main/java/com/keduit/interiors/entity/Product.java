@@ -1,6 +1,7 @@
 package com.keduit.interiors.entity;
 
 import com.keduit.interiors.constant.CS;
+import com.keduit.interiors.constant.ProductSell;
 import com.keduit.interiors.dto.ProductDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,8 +37,8 @@ public class Product extends BaseEntity{
 	@Column(name = "price")
 	private int price;
 
-	@Column(name = "cs_status")
-	private CS csStatus;
+	@Column(name = "product_sell")
+	private ProductSell productSell;
 
 	@OneToMany(mappedBy = "product_id",cascade = CascadeType.ALL , orphanRemoval = true)
 	private List<ProductImg> productImgList = new ArrayList<>();
@@ -52,7 +53,7 @@ public class Product extends BaseEntity{
 		this.product_name = product.getProductName();
 		this.product_Detail = product.getProductDetail();
 		this.price = product.getPrice();
-		this.csStatus = product.getCsStatus();
+		this.productSell = product.getProductSell();
 	}
 
 }
