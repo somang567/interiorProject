@@ -97,13 +97,33 @@
   <!-- enctype="multipart/form-data" 이미지 등록 -->
   <!-- itemDTO 에서 선택한 객체에 접근해서 HTMl 태그의 id,name,value 속성을 자동처리 -->
   <form role="form" method="post" th:object="${megazineDTO}" enctype="multipart/form-data">
-    <input type="hidden" th:field="*{id}">
-    <div class="form-group">
-      <select th:field="*{itemSellStatus}" class="custom-select">
-        <option value="SELL">판매중</option>
-        <option value="SOLD_OUT">품절</option>
-      </select>
+
+    <!--비어있는 경우-->
+    <div th:if="${#lists.isEmpty(megazineDTO.itemImgDTOList)}">
+      <div class="form-group" th:each="num: ${#numbers.sequence(1,1)}">
+        <div class="custom-file img-div">
+          <input type="file" class="custom-file-input"
+                 name="itemImgFile">
+          <label class="custom-file-label"
+                 th:text="상품이미지 + ${num}"></label>
+        </div>
+      </div>
     </div>
+
+    <!--비어있지 않은 경우 이미지가 있는 경우-->
+    <!--itemDTO.itemImgDTOList가 비어 있지 않은 경우에만 이 <div> 블록이 렌더링됩니다-->
+    <div th:if="${not #lists.isEmpty(megazineDTO.itemImgDTOList)}">
+      <div class="form-group" th:each="itemImgDTO, status: ${itemDTO.itemImgDTOList}">
+        <div class="custom-file img-div">
+          <input type="file" class="custom-file-input" name="itemImgFile">
+          <input type="hidden" name="itemImgIds" th:value="${itemImgDTO.id}">
+          <label class="custom-file-label"
+                 th:text="${not #strings.isEmpty(itemImgDTO.oriImgName)} ?
+                    ${itemImgDTO.oriImgName} : '상품이미지' + ${status.count}"></label>
+        </div>
+      </div>
+    </div>
+
 
 
 
@@ -160,30 +180,7 @@
       </div>
     </div>
 
-    <div th:if="${#lists.isEmpty(megazineDTO.itemImgDTOList)}">
-      <div class="form-group" th:each="num: ${#numbers.sequence(1,1)}">
-        <div class="custom-file img-div">
-          <input type="file" class="custom-file-input"
-                 name="itemImgFile">
-          <label class="custom-file-label"
-                 th:text="상품이미지 + ${num}"></label>
-        </div>
-      </div>
-    </div>
 
-    <!--비어있지 않은 경우 이미지가 있는 경우-->
-    <!--itemDTO.itemImgDTOList가 비어 있지 않은 경우에만 이 <div> 블록이 렌더링됩니다-->
-    <div th:if="${not #lists.isEmpty(itemDTO.itemImgDTOList)}">
-      <div class="form-group" th:each="itemImgDTO, status: ${itemDTO.itemImgDTOList}">
-        <div class="custom-file img-div">
-          <input type="file" class="custom-file-input" name="itemImgFile">
-          <input type="hidden" name="itemImgIds" th:value="${itemImgDTO.id}">
-          <label class="custom-file-label"
-                 th:text="${not #strings.isEmpty(itemImgDTO.oriImgName)} ?
-                    ${itemImgDTO.oriImgName} : '상품이미지' + ${status.count}"></label>
-        </div>
-      </div>
-    </div>
 
     <!-- 조건부로 버튼을 생성: 삽입버튼/ 수정버튼 id가 비어있으면 저장/ 아님 unless  수정-->
     <!--${#strings.isEmpty(itemDTO.id)} : Thymeleaf의 유틸리티 함수 -->
