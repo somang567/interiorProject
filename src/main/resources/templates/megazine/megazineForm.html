@@ -43,9 +43,9 @@
 <th:block layout:fragment="css">
   <style>
     .wrap{
-      width:90vw;
+      width:70vw;
       height:100%;
-      margin:0 auto;
+      margin:3vw auto;
     }
     .input-group{
       margin-bottom: 15px;
@@ -58,10 +58,22 @@
     }
     .know_how_box{
       width:100%;
-      height:12vw;
+      height:18vw;
+      padding:2vw;
       background-color:cyan;
       border-radius:1vw;
       border:0.1vw solid grey;
+    }
+    .know_how_title{
+      font-size:1.5vw;
+      margin-bottom:1.5vw;
+    }
+    .know_how_lists{
+      line-height:2vw;
+    }
+    .know_how_list{
+      font-size:1vw;
+      list-style-type:circle;
     }
   </style>
 </th:block>
@@ -69,9 +81,9 @@
 
 <div layout:fragment="content">
   <div class="wrap">
-  <h1>매거진 등록</h1>
+  <h1 hidden>매거진 등록</h1>
   <div class="know_how_box">
-    <h2>매거진 작성 가이드</h2><span>원활한 매거진 발행을 위해 꼭 읽어주세요.</span>
+    <h2 class="know_how_title">매거진 작성 가이드 <span>원활한 매거진 발행을 위해 꼭 읽어주세요.</span></h2>
     <ul class="know_how_lists">
       <li class="know_how_list">작성해주신 꿀팁 콘텐츠는 00앱에 14일 내로 반영됩니다. 완성본은 '발생신청' 버튼을 눌러주세요.</li>
       <li class="know_how_list">영리 목적의 콘텐츠, 타인의 권리를 침해하는 콘텐츠, 음란성/혐오성/기타 법령을 위배하는 콘텐츠는 게시하지 않거나 삭제될 수 있습니다.</li>
