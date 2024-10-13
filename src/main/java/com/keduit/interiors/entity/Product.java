@@ -1,8 +1,10 @@
 package com.keduit.interiors.entity;
 
-import com.keduit.interiors.constant.CS;
 import com.keduit.interiors.constant.ProductSell;
 import com.keduit.interiors.dto.ProductDTO;
+import com.keduit.interiors.entity.BaseEntity;
+import com.keduit.interiors.entity.Member;
+import com.keduit.interiors.entity.ProductImg;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class Product extends BaseEntity{
+public class Product extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +42,11 @@ public class Product extends BaseEntity{
 	@Column(name = "product_sell")
 	private ProductSell productSell;
 
-	@OneToMany(mappedBy = "product_id",cascade = CascadeType.ALL , orphanRemoval = true)
+	// 추가: 상품 종류 필드
+	@Column(name = "product_type")
+	private String productType;
+
+	@OneToMany(mappedBy = "product_id", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductImg> productImgList = new ArrayList<>();
 
 	// 상품 이미지 추가 메소드
@@ -49,11 +55,11 @@ public class Product extends BaseEntity{
 		productImg.setProduct_id(this); // 양방향 관계 설정
 	}
 
-	private void updateItem(ProductDTO product){
+	public void updateItem(ProductDTO product) {
 		this.product_name = product.getProductName();
 		this.product_Detail = product.getProductDetail();
 		this.price = product.getPrice();
 		this.productSell = product.getProductSell();
+		this.productType = product.getProductType(); // 추가된 필드 업데이트
 	}
-
 }

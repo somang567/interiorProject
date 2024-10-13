@@ -59,54 +59,54 @@
             </button>
         </div>
 
-
         <div class="itemDetailExpain">
-            <p style="font-size: 2vw; color:  black; font-weight: 800; padding-top: 4vw">상품제목</p>
-            <div class="itemPrice">
-                <p style="font-size: 2vw; color:  red; font-weight: 800; padding-left: 5vw;">60%</p>
-                <p style="font-size: 2vw; color:  black; font-weight: 800;padding-left: 2vw;">17,000원</p>
-            </div>
-            <div class="itemColor" style="padding-top: 2vw;">
-                <p style="font-size: 2vw; color: black; font-weight: 800;">상품색상</p>
-                <div class="ItemImageBox" style="padding-top: 2vw;">
-                    <button class="itemColorButton">
+            <form th:action="@{/item/addItem}" method="post" th:object="${productDTO}">
+                <p style="font-size: 2vw; color: black; font-weight: 800; padding-top: 4vw;">
+                    <input type="text" th:field="*{productName}" placeholder="상품 제목을 입력해주세요." style="border: none; font-size: 2vw; color: black; font-weight: 800; width: 100%; padding: 0;">
+                </p>
 
-                    </button>
-                    <button class="itemColorButton">
-
-                    </button>
+                <div class="itemPrice">
+                    <p style="font-size: 2vw; color: red; font-weight: 800; padding-left: 5vw;">60%</p>
+                    <p style="font-size: 2vw; color: black; font-weight: 800; padding-left: 2vw;">17,000원</p>
                 </div>
 
-                <div class="ItemSizeContainer" style="padding-top: 2vw;">
-                    <p style="font-size: 2vw; color: black; font-weight: 800;">상품사이즈 선택</p>
-                    <div class="ItemSizeBox" style="padding-top: 2vw;">
-                        <button class="itemSize1">
-                            <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
-                        </button>
-                        <button class="itemSize2">
-                            <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
-                        </button>
-                        <button class="itemSize3">
-                            <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
-                        </button>
+                <div class="itemColor" style="padding-top: 2vw;">
+                    <p style="font-size: 2vw; color: black; font-weight: 800;">상품색상</p>
+                    <div class="ItemImageBox" style="padding-top: 2vw;">
+                        <button class="itemColorButton"></button>
+                        <button class="itemColorButton"></button>
+                    </div>
+
+                    <div class="ItemSizeContainer" style="padding-top: 2vw;">
+                        <p style="font-size: 2vw; color: black; font-weight: 800;">상품사이즈 선택</p>
+                        <div class="ItemSizeBox" style="padding-top: 2vw;">
+                            <button class="itemSize1">
+                                <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
+                            </button>
+                            <button class="itemSize2">
+                                <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
+                            </button>
+                            <button class="itemSize3">
+                                <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="itemStock" style="padding-top: 2vw;">
+                        <p style="font-size: 2vw; font-weight: 600">현재 재고 수량 : </p>
+                    </div>
+
+                    <div class="warningItemDetail" style="padding-top: 2vw;">
+                        <p style="font-size: 2vw; font-weight: 600">- 상품 주의사항</p>
+                        <p style="font-size: 1vw; font-weight: 600">
+                            <textarea th:field="*{productDetail}" placeholder="상품 상세 설명" rows="4" style="width: 100%; font-size: 1vw; font-weight: 600;"></textarea>
+                        </p>
                     </div>
                 </div>
-
-                <div class="itemStock" style="padding-top: 2vw;">
-                    <p style="font-size: 2vw; font-weight: 600">현재 재고 수량 : </p>
-                </div>
-                <div class="warningItemDetail" style="padding-top: 2vw;">
-                    <p style="font-size: 2vw; font-weight: 600">- 상품 주의사항</p>
-                    <p style="font-size: 1vw; font-weight: 600">Lorem ipsum dolor sit amet,
-                        consectetur adipisicing elit. Assumenda commodi
-                        consectetur culpa distinctio dolor ducimus eius enim facilis,
-                        necessitatibus obcaecati omnis provident,
-                        sint sit sunt tempore! Mollitia nobis quae quaerat?</p>
-                </div>
-            </div>
+            </form>
         </div>
-    </div>
-    <div class="snsShare">
+
+        <div class="snsShare">
         <p style="font-size: 2vw; font-weight: 800; margin-top: 3.5vw; text-align: center;">SNS 공유하기</p>
 
     </div>

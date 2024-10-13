@@ -32,6 +32,8 @@ public class ProductDTO {
 
 	private ProductSell productSell;
 
+	private String productType;
+
 	private List<ProductImg> productImgList = new ArrayList<>();
 	private List<Long> ProductImgIds = new ArrayList<>();
 
