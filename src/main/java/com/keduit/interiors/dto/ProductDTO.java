@@ -1,6 +1,9 @@
 package com.keduit.interiors.dto;
 
 import com.keduit.interiors.constant.CS;
+import com.keduit.interiors.constant.ProductSell;
+import com.keduit.interiors.entity.Product;
+import com.keduit.interiors.entity.ProductImg;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +11,8 @@ import lombok.ToString;
 import org.modelmapper.ModelMapper;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Getter
@@ -25,9 +30,22 @@ public class ProductDTO {
 	@NotBlank(message = "가격은 필수입력입니다.")
 	private int price;
 
-	private CS csStatus;
+	private ProductSell productSell;
+
+	private String productType;
+
+	private List<ProductImg> productImgList = new ArrayList<>();
+	private List<Long> ProductImgIds = new ArrayList<>();
 
 	private static ModelMapper modelMapper = new ModelMapper();
+
+	public Product createProductItem(){
+		return modelMapper.map(this , Product.class);
+	}
+
+	public static ProductDTO of(Product product){
+		return modelMapper.map(product , ProductDTO.class);
+	}
 
 
 }

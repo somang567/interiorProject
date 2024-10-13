@@ -29,4 +29,10 @@ public class ProductImg extends BaseEntity{
 
 	@Column(name = "img_name")
 	private String img_name;
+
+	public void updateItemImg(String origin_img_name, String img_name, String file_url){
+		this.origin_img_name = origin_img_name;
+		this.img_name = img_name;
+		this.file_url = file_url;
+	}
 }
