@@ -176,6 +176,21 @@ justify-content: end;
     height:30vw;
     background-color:grey;
 }
+.banner-img{
+    display:inline-block;
+    width:100vw;
+    height:100%;
+}
+/*carousel slide 안의 배경 이미지*/
+/*
+#carouselExampleIndicators:nth-child(1){
+ background-image: url("../img/arco1.jpg");
+}
+*/
+img{
+    width:100vw;
+    height:10vw;
+}
 </style>
 </th:block>
 
@@ -193,13 +208,13 @@ justify-content: end;
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="..." class="d-block w-100" alt="...">
+                <img th:src="@{/img/arco1.jpg}" class="d-block w-100 banner-img" alt="...">
             </div>
             <div class="carousel-item">
-                <img src="..." class="d-block w-100" alt="...">
+                <img th:src="@{/img/arco2.jpg}" class="d-block w-100 banner-img" alt="...">
             </div>
             <div class="carousel-item">
-                <img src="..." class="d-block w-100" alt="...">
+                <img src="..." class="d-block w-100 banner-img" alt="...">
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
