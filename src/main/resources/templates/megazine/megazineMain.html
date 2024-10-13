@@ -15,7 +15,7 @@
         console.log("javascript 스크립트 입니다------------------------------");
         //등록 버튼 클릭하면 /megazines/register로 이동.
             $("#regBtn").on("click", function() {
-					self.location = "/megazine/user/write/new";
+					self.location = "/megazines/user/write/new";
         });
         const result = [[${result}]];
         console.log("result ------> " + result);
@@ -235,14 +235,14 @@ justify-content: end;
 
         <div class="count_and_btn">
             <h3 class="total_cnt">전체 매거진 글 수</h3>
-            <a id="regBtn" href="/user/write/new"
+            <a id="regBtn"
                     class="btn btn-primary btn-xs pull-right display-right float-right register-btn">글쓰기</a>
         </div>
 
         <!-- 시작 부분 -->
 
         <!-- status: 반복의 상태 정보를 담는 변수 -->
-        <!-- ${} 구문은 Thymeleaf의 표현식 언어로, Spring MVC 모델에서 제공하는 데이터를 참조합니다. -->
+        <!--megazineItems에서 모든 콘텐츠들을 가져와-->
         <th:block th:each="megazineItem, status: ${megazineItems.getContent()}">
             <div class="col-md-4 margin">
                 <div class="card">
@@ -262,7 +262,37 @@ justify-content: end;
 </div>
 
 
+<!-- 페이지 처리 부분 -->
+<div th:with="start=${(items.number/maxPage)*maxPage + 1},
+                  end=(${(items.totalPages == 0)? 1 :
+                  (start + (maxPage -1) < items.totalPages ? start + (maxPage -1) : items.totalPages)})"><!--realEnd 시작 -->
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${items.first}? 'disabled'">
+            <a th:href="@{ '/' + '?searchQuery=' + ${itemSearchDTO.searchQuery} + '&page=' + ${items.number -1}}"
+               aria-label="Previous" class="page-link"><!--items.number: 현재 페이지 -->
+                <span aria-hidden="true">Previous</span>
+            </a>
+        </li>
+
+        <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}"
+            th:classappend="${items.number eq page -1} ? 'active' : ''"><!--items.number: 현재 페이지가 0부터 이기 때문에 1을 빼줌 -->
+            <a th:href="@{'/' + '?searchQuery=' + ${itemSearchDTO.searchQuery} + '&page=' + ${page - 1}}"
+               th:inline="text" class="page-link">[[${page}]]</a>
+        </li>
+
+
+        <li class="page-item" th:classappend="${items.last}? 'disabled'">
+            <a th:href="@{'/' + '?searchQuery=' + ${itemSearchDTO.searchQuery} + '&page=' + ${items.number +1}}"
+               aria-label="Next" class="page-link"><!--items.number: 현재 페이지 -->
+                <span aria-hidden="true">Next</span>
+            </a>
+        </li>
+
+    </ul>
 </div>
+
+
+
 
 
 <!-- Modal -->

@@ -38,10 +38,9 @@ public class MegazineController {
     return "megazine/megazineMain";
   }
 
-
   @GetMapping("/user/write/new")
   public String magazineNew(Model model){
-    model.addAttribute("itemDTO", new MegazineDTO());
+    model.addAttribute("megazineDTO", new MegazineDTO());
     return "megazine/megazineForm";
   }
 }
