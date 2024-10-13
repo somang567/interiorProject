@@ -1,7 +1,6 @@
 package com.keduit.interiors.dto;
 
 
-import com.keduit.interiors.entity.ItemImg;
 import com.keduit.interiors.entity.Megazine;
 import lombok.Getter;
 import lombok.Setter;
