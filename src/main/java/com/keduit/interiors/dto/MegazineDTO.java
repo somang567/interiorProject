@@ -34,6 +34,9 @@ public class MegazineDTO {
 
   private String imageUrl;  //이미지 Url
 
+
+  //이거 쓰려면 조건: 의존성 추가. 모델명과 같아야 함
+  //데이터 전송 객체(DTO)와 데이터베이스 엔티티 간의 변환을 매핑
   private static ModelMapper modelMapper = new ModelMapper();
 
   public Megazine createMegazine(){
@@ -61,12 +64,8 @@ public class MegazineDTO {
   //수정인 경우에는 읽어오기 때문에
   private List<Long> itemImgIds = new ArrayList<>();
 
-  //이거 쓰려면 조건: 의존성 추가. 모델명과 같아야 함
-  //데이터 전송 객체(DTO)와 데이터베이스 엔티티 간의 변환을 매핑
-  private static ModelMapper modelMapper = new ModelMapper();
-
-  public Item createItem(){
-    return modelMapper.map(this, Item.class);
+  public Megazine createItem(){
+    return modelMapper.map(this, Megazine.class);
   }
 
 
