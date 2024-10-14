@@ -53,6 +53,6 @@ public class Megazine extends BaseEntity {
   //엔티티에다 바로 넣어줌
   public void updateItem(MegazineDTO megazineDTO) {
     this.title = megazineDTO.getTitle();
-    this.content = megazineDTO.getPrice();
+    this.content = megazineDTO.getContent();
   }
 }
