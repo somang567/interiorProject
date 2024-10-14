@@ -338,7 +338,7 @@
         /* 질문 내용 */
         .qna_content {
             width: 70%; /* 너비를 70%로 설정 */
-            height: 400px;
+            height: 80%;
             background-color: #f0f0f0;
             padding: 20px;
             border-radius: 10px; /* 둥근 모서리 */
@@ -351,8 +351,8 @@
         }
 
         .qna_ul li {
-            font-size: 18px;
-            margin: 8px;
+            font-size: 19px;
+            padding: 8px;
         }
 
         .qna_ul li a {
@@ -365,6 +365,7 @@
 
         .qna_ul img {
             margin-right: 10px;
+            margin-top: 5px;
         }
 
     </style>
@@ -638,10 +639,10 @@
                <h3>묻고 답하기</h3>
                <div class="qna_content">
                    <ul class="qna_ul">
-                       <li th:each=" item : ${list}">
-                           <a th:href="@{${item.url}}">
+                       <li th:each="board : ${list}">
+                           <a th:href="@{/board/view(id=${board.id})}">
                                <img th:src="@{/img/new.jpg}" alt="이미지">
-                               <span th:text="${item.title}">[[${item.title}]]</span>
+                               <span th:text="${board.title}">제목</span>
                            </a>
                        </li>
                    </ul>
