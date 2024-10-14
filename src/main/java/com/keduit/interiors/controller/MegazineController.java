@@ -13,9 +13,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -38,11 +42,110 @@ public class MegazineController {
     return "megazine/megazineMain";
   }
 
+  //상품 등록
   @GetMapping("/user/write/new")
   public String magazineNew(Model model){
     model.addAttribute("megazineDTO", new MegazineDTO());
     return "megazine/megazineForm";
-    //ㄹㅇㄹㅇㄹ
   }
+
+  //상품 등록 데이터 서버에 전달
+  @PostMapping("/user/write/new")
+  //@Valid 유효성 검사 수행
+  //bindingResult: 유효성 검사 결과를 담고 있는 객체로, 오류가 발생하면 이를 확인할 수 있습니다.
+  //model: 뷰에 데이터를 전달하는 데 사용되는 객체입니다.
+  //itemImgFileList: 사용자가 업로드한 이미지 파일 리스트를 나타냅니다.
+  public String itemNew(@Valid MegazineDTO megazineDTO, BindingResult bindingResult, Model model,
+                        @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) {
+
+    //유효성 검사에서 에러가 발생한 경우, 사용자에게 폼을 다시 보여줍니다. 이때 itemForm.html이 반환됩니다.
+    if (bindingResult.hasErrors()) {
+      return "megazine/megazineForm"; //item에 있는 itemForm.html
+    }
+
+    //제대로 안넣었다면
+    //이미지 하나라도 안넣었다면 안넘어간다~
+    //이미지 파일 리스트의 첫 번째 파일이 비어 있고, itemDTO의 ID가 null인 경우(즉, 새로 생성하는 경우) 에러 메시지를 모델에 추가하고 폼으로 돌아갑니다.
+    if (itemImgFileList.get(0).isEmpty() && megazineDTO.getMno() == null) {
+      model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 입니다.");
+      return "megazine/megazineForm";
+    }
+
+    // 앞에서 계속 익셉션으로 넘겼기 때문에
+    try {
+      megazineService.saveItem(megazineDTO, itemImgFileList);
+    } catch (Exception e) {
+      model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
+      System.out.println("====================================");
+      e.printStackTrace();
+      return "megazine/megazineForm";
+    }
+    return "redirect:/megazines/list";  //상품등록이 잘 되면 메인으로 이동
+  }
+
+
+  //url path에 있는 것을 변수로 쓰겠어
+  @GetMapping("user/item/{itemId}")
+  public String itemDtl(@PathVariable("itemId") Long itemId, Model model) {
+    try {
+      MegazineDTO megazineDTO = megazineService.getItemDtl(itemId);
+      model.addAttribute("megazineDTO", megazineDTO);
+    } catch (EntityNotFoundException e) {
+      model.addAttribute("errorMessaage", "존재하지 않는 상품 입니다");
+      model.addAttribute("megazineDTO", new MegazineDTO());
+    }
+    return "megazine/megazineForm"; //버튼 있으면 저장 없으면 수정버튼이 보임 itemForm으로 똑같이 보내기로 함
+  }
+
+
+  @PostMapping("user/item/{itemId}")
+  public String itemUpdate(@Valid MegazineDTO megazineDTO,
+                           BindingResult bindingResult,
+                           @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
+                           Model model) {
+    if (bindingResult.hasErrors()) {
+      return "megazine/megazineForm"; //에러 나면 다시
+    }
+    //비어 있으면
+    if (itemImgFileList.get(0).isEmpty() && megazineDTO.getMno() == null) {
+      model.addAttribute("errorMessage", "첫번재 상품 이미지는 필수입력입니다.");
+      return  "megazine/megazineForm";
+    }
+
+    try {
+      megazineService.updateItem(megazineDTO, itemImgFileList);
+    } catch (Exception e){
+      System.out.println(e.getMessage()); //에러 메시지 확인
+      model.addAttribute("errorMessage", "상품 수정 중 에러가 발생했습니다.");
+      return "megazine/megazineForm";
+    }
+    //수정 후 메인으로 감
+    return "redirect:/megazines/list";
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
