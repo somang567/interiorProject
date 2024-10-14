@@ -71,12 +71,16 @@ public class BoardService {
             // 파일 저장
             file.transferTo(saveFile);
 
+            // 새로운 파일 정보로 업데이트
             existingBoard.setFilename(filename);
             existingBoard.setFilepath("/files/" + filename); // DB에 새로운 파일 경로 저장
-        } // 파일이 없으면 기존 filename과 filepath을 그대로 유지
+        }
+        // 파일이 새로 업로드되지 않았다면 기존 정보 유지 (아무것도 하지 않음)
 
         boardRepository.save(existingBoard); // 게시글 업데이트
     }
+
+
 
     // 게시글에 파일을 업데이트하는 메서드
     public void updateFile(Board board, MultipartFile file) throws IOException {
