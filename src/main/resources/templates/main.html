@@ -634,19 +634,19 @@
 
 
             <!--묻고답하기 부분 타임리프-->
-            <div class="qna">
-                <h3>묻고 답하기</h3>
-                <div class="qna_content">
-                    <ul class="qna_ul">
-                        <li th:each=" item : ${list}">
-                            <a th:href="@{${item.url}}">
-                                <img th:src="@{/img/new.jpg}" alt="이미지">
-                                <span th:text="${item.title}">[[${item.title}]]</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+           <div class="qna">
+               <h3>묻고 답하기</h3>
+               <div class="qna_content">
+                   <ul class="qna_ul">
+                       <li th:each=" item : ${list}">
+                           <a th:href="@{${item.url}}">
+                               <img th:src="@{/img/new.jpg}" alt="이미지">
+                               <span th:text="${item.title}">[[${item.title}]]</span>
+                           </a>
+                       </li>
+                   </ul>
+               </div>
+           </div>
 
         </div>
     </div>

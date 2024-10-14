@@ -19,13 +19,45 @@
             margin: 100px 0 20px 0;
         }
 
+        .greeting h2 {
+            font-size: 35px;
+            font-weight: bold;
+        }
+
         .greeting p {
             font-size: 20px;
+        }
+
+        .btn_div {
+            width: 30%;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            cursor: pointer;
+            background-color: #999;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+
+        .btn_div btn {
+            width: 40%;
+        }
+        .btn:hover {
+            color: #2c2c2c;
+            background-color: #ee7828;
+            transition: 0.2s;
         }
 
         .tabs {
             display: flex;
             margin-bottom: 10px;
+            margin-top: 80px;
         }
 
         .tab {
@@ -44,6 +76,7 @@
 
         .content-area {
             display: none;
+            height: 500px;
             transition: all 0.3s;
         }
 
@@ -57,23 +90,16 @@
             justify-content: space-between;
             background-color: #f0f0f0;
             padding: 10px;
+            height: 95%;
         }
 
         .carousel img {
-            width: 100px;
-            height: 100px;
+            width: 20%;
+            height: 350px;
             margin: 0 10px;
         }
 
-        .btn {
-            cursor: pointer;
-            background-color: #999;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 0 15px;
-        }
+
     </style>
 </th:block>
 <th:block layout:fragment="script">
@@ -125,7 +151,7 @@
                 <h2>OOO님 안녕하세요</h2>
                 <p>아이디</p>
             </div>
-            <div>
+            <div class="btn_div">
                 <button class="btn">정보 수정</button>
                 <button class="btn">로그아웃</button>
             </div>
