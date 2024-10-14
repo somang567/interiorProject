@@ -85,6 +85,7 @@
 <div layout:fragment="content">
   <div class="wrap">
   <h1 hidden>매거진 등록</h1>
+
   <div class="know_how_box">
     <h2 class="know_how_title">매거진 작성 가이드 <span>원활한 매거진 발행을 위해 꼭 읽어주세요.</span></h2>
     <ul class="know_how_lists">
@@ -94,11 +95,14 @@
       <li class="know_how_list">동영상의 경우, 영상 파일을 직접 업로드 할 수 없습니다.</li>
     </ul>
   </div>
+
+
   <!-- enctype="multipart/form-data" 이미지 등록 -->
   <!-- itemDTO 에서 선택한 객체에 접근해서 HTMl 태그의 id,name,value 속성을 자동처리 -->
   <form role="form" method="post" th:object="${megazineDTO}" enctype="multipart/form-data">
 
-    <!--비어있는 경우-->
+
+    <!--이미지 비어있는 경우-->
     <div th:if="${#lists.isEmpty(megazineDTO.itemImgDTOList)}">
       <div class="form-group" th:each="num: ${#numbers.sequence(1,1)}">
         <div class="custom-file img-div">
@@ -127,19 +131,12 @@
 
 
 
-
-
-
-
-
-
     <div class="form-group">
       <div class="input-group">
         <div class="input-group-prepend">
           <label th:for="title" class="input-group-text">제목</label>
         </div>
-        <input type="text" class="form-control" th:field="*{title}"
-               placeholder="제목을 입력해주세요.">
+        <input type="text" class="form-control" th:field="*{title}" placeholder="제목을 입력해주세요.">
         <p th:if="${#fields.hasErrors('title')}"
            th:errors="*{title}" class="fieldError">Incorrect data</p>
       </div>
@@ -148,37 +145,14 @@
     <div class="form-group">
       <div class="input-group">
         <div class="input-group-prepend">
-          <label th:for="price" class="input-group-text">가격</label>
+          <label th:for="content" class="input-group-text">내용</label>
         </div>
-        <input type="text" class="form-control" th:field="*{price}"
-               placeholder="상품명을 입력해주세요.">
-        <p th:if="${#fields.hasErrors('price')}"
-           th:errors="*{price}" class="fieldError">Incorrect data</p>
+        <textarea class="form-control" th:field="*{content}"></textarea>
+        <p th:if="${#fields.hasErrors('content')}"
+           th:errors="*{content}" class="fieldError">Incorrect data</p>
       </div>
     </div>
 
-    <div class="form-group">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label th:for="stockNumber" class="input-group-text">재고</label>
-        </div>
-        <input type="text" class="form-control" th:field="*{stockNumber}"
-               placeholder="상품명을 입력해주세요.">
-        <p th:if="${#fields.hasErrors('stockNumber')}"
-           th:errors="*{stockNumber}" class="fieldError">Incorrect data</p>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <label th:for="itemDetail" class="input-group-text">상품 상세 내용</label>
-        </div>
-        <textarea class="form-control" th:field="*{itemDetail}"></textarea>
-        <p th:if="${#fields.hasErrors('itemDetail')}"
-           th:errors="*{itemDetail}" class="fieldError">Incorrect data</p>
-      </div>
-    </div>
 
 
 

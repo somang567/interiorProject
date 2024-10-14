@@ -28,11 +28,11 @@ public class MegazineDTO {
 
   private int scrapCount; //스크랩 수
 
-  private String oriImgName;  //원본 이미지 이름
-
-  private String imgName; //이미지 이름
-
-  private String imageUrl;  //이미지 Url
+//  private String oriImgName;  //원본 이미지 이름
+//
+//  private String imgName; //이미지 이름
+//
+//  private String imageUrl;  //이미지 Url
 
 
   //이거 쓰려면 조건: 의존성 추가. 모델명과 같아야 함
