@@ -56,7 +56,14 @@ public class MegazineController {
   //model: 뷰에 데이터를 전달하는 데 사용되는 객체입니다.
   //itemImgFileList: 사용자가 업로드한 이미지 파일 리스트를 나타냅니다.
   public String itemNew(@Valid MegazineDTO megazineDTO, BindingResult bindingResult, Model model,
+                        @RequestParam("itemImgFile") MultipartFile itemImgFile) {
+
+    /*
+      public String itemNew(@Valid MegazineDTO megazineDTO, BindingResult bindingResult, Model model,
                         @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) {
+
+     */
+
 
     //유효성 검사에서 에러가 발생한 경우, 사용자에게 폼을 다시 보여줍니다. 이때 itemForm.html이 반환됩니다.
     if (bindingResult.hasErrors()) {
@@ -66,14 +73,14 @@ public class MegazineController {
     //제대로 안넣었다면
     //이미지 하나라도 안넣었다면 안넘어간다~
     //이미지 파일 리스트의 첫 번째 파일이 비어 있고, itemDTO의 ID가 null인 경우(즉, 새로 생성하는 경우) 에러 메시지를 모델에 추가하고 폼으로 돌아갑니다.
-    if (itemImgFileList.get(0).isEmpty() && megazineDTO.getMno() == null) {
-      model.addAttribute("errorMessage", "첫 번째 상품 이미지는 필수 입력 입니다.");
+    if (megazineDTO.getImageUrl().isEmpty() && megazineDTO.getMno() == null) {
+      model.addAttribute("errorMessage", "상품 이미지는 필수 입력 입니다.");
       return "megazine/megazineForm";
     }
 
     // 앞에서 계속 익셉션으로 넘겼기 때문에
     try {
-      megazineService.saveItem(megazineDTO, itemImgFileList);
+      megazineService.saveItem(megazineDTO, itemImgFile);
     } catch (Exception e) {
       model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
       System.out.println("====================================");
@@ -85,8 +92,8 @@ public class MegazineController {
 
 
   //url path에 있는 것을 변수로 쓰겠어
-  @GetMapping("user/item/{itemId}")
-  public String itemDtl(@PathVariable("itemId") Long itemId, Model model) {
+  @GetMapping("/item/{megazineId}")
+  public String itemDtl(@PathVariable("megazineId") Long itemId, Model model) {
     try {
       MegazineDTO megazineDTO = megazineService.getItemDtl(itemId);
       model.addAttribute("megazineDTO", megazineDTO);

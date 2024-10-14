@@ -24,11 +24,10 @@ public class Megazine extends BaseEntity {
   @Column(nullable = false, length = 500)
   private String title;
 
-  /*
   //member.getemail 해서 가져오기
-  @Column(nullable = false, length = 200)
+  @Column(nullable = true, length = 200)
   private String user;
-*/
+
   @Column(nullable = false, length = 5000)
   private String content;
 
@@ -37,7 +36,7 @@ public class Megazine extends BaseEntity {
 
   @Column(nullable = true)
   private int scrapCount;
-/*
+
   @Column(nullable = false, length = 800)
   private String oriImgName;
 
@@ -46,7 +45,7 @@ public class Megazine extends BaseEntity {
 
   @Column(nullable = false, length = 1000)
   private String imageUrl;
-*/
+
   @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "member_id")
   private Member member;
@@ -56,5 +55,8 @@ public class Megazine extends BaseEntity {
   public void updateItem(MegazineDTO megazineDTO) {
     this.title = megazineDTO.getTitle();
     this.content = megazineDTO.getContent();
+    this.oriImgName = megazineDTO.getOriImgName();
+    this.imgName = megazineDTO.getImgName();
+    this.imageUrl = megazineDTO.getImageUrl();
   }
 }

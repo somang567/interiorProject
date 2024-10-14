@@ -184,32 +184,7 @@ justify-content: end;
 <div layout:fragment="content">
 <div class="row">
 
-    <div id="carouselExampleIndicators" class="carousel slide item">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img  src="..." class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img  src="..." class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img  src="..." class="d-block w-100" alt="...">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+
 
 
     <div class="wrap">
@@ -234,8 +209,8 @@ justify-content: end;
 
         <div class="count_and_btn">
             <h3 class="total_cnt">전체 매거진 글 수</h3>
-            <a id="regBtn"
-                    class="btn btn-primary btn-xs pull-right display-right float-right register-btn">글쓰기</a>
+            <button type="button" id="regBtn"
+                    class="btn btn-primary btn-xs pull-right display-right float-right register-btn">글쓰기</button>
         </div>
 
         <!-- 시작 부분 -->
@@ -245,7 +220,7 @@ justify-content: end;
         <th:block th:each="megazineItem, status: ${megazineItems.getContent()}">
             <div class="col-md-4 margin">
                 <div class="card">
-                    <a th:href="'/megazineItem/' + ${megazineItem.id}" class="text-dark">
+                    <a th:href="'/megazines/item/' + ${megazineItem.mno}" class="text-dark">
                         <img th:src="${megazineItem.imageUrl}" th:alt="${megazineItem.title}" class="card-img-top" height="400">
                         <div class="card-body">
                             <h4 class="card-title">[[${megazineItem.title}]]</h4>

@@ -176,6 +176,30 @@
   <form role="form" method="post" th:object="${megazineDTO}" enctype="multipart/form-data">
 
     <!--이미지 비어있는 경우-->
+    <div th:if="${#strings.isEmpty(megazineDTO.imageUrl)}">
+      <div class="form-group">
+        <div class="custom-file img-div">
+          <input type="file" class="custom-file-input"
+                 name="imageUrl">
+          <label  hidden class="custom-file-label"
+                  th:text="상품이미지 + ${num}"></label>
+        </div>
+      </div>
+    </div>
+
+
+    <div th:if="${not #strings.isEmpty(megazineDTO.imageUrl)}">
+      <div class="form-group">
+        <div class="custom-file img-div">
+          <input type="file" class="custom-file-input" name="itemImgFile">
+          <input type="hidden" name="mno" th:value="${megazineDTO.mno}">
+          <label class="custom-file-label"
+                 th:text="${not #strings.isEmpty(megazineDTO.oriImgName)} ?
+                    ${megazineDTO.oriImgName} : '상품이미지'"></label>
+        </div>
+      </div>
+    </div>
+    <!--
     <div th:if="${#lists.isEmpty(megazineDTO.itemImgDTOList)}">
       <div class="form-group" th:each="num: ${#numbers.sequence(1,1)}">
         <div class="custom-file img-div">
@@ -186,9 +210,10 @@
         </div>
       </div>
     </div>
-
+-->
     <!--비어있지 않은 경우 이미지가 있는 경우-->
     <!--itemDTO.itemImgDTOList가 비어 있지 않은 경우에만 이 <div> 블록이 렌더링됩니다-->
+    <!--
     <div th:if="${not #lists.isEmpty(megazineDTO.itemImgDTOList)}">
       <div class="form-group" th:each="itemImgDTO, status: ${megazineDTO.itemImgDTOList}">
         <div class="custom-file img-div">
@@ -200,6 +225,7 @@
         </div>
       </div>
     </div>
+    -->
 
 
     <div class="form-group">
@@ -237,6 +263,14 @@
       <button th:formaction="@{/megazines/user/write/new}" type="submit"
               class="btn_register">
         발행신청
+      </button>
+    </div>
+
+
+    <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+      <button th:formaction="@{'/admin/item/' + ${megazineDTO.mno}}" type="submit"
+              class="btn_edit">
+        수정
       </button>
     </div>
 
