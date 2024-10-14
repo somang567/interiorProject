@@ -68,8 +68,8 @@ public class BoardController {
         model.addAttribute("board", board);
 
         // 이미지가 있는 경우 이미지 URL도 모델에 추가
-        if (board.getImageFilename() != null) {
-            String imageUrl = "files/" + board.getImageFilename();
+        if (board.getFilename() != null) { // 여기에서 imageFilename 대신 filename을 사용
+            String imageUrl = "/files/" + board.getFilename(); // filename으로 수정
             model.addAttribute("imageUrl", imageUrl);
         }
 
