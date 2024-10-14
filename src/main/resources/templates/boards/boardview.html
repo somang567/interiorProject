@@ -111,8 +111,8 @@
                     <span th:text="${board.content}"></span>
                     <br/>
                     <!-- 첨부파일 이미지 표시 -->
-                    <th:block th:each="attachment : ${board.attachments}">
-                        <img th:src="@{${attachment}}" alt="첨부 이미지"/>
+                    <th:block th:if="${board.imageFilename != null}">
+                        <img th:src="@{/images/{imageFilename}(imageFilename=${board.imageFilename})}" alt="첨부 이미지"/>
                     </th:block>
                 </td>
             </tr>

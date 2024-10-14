@@ -28,8 +28,9 @@ public class BoardController {
 
     @PostMapping("/board/writedo")
     public String boardWritePro(Board board, Model model, MultipartFile file) throws Exception {
-        // 게시글 작성 및 첨부파일 저장
+        // 게시글 작성 및 첨부파일(이미지) 저장
         boardService.write(board, file);
+
         model.addAttribute("boardId", board.getId());
         model.addAttribute("message", "게시글 작성이 완료되었습니다.");
         model.addAttribute("searchUrl", "/board/list");
@@ -39,8 +40,7 @@ public class BoardController {
 
     @GetMapping("/board/list")
     public String boardList(Model model,
-                            @PageableDefault(page = 0, size = 20, sort = "id",
-                                    direction = Sort.Direction.DESC) Pageable pageable,
+                            @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                             String searchKeyword) {
         Page<Board> list;
         if (searchKeyword != null) {
@@ -49,20 +49,30 @@ public class BoardController {
             list = boardService.boardList(pageable);
         }
 
-        int nowPage = list.getPageable().getPageNumber() + 1; // 현재 페이지
+        int nowPage = list.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(nowPage + 5, list.getTotalPages());
+
         model.addAttribute("list", list);
         model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+
         return "boards/boardlist";
     }
 
     @GetMapping("/board/view")
     public String boardView(Model model, Long id) {
-        // 게시글 및 첨부파일 정보 가져오기
-        model.addAttribute("board", boardService.boardView(id));
+        // 게시글 및 첨부파일(이미지) 정보 가져오기
+        Board board = boardService.boardView(id);
+        model.addAttribute("board", board);
+
+        // 이미지가 있는 경우 이미지 URL도 모델에 추가
+        if (board.getImageFilename() != null) {
+            String imageUrl = "/images/" + board.getImageFilename();  // static/images 경로에 저장된 이미지
+            model.addAttribute("imageUrl", imageUrl);
+        }
+
         return "boards/boardview";
     }
 
@@ -86,17 +96,15 @@ public class BoardController {
         boardTemp.setTitle(board.getTitle());
         boardTemp.setContent(board.getContent());
 
-        // 새 파일이 업로드된 경우
+        // 새 파일이 업로드된 경우 기존 파일을 교체
         if (file != null && !file.isEmpty()) {
-            // 기존 파일을 삭제하거나 업데이트하는 로직 추가
-            boardService.updateFile(boardTemp, file); // 새 파일로 저장
+            boardService.updateFile(boardTemp, file);  // 기존 파일 삭제 및 새 파일 저장
         }
 
         // 게시글 업데이트 (파일이 없는 경우에도 정상적으로 처리)
-        boardService.update(boardTemp, file); // 여기에 file을 전달
+        boardService.update(boardTemp, file);  // 새 파일을 전달하여 게시글 업데이트
 
         // 수정 완료 후 알림을 위해 리다이렉트할 URL에 쿼리 매개변수 추가
         return "redirect:/board/list?alert=update_success";
     }
-
 }

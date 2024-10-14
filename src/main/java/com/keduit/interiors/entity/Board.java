@@ -12,15 +12,20 @@ public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
     private String content;
     private String author;
-    private String filename;
-    private String filepath;
 
-    // Attachments 필드 추가
+    // 이미지 파일 관련 필드
+    private String imageFilename;  // 이미지 파일명
+    private String imagePath;      // 이미지 저장 경로
+    private String filename;  // 새로 추가한 파일명 필드
+    private String filepath;   // 새로 추가한 파일 경로 필드
+
+    // 첨부 파일 목록 관리 (이미지 외의 추가 첨부 파일도 관리 가능)
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Attachment> attachments; // 첨부 파일 목록
+    private List<Attachment> attachments;
 
-    // Getters nd Setaters는 @Data 어노테이션으로 자동 생성됨
+    // @Data로 인해 getter/setter는 자동으로 생성됩니다.
 }
