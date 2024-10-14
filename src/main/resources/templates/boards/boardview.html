@@ -1,14 +1,130 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
-<head>
-    <title>게시글 상세보기</title>
-</head>
+
 <div layout:fragment="content">
-    <h1 th:text="${board.title}">제목이 들어갈 부분</h1>
-    <p th:text="${board.content}">내용이 들어갈 부분</p>
-    <a th:href="@{/board/delete(id=${board.id})}">삭제</a>
-    <a th:href="@{/board/modify/{id}(id=${board.id})}">수정</a>
+    <th:block layout:fragment="css">
+        <style>
+            .view-container {
+                width: 70vw;
+                margin: 0 auto;
+                margin-top: 3vw;
+                padding: 2vw;
+                background-color: #f4f4f4;
+                border-radius: 0.8vw;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                font-size: 1rem;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 2vw;
+                border: 1px solid #ddd;
+            }
+
+            th, td {
+                padding: 1rem;
+                border: 1px solid #ddd;
+                text-align: left;
+            }
+
+            th {
+                background-color: #f9f9f9;
+                font-weight: bold;
+                width: 15%;
+                color: #333;
+            }
+
+            td {
+                background-color: #fff;
+                color: #333;
+            }
+
+            .content-cell {
+                background-color: #fdfdfd;
+                padding: 1.5rem;
+                white-space: pre-line;
+            }
+
+            .button-container {
+                text-align: right;
+                margin-top: 1.5rem;
+            }
+
+            .button {
+                padding: 0.8vw 1.6vw;
+                background-color: #555;
+                color: white;
+                border: none;
+                border-radius: 0.4vw;
+                cursor: pointer;
+                font-size: 0.9rem;
+                margin-left: 1rem;
+                text-decoration: none;
+            }
+
+            .button:hover {
+                background-color: #333;
+            }
+
+            .breadcrumb {
+                font-size: 0.9rem;
+                margin-bottom: 2vw;
+                color: #999;
+            }
+
+            .breadcrumb a {
+                color: #666;
+                text-decoration: none;
+                margin-right: 0.5vw;
+            }
+
+            .breadcrumb a:hover {
+                text-decoration: underline;
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+                margin-top: 1rem;
+            }
+        </style>
+    </th:block>
+
+    <div class="view-container">
+
+        <!-- 게시글 상세 내용 -->
+        <table>
+            <tr>
+                <th>제목</th>
+                <td th:text="${board.title}"></td>
+            </tr>
+            <tr>
+                <th>작성자</th>
+                <td th:text="${board.author}"></td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td class="content-cell">
+                    <span th:text="${board.content}"></span>
+                    <br/>
+                    <!-- 첨부파일 이미지 표시 -->
+                    <th:block th:each="attachment : ${board.attachments}">
+                        <img th:src="@{${attachment}}" alt="첨부 이미지"/>
+                    </th:block>
+                </td>
+            </tr>
+        </table>
+
+        <!-- 버튼 -->
+        <div class="button-container">
+            <a href="/board/list" class="button">목록으로</a>
+            <a th:href="@{/board/modify/{id}(id=${board.id})}" class="button">수정하기</a>
+            <a th:href="@{/board/delete/{id}(id=${board.id})}" class="button" onclick="return confirm('정말 삭제하시겠습니까?');">삭제하기</a>
+        </div>
+    </div>
 </div>
+
 </html>

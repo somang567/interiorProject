@@ -28,6 +28,7 @@ public class BoardController {
 
     @PostMapping("/board/writedo")
     public String boardWritePro(Board board, Model model, MultipartFile file) throws Exception {
+        // 게시글 작성 및 첨부파일 저장
         boardService.write(board, file);
         model.addAttribute("boardId", board.getId());
         model.addAttribute("message", "게시글 작성이 완료되었습니다.");
@@ -41,7 +42,7 @@ public class BoardController {
                             @PageableDefault(page = 0, size = 20, sort = "id",
                                     direction = Sort.Direction.DESC) Pageable pageable,
                             String searchKeyword) {
-        Page<Board> list = null;
+        Page<Board> list;
         if (searchKeyword != null) {
             list = boardService.boardSearchList(searchKeyword, pageable);
         } else {
@@ -60,12 +61,13 @@ public class BoardController {
 
     @GetMapping("/board/view")
     public String boardView(Model model, Long id) {
+        // 게시글 및 첨부파일 정보 가져오기
         model.addAttribute("board", boardService.boardView(id));
         return "boards/boardview";
     }
 
-    @GetMapping("/board/delete")
-    public String boardDelete(Long id) {
+    @GetMapping("/board/delete/{id}")
+    public String boardDelete(@PathVariable Long id) {
         boardService.boardDelete(id);
         return "redirect:/board/list";
     }
@@ -86,11 +88,12 @@ public class BoardController {
 
         // 새 파일이 업로드된 경우
         if (file != null && !file.isEmpty()) {
-            boardService.write(boardTemp, file); // 새 파일로 저장
+            // 기존 파일을 삭제하거나 업데이트하는 로직 추가
+            boardService.updateFile(boardTemp, file); // 새 파일로 저장
         }
 
-        // 게시글 업데이트
-        boardService.update(boardTemp, file);
+        // 게시글 업데이트 (파일이 없는 경우에도 정상적으로 처리)
+        boardService.update(boardTemp, file); // 여기에 file을 전달
 
         // 수정 완료 후 메시지 추가
         redirectAttributes.addFlashAttribute("message", "게시글 수정이 완료되었습니다.");

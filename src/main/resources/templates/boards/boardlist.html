@@ -127,7 +127,7 @@
                 <td>
                     <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}">제목입니다.</a>
                 </td>
-                <td th:text="${board != null && board.regTime != null ? board.regTime : 'N/A'}"></td>
+                <td th:text="${board.regTime}"></td>
             </tr>
             </tbody>
         </table>
