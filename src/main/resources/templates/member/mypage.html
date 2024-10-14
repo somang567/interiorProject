@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<th:block layout:fragment="css">
+    <style>
+        /* 기본 레이아웃 스타일 */
+        .container {
+            width: 80vw;
+            height: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .greeting {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 100px 0 20px 0;
+        }
+
+        .greeting p {
+            font-size: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .tab {
+            font-size: 23px;
+            width: 95px;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #ddd;
+            margin-right: 5px;
+        }
+
+        .tab.active {
+            background-color: #999;
+            color: white;
+        }
+
+        .content-area {
+            display: none;
+            transition: all 0.3s;
+        }
+
+        .content-area.active {
+            display: block;
+        }
+
+        .carousel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+
+        .carousel img {
+            width: 100px;
+            height: 100px;
+            margin: 0 10px;
+        }
+
+        .btn {
+            cursor: pointer;
+            background-color: #999;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 0 15px;
+        }
+    </style>
+</th:block>
+<th:block layout:fragment="script">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // 탭 클릭 시 콘텐츠 변경
+            document.getElementById('tab-products').addEventListener('click', function () {
+                setActiveTab('products');
+            });
+
+            document.getElementById('tab-magazine').addEventListener('click', function () {
+                setActiveTab('magazine');
+            });
+
+            function setActiveTab(tab) {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.content-area').forEach(c => c.classList.remove('active'));
+
+                document.getElementById(`tab-${tab}`).classList.add('active');
+                document.getElementById(`content-${tab}`).classList.add('active');
+            }
+
+            // 슬라이더 버튼 (prev/next) 기능 예시
+            document.getElementById('prev-product').addEventListener('click', function () {
+                alert('이전 상품으로 이동');
+            });
+
+            document.getElementById('next-product').addEventListener('click', function () {
+                alert('다음 상품으로 이동');
+            });
+
+            document.getElementById('prev-magazine').addEventListener('click', function () {
+                alert('이전 매거진으로 이동');
+            });
+
+            document.getElementById('next-magazine').addEventListener('click', function () {
+                alert('다음 매거진으로 이동');
+            });
+        });
+    </script>
+
+</th:block>
+<div layout:fragment="content">
+    <div class="container">
+
+        <!-- 인사 및 버튼 -->
+        <div class="greeting">
+            <div>
+                <h2>OOO님 안녕하세요</h2>
+                <p>아이디</p>
+            </div>
+            <div>
+                <button class="btn">정보 수정</button>
+                <button class="btn">로그아웃</button>
+            </div>
+        </div>
+
+        <!-- 탭 -->
+        <div class="tabs">
+            <div class="tab active" id="tab-products">상품</div>
+            <div class="tab" id="tab-magazine">매거진</div>
+        </div>
+
+        <!-- 콘텐츠 영역 -->
+        <div class="content-area active" id="content-products">
+            <div class="carousel">
+                <button class="btn" id="prev-product">◀</button>
+                <img src="https://via.placeholder.com/100" alt="상품 1">
+                <img src="https://via.placeholder.com/100" alt="상품 2">
+                <img src="https://via.placeholder.com/100" alt="상품 3">
+                <img src="https://via.placeholder.com/100" alt="상품 4">
+                <button class="btn" id="next-product">▶</button>
+            </div>
+        </div>
+
+        <div class="content-area" id="content-magazine">
+            <div class="carousel">
+                <button class="btn" id="prev-magazine">◀</button>
+                <img src="https://via.placeholder.com/100" alt="매거진 1">
+                <img src="https://via.placeholder.com/100" alt="매거진 2">
+                <img src="https://via.placeholder.com/100" alt="매거진 3">
+                <img src="https://via.placeholder.com/100" alt="매거진 4">
+                <button class="btn" id="next-magazine">▶</button>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+</body>
+</html>
