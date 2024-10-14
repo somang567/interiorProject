@@ -106,11 +106,6 @@
     </th:block>
 
     <div class="list_text">
-        <!-- 성공 메시지 표시 -->
-        <div th:if="${message}" class="alert" role="alert">
-            <p th:text="${message}"></p>
-        </div>
-
         <a href="/board/write" class="write-button">글쓰기</a>
 
         <table>
@@ -159,5 +154,6 @@
             <button type="submit">검색</button>
         </form>
     </div>
+
 </div>
 </html>

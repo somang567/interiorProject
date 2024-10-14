@@ -95,10 +95,8 @@ public class BoardController {
         // 게시글 업데이트 (파일이 없는 경우에도 정상적으로 처리)
         boardService.update(boardTemp, file); // 여기에 file을 전달
 
-        // 수정 완료 후 메시지 추가
-        redirectAttributes.addFlashAttribute("message", "게시글 수정이 완료되었습니다.");
-
-        // 게시글 리스트로 리다이렉트
-        return "redirect:/board/list";
+        // 수정 완료 후 알림을 위해 리다이렉트할 URL에 쿼리 매개변수 추가
+        return "redirect:/board/list?alert=update_success";
     }
+
 }
