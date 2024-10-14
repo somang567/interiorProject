@@ -27,5 +27,4 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Attachment> attachments;
 
-    // @Data로 인해 getter/setter는 자동으로 생성됩니다.
 }

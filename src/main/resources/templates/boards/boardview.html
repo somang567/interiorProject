@@ -49,6 +49,10 @@
                 white-space: pre-line;
             }
 
+            .image-cell {
+                text-align: center;
+            }
+
             .button-container {
                 text-align: right;
                 margin-top: 1.5rem;
@@ -109,10 +113,16 @@
                 <th>내용</th>
                 <td class="content-cell">
                     <span th:text="${board.content}"></span>
-                    <br/>
-                    <!-- 첨부파일 이미지 표시 -->
-                    <th:block th:if="${board.imageFilename != null}">
-                        <img th:src="@{/images/{imageFilename}(imageFilename=${board.imageFilename})}" alt="첨부 이미지"/>
+                </td>
+            </tr>
+            <tr>
+                <th>첨부 이미지</th>
+                <td class="image-cell">
+                    <th:block th:if="${imageUrl}">
+                        <img th:src="${imageUrl}" alt="첨부 이미지"/>
+                    </th:block>
+                    <th:block th:unless="${board.imageFilename}">
+                        이미지가 없습니다.
                     </th:block>
                 </td>
             </tr>

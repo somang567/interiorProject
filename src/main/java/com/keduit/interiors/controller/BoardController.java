@@ -69,7 +69,7 @@ public class BoardController {
 
         // 이미지가 있는 경우 이미지 URL도 모델에 추가
         if (board.getImageFilename() != null) {
-            String imageUrl = "/images/" + board.getImageFilename();  // static/images 경로에 저장된 이미지
+            String imageUrl = "files/" + board.getImageFilename();
             model.addAttribute("imageUrl", imageUrl);
         }
 
