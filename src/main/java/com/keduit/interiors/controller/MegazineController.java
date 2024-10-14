@@ -42,6 +42,7 @@ public class MegazineController {
   public String magazineNew(Model model){
     model.addAttribute("megazineDTO", new MegazineDTO());
     return "megazine/megazineForm";
+    //ㄹㅇㄹㅇㄹ
   }
 }
 
