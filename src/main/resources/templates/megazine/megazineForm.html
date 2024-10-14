@@ -89,13 +89,15 @@
     /*input 영역======================================================*/
      /*이미지 파일 불러오는 box 영역*/
     .custom-file{
-      width:100%;
-      height:10vw;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      width:67vw;
+      height:20vw;
       background-color:#F7F8FA;
       border-radius:0.5vw;
       margin:0 auto;
       text-align:center;
-      padding:5vw 5.5vw;
     }
     /*선택된 파일 없음*/
     .custom-file-input{
@@ -133,7 +135,7 @@
       border:none;
     }
     .form-title{
-      width:100%;
+      width:67vw;
       height:5vw;
       font-size: 2vw;
       border-bottom: 0.2vw solid #2C2C2C;
@@ -142,7 +144,14 @@
     .form-title{
       width:100%;
     }
-
+    .form-content{
+      width:67vw;
+      height:15vw;
+      background-color:#F7F8FA;
+      border-radius:0.5vw;
+      border:none;
+      font-size:2vw;
+    }
   </style>
 </th:block>
 
@@ -196,30 +205,36 @@
     <div class="form-group">
       <div class="input-group">
 
-        <label th:for="title" class="input-group-text">제목</label>
+        <label hidden th:for="title" class="input-group-text">제목</label>
         <input type="text" class="form-title" th:field="*{title}" placeholder="제목을 입력해주세요.">
         <p th:if="${#fields.hasErrors('title')}"
            th:errors="*{title}" class="fieldError">Incorrect data</p>
       </div>
     </div>
 
+
+
+
+
     <div class="form-group">
       <div class="input-group">
         <div class="input-group-prepend">
-          <label th:for="content" class="input-group-text">내용</label>
+          <label hidden th:for="content" class="input-group-text">내용</label>
         </div>
-        <textarea class="form-control" th:field="*{content}"></textarea>
+        <textarea class="form-content" th:field="*{content}" placeholder="내용을 입력해주세요."></textarea>
         <p th:if="${#fields.hasErrors('content')}"
            th:errors="*{content}" class="fieldError">Incorrect data</p>
       </div>
     </div>
 
 
+
+
     <!-- 조건부로 버튼을 생성: 삽입버튼/ 수정버튼 id가 비어있으면 저장/ 아님 unless  수정-->
     <!--${#strings.isEmpty(megazineDTO.mno)} : Thymeleaf의 유틸리티 함수 -->
     <div th:if="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
       <!--여기로 처리 -->
-      <button th:formaction="@{/user/write/new}" type="submit"
+      <button th:formaction="@{/megazines/user/write/new}" type="submit"
               class="btn_register">
         발행신청
       </button>

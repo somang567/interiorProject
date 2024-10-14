@@ -20,7 +20,7 @@ public class MegazineDTO {
 
   private String title; //제목
 
-  private String user;  //글 등록한 사용자
+  /*private String user;  //글 등록한 사용자*/
   
   private String content; //내용
 
