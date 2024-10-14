@@ -71,7 +71,7 @@
 <th:block layout:fragment="script">
   <script>
     const googuns = {
-      서울: ["강북구", "관악구", "광진구", "금천구", "동작구", "마포구", "서초구", "성동구", "영등포구", "용산구", "은평구"],
+      서울: ["강북구", "관악구", "광진구", "금천구", "동작구", "마포구", "서초구", "성동구", "영등포구", "용산구"],
       인천: ["부평구"],
       대전: ["동구", "서구", "유성구", "대덕구"],
       부산: ["강서구", "기장군", "동구", "동래구", "부산진구", "북구", "사상구", "사하구", "서구", "영도구", "중구", "해운대구"],
@@ -109,11 +109,11 @@
 
     // searchCompany() : 사용자 입력을 확인하고 api 호출하는 함수
     function searchCompany() {
-      const citySelected = document.getElementById("search-dosi").value;
-      const districtSelected = document.getElementById("search-googun").value;
+      const dosiSelected = document.getElementById("search-dosi").value;
+      const googunSelected = document.getElementById("search-googun").value;
 
       // 도/시와 구/군을 선택하지 않았을때 뜨는 경고메세지
-      if (!citySelected || !districtSelected) {
+      if (!dosiSelected || !googunSelected) {
         alert("도/시, 구/군을 선택해주세요.");
         return;
       }
@@ -122,7 +122,7 @@
       // const jsonFilePath = 'file:///Users/lkiki/Desktop/interior_API/${dosiSelected}_${googunSelected}.json';
 
       // AJAX 요청
-      fetch(`/api/data/${citySelected}/${districtSelected}`)
+      fetch(`http://localhost:8586/${dosiSelected}_${googunSelected}.json`)
         .then(response => {
           if (!response.ok) {
             throw new Error('네트워크 응답이 좋지 않습니다.');
@@ -148,22 +148,49 @@
       const resultContainer = document.querySelector(".search-result");
       resultContainer.innerHTML = '';       // 기존 결과 초기화
 
-      if (data.length == 0) {
-        resultContainer.innerHTML = '<p>검색 결과가 없습니다.</p>';
+      let results = [];
+
+      // "Sheet1" 키가 있는지 확인하고, 배열이 있는 경우
+      if (data && Array.isArray(data["Sheet1"])) {
+        results = data["Sheet1"];
+      } else if (Array.isArray(data)) {
+        // "Sheet1" 키가 없지만, 기본 배열인 경우(기본 json 파일 얘들)
+        results = data;
+      } else {
+        // 유효한 데이터가 아닐 때
+        resultContainer.innerHTML = '<p>유효한 데이터가 아닙니다.</p>';
         return;
       }
 
-      data.forEach(item => {
+      // getValue 함수 정의
+      function getValue(item, ...fields) {
+        for (const field of fields) {
+          if (item[field]) {
+            return item[field];
+          }
+        }
+        return '';            // json 파일에 해당하는 필드가 전부 없을 경우 ''값 반환
+      }
+
+      // 나머지 데이터 처리
+      results.forEach(item => {
         const resultDiv = document.createElement('div');
         resultDiv.className = 'search-result-btn';
+
+        const companyName = getValue(item, '업체명', '상호', '상호명');
+        const address = getValue(item, '도로명주소', '소재지', '영업소재지주소', '소재지도로명주소', '영업소재지(도로명주소)', '소재지 주소');
+        const phone = getValue(item, '전화번호', '연락처');
+
         resultDiv.innerHTML = `
-          <h3>${item.company_name}</h3>
-          <p>${item.road_address}</p>
-          <p>${item.contact}</p>
+          <h2><b>${companyName}</b></h2>
+          <p>
+          <p>${address}</p>
+          <p>${phone}</p>
         `;
         resultContainer.appendChild(resultDiv);
       });
     }
+
   </script>
 </th:block>
 
