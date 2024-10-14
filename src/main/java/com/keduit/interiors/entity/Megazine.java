@@ -1,6 +1,7 @@
 
 package com.keduit.interiors.entity;
 
+import com.keduit.interiors.dto.MegazineDTO;
 import com.keduit.interiors.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,8 +45,14 @@ public class Megazine extends BaseEntity {
   @Column(nullable = false, length = 1000)
   private String imageUrl;
 
-@OneToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name="member_id")
+  @OneToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "member_id")
   private Member member;
-}
 
+
+  //엔티티에다 바로 넣어줌
+  public void updateItem(MegazineDTO megazineDTO) {
+    this.title = megazineDTO.getTitle();
+    this.content = megazineDTO.getPrice();
+  }
+}

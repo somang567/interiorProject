@@ -1,9 +1,12 @@
 
 package com.keduit.interiors.service;
 
+import com.keduit.interiors.dto.ItemImgDTO;
 import com.keduit.interiors.dto.MegazineDTO;
+import com.keduit.interiors.entity.ItemImg;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.entity.Member;
+import com.keduit.interiors.repository.ItemImgRepository;
 import com.keduit.interiors.repository.MegazineRepository;
 import com.keduit.interiors.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +36,11 @@ public class MegazineService {
   @Autowired
   private MemberRepository memberRepository;
 
+  @Autowired
+  private ItemImgService itemImgService;
+
+  @Autowired
+  private ItemImgRepository itemImgRepository;
 
   @Transactional(readOnly = true) //데이터 베이스 성능 최적화를 위함.
   //CartDetailDTO 응? 여기서 리스트를 뽑아온다? 얘가 몬데 씌벌?
@@ -82,6 +92,89 @@ public class MegazineService {
     System.out.println("saveboard------>" + savemegazine);
     return savemegazine.getMno();
   }
+
+
+  //제공하신 코드는 Java의 Spring Framework에서 상품(Item)과 관련된 정보를 저장하는 서비스 메서드
+  //all 커밋이 되거나 롤백이 되어야 함.
+  //상품이 몇번인지 Long으로 등록
+  public Long saveItem(MegazineDTO megazineDTO, List<MultipartFile> itemImgFileList) throws Exception{
+
+    //상품 등록
+    //Item 엔티티 가져와서
+    Megazine megazine = megazineDTO.createItem();
+    //모델 매퍼 사용
+    megazineRepository.save(megazine);  //리포지토리는 엔티티를 줘야 하기 때문에
+
+    //이미지 등록
+    for( int i = 0; i < itemImgFileList.size(); i++){
+      ItemImg itemImg = new ItemImg();
+      itemImg.setMegazine(megazine);  //조인 걸려 있어서 item을 통째로 가져옴.
+      //대표 이미지 세팅함.
+      if(i==0){
+        itemImg.setRegImgYn("Y");
+      }else{
+        itemImg.setRegImgYn("N");
+      }
+      System.out.println("itemImg, itemImgFileList.get(i)" + itemImg +"----===="+ itemImgFileList.get(i));
+      itemImgService.saveItemImg(itemImg, itemImgFileList.get(i));
+    }
+
+    return megazine.getMno();  //Long 타입 리턴하는 메서드임.
+  }
+
+  //readOnly = true : 상품 데이터를 읽기만 하므로 JPA에게 더티 체킹(변경 감지->업데이트)를 하지 않도록 설정.
+  // 성능상 이점이 발생 (더 빨라짐)
+  @Transactional(readOnly = true)
+  public MegazineDTO getItemDtl(Long megazineId){
+    List<ItemImg> itemImgList = itemImgRepository.findByMegazine_MnoOrderByIdAsc(megazineId);
+    List<ItemImgDTO> itemImgDTOList = new ArrayList<>();
+    for (ItemImg itemImg : itemImgList){
+      ItemImgDTO itemImgDTO = ItemImgDTO.of(itemImg);
+      itemImgDTOList.add(itemImgDTO);
+    }
+
+    //위에 이미지 읽었으니 아이템 읽어야즤
+    Megazine megazine = megazineRepository.findById(megazineId)
+        .orElseThrow(EntityNotFoundException::new);
+    MegazineDTO megazineDTO = MegazineDTO.of(megazine); // 매핑해줌 아이템DTO로 변경해줌
+    //앞에서 이미지 담아서 주려고
+    megazineDTO.setItemImgDTOList(itemImgDTOList);
+
+    return megazineDTO;
+  }
+
+  //MultipartFile 화면에서 받아옴
+  public Long updateItem(MegazineDTO megazineDTO,
+                         List<MultipartFile> itemImgFileList) throws Exception{
+    //상품 수정
+    //findById 애가 옵셔널을 들고 있음.
+    System.out.println("---- updateItem. itemDto ====>" + megazineDTO);
+    Megazine megazine = megazineRepository.findById(megazineDTO.getMno())
+        .orElseThrow(EntityNotFoundException::new);
+
+    megazine.updateItem(megazineDTO);
+
+    List<Long> itemImgIds = megazineDTO.getItemImgIds(); //이미지들의 아이디가 있어야 업데이트를 하거나 삭제함
+
+    //이미지 등록
+    for(int i=0; i < itemImgFileList.size(); i++){
+      System.out.println("****" + i + "-----" + itemImgIds.get(i) + "-----" + itemImgFileList.get(i));
+      itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i));
+    }
+    return megazine.getMno();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   //-------------------------------------------------------------

@@ -1,6 +1,7 @@
 package com.keduit.interiors.dto;
 
 
+import com.keduit.interiors.entity.ItemImg;
 import com.keduit.interiors.entity.Megazine;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,9 +30,9 @@ public class ItemImgDTO {
 
   //item을 itemDTO로 바꿔줄때 매핑해줄 때 사용
   //of라는 이름의 정적 메서드를 정의합니다. 이 메서드는 ItemImg 객체를 파라미터로 받아서 ItemImgDTO 객체로 변환합니다.
-  public static ItemImgDTO of(Megazine megazine){
+  public static ItemImgDTO of(ItemImg itemImg){
     //from itemImg ~ to ItemImgDTO.class(이걸로 이 타입으로 매핑할거야)/ to 는 .class를 붙여눠야함
-    return modelMapper.map(megazine, ItemImgDTO.class);  //itemImg -> ItemImgDTO로 매핑
+    return modelMapper.map(itemImg, ItemImgDTO.class);  //itemImg -> ItemImgDTO로 매핑
   }
 
 }
