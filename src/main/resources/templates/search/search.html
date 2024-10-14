@@ -71,16 +71,59 @@
 <th:block layout:fragment="script">
   <script>
     const googuns = {
-      서울: ["강북구", "관악구", "광진구", "금천구", "동작구", "마포구", "서초구", "성동구", "영등포구", "용산구"],
+      서울: ["전체", "강북구", "관악구", "광진구", "금천구", "동작구", "마포구", "서초구", "성동구", "영등포구", "용산구"],
       인천: ["부평구"],
-      대전: ["동구", "서구", "유성구", "대덕구"],
-      부산: ["강서구", "기장군", "동구", "동래구", "부산진구", "북구", "사상구", "사하구", "서구", "영도구", "중구", "해운대구"],
+      대전: ["전체", "동구", "서구", "유성구", "대덕구"],
+      부산: ["전체", "강서구", "기장군", "동구", "동래구", "부산진구", "북구", "사상구", "사하구", "서구", "영도구", "중구", "해운대구"],
       충북: ["옥천군"],
       충남: ["부여군"],
       전북: ["익산시"],
       세종: ["세종시"]
     };
 
+    // 페이지 로드 시 모든 업체 데이터를 불러오는 함수
+    function loadAllCompanies() {
+      const allCompanies = [];
+      let completedRequests = 0;
+
+      // 각 도/시에 대해 모든 구/군을 반복
+      for (const dosi in googuns) {
+        // 구/군 배열을 가져오기
+        const googunList = googuns[dosi];
+
+        // 각 구/군에 대해 요청
+        googunList.forEach(googun => {
+          const jsonFilePath = `http://localhost:8586/${dosi}_${googun}.json`;
+
+          fetch(jsonFilePath)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('네트워크 응답이 좋지 않습니다.');
+              }
+              return response.json();
+            })
+            .then(data => {
+              let results = data["Sheet1"] || data;
+              allCompanies.push(...results);
+            })
+            .catch(error => {
+              console.error('문제가 발생했습니다.', error);
+            })
+            .finally(() => {
+              completedRequests++;
+              // 모든 요청이 완료된 후 정렬 및 결과 표시
+              if (completedRequests === Object.keys(googuns).reduce((sum, dosi) => sum + googuns[dosi].length, 0)) {
+                displayResults(allCompanies);
+              }
+            });
+        });
+      }
+    }
+
+    // 페이지 로드 시 모든 업체 표시
+    document.addEventListener("DOMContentLoaded", loadAllCompanies);
+
+    // 도/시 필터
     function searchDosi() {
       const dosiSelect = document.getElementById("search-dosi");
       const googunSelect = document.getElementById("search-googun");
@@ -101,6 +144,7 @@
       }
     }
 
+    // 모든 필터, 검색바 초기화
     function resetSelection() {
       document.getElementById("search-dosi").value = '';
       document.getElementById("search-googun").innerHTML = '<option value="">구/군</option>';
@@ -118,9 +162,6 @@
         return;
       }
 
-      // JSON 파일 경로
-      // const jsonFilePath = 'file:///Users/lkiki/Desktop/interior_API/${dosiSelected}_${googunSelected}.json';
-
       // AJAX 요청
       fetch(`http://localhost:8586/${dosiSelected}_${googunSelected}.json`)
         .then(response => {
@@ -130,12 +171,6 @@
           return response.json();
         })
         .then(data => {
-          // 업체명으로 필터링 (업체명이 입력된 경우에만)
-          // const filteredData = companyName
-          //   ? data.filter(item => item.company_name.includes(companyName))
-          //   : data; // 업체명이 없으면 전체 데이터 반환
-
-          // 결과 표시
           displayResults(data);
         })
         .catch(error => {
@@ -161,6 +196,9 @@
         resultContainer.innerHTML = '<p>유효한 데이터가 아닙니다.</p>';
         return;
       }
+      // 업체명으로 가나다순 정렬
+      results.sort((a, b) => getValue(a, '업체명', '상호', '상호명').localeCompare(getValue(b, '업체명', '상호', '상호명')));
+
 
       // getValue 함수 정의
       function getValue(item, ...fields) {
@@ -180,10 +218,14 @@
         const companyName = getValue(item, '업체명', '상호', '상호명');
         const address = getValue(item, '도로명주소', '소재지', '영업소재지주소', '소재지도로명주소', '영업소재지(도로명주소)', '소재지 주소');
         const phone = getValue(item, '전화번호', '연락처');
+        const jobType = getValue(item, '업종');
+        const zipNumber = getValue(item, '우편번호');
 
         resultDiv.innerHTML = `
           <h2><b>${companyName}</b></h2>
           <p>
+          <p>${jobType}</p>
+          <p>${zipNumber}</p>
           <p>${address}</p>
           <p>${phone}</p>
         `;
