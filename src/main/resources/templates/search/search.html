@@ -2,203 +2,85 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-<th:block layout:fragment="css">
-  <!-- css 적용 -->
-  <style>
-    .search-main {
-      margin: 40px auto;
-      padding: 20px;
-      width: 80vw;
-      height: 40vh;
-      background-color: papayawhip;
-      text-align: center;
-    }
-
-    #search-dosi,
-    #search-googun {
-      width: 300px;
-      height: 50px;
-      margin: 10px;
-      padding: 10px 30px;
-      border: none;
-      border-radius: 20px;
-      font-size: large;
-    }
-
-    .search-main>h1 {
-      font-size: 50px;
-      padding: 20px;
-    }
-
-    #magnifier {
-      width: 100px;
-      height: 100px;
-      margin-right: 10%;
-      display: inline-block;
-    }
-
-    #company-name {
-      width: 400px;
-    }
-
-    #company-name,
-    .search-btn {
-      height: 50px;
-      margin: 10px 15px;
-      padding: 10px 30px;
-      border-radius: 20px;
-      border-width: 1px;
-      border: none;
-      font-size: large;
-      background-color: white;
-    }
-
-    .search-btn:hover {
-      background-color: #C5BAAA;
-    }
-
-    .search-result-btn {
-      margin: 40px auto;
-      padding: 15px;
-      width: 80vw;
-      height: 30vh;
-      background-color: #C5BAAA;
-      border-radius: 30px;
-    }
-  </style>
-</th:block>
-
-<th:block layout:fragment="script">
-  <script>
-    const googuns = {
-      서울: ["전체", "강북구", "관악구", "광진구", "금천구", "동작구", "마포구", "서초구", "성동구", "영등포구", "용산구"],
-      인천: ["부평구"],
-      대전: ["전체", "동구", "서구", "유성구", "대덕구"],
-      부산: ["전체", "강서구", "기장군", "동구", "동래구", "부산진구", "북구", "사상구", "사하구", "서구", "영도구", "중구", "해운대구"],
-      충북: ["옥천군"],
-      충남: ["부여군"],
-      전북: ["익산시"],
-      세종: ["세종시"]
-    };
-
-    // 페이지 로드 시 모든 업체 데이터를 불러오는 함수
-    function loadAllCompanies() {
-      const allCompanies = [];
-      let completedRequests = 0;
-
-      // 각 도/시에 대해 모든 구/군을 반복
-      for (const dosi in googuns) {
-        // 구/군 배열을 가져오기
-        const googunList = googuns[dosi];
-
-        // 각 구/군에 대해 요청
-        googunList.forEach(googun => {
-          const jsonFilePath = `http://localhost:8586/${dosi}_${googun}.json`;
-
-          fetch(jsonFilePath)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('네트워크 응답이 좋지 않습니다.');
-              }
-              return response.json();
-            })
-            .then(data => {
-              let results = data["Sheet1"] || data;
-              allCompanies.push(...results);
-            })
-            .catch(error => {
-              console.error('문제가 발생했습니다.', error);
-            })
-            .finally(() => {
-              completedRequests++;
-              // 모든 요청이 완료된 후 정렬 및 결과 표시
-              if (completedRequests === Object.keys(googuns).reduce((sum, dosi) => sum + googuns[dosi].length, 0)) {
-                displayResults(allCompanies);
-              }
-            });
-        });
-      }
-    }
-
-    // 페이지 로드 시 모든 업체 표시
-    document.addEventListener("DOMContentLoaded", loadAllCompanies);
-
-    // 도/시 필터
-    function searchDosi() {
-      const dosiSelect = document.getElementById("search-dosi");
-      const googunSelect = document.getElementById("search-googun");
-
-      const dosiSelected = dosiSelect.value;
-
-      // 구/군 목록 초기화
-      googunSelect.innerHTML = '<option value="">구/군</option>';
-
-      // 선택된 도시의 구/군 목록 추가
-      if (googuns[dosiSelected]) {
-        googuns[dosiSelected].forEach(googun => {
-          const option = document.createElement("option");
-          option.value = googun;
-          option.textContent = googun;
-          googunSelect.appendChild(option);
-        });
-      }
-    }
-
-    // 모든 필터, 검색바 초기화
-    function resetSelection() {
-      document.getElementById("search-dosi").value = '';
-      document.getElementById("search-googun").innerHTML = '<option value="">구/군</option>';
-      document.getElementById("company-name").value = '';
-    }
-
-    // searchCompany() : 사용자 입력을 확인하고 api 호출하는 함수
-    function searchCompany() {
-      const dosiSelected = document.getElementById("search-dosi").value;
-      const googunSelected = document.getElementById("search-googun").value;
-
-      // 도/시와 구/군을 선택하지 않았을때 뜨는 경고메세지
-      if (!dosiSelected || !googunSelected) {
-        alert("도/시, 구/군을 선택해주세요.");
-        return;
+<head>
+  <th:block layout:fragment="css">
+    <!-- css 적용 -->
+    <style>
+      .search-main {
+        margin: 40px auto;
+        padding: 20px;
+        width: 80vw;
+        height: 40vh;
+        background-color: papayawhip;
+        text-align: center;
       }
 
-      // AJAX 요청
-      fetch(`http://localhost:8586/${dosiSelected}_${googunSelected}.json`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('네트워크 응답이 좋지 않습니다.');
-          }
-          return response.json();
-        })
-        .then(data => {
-          displayResults(data);
-        })
-        .catch(error => {
-          console.error('문제가 발생했습니다.', error);
-        });
-    }
-
-    // displayResults() : 결과를 화면에 표시하는 함수
-    function displayResults(data) {
-      const resultContainer = document.querySelector(".search-result");
-      resultContainer.innerHTML = '';       // 기존 결과 초기화
-
-      let results = [];
-
-      // "Sheet1" 키가 있는지 확인하고, 배열이 있는 경우
-      if (data && Array.isArray(data["Sheet1"])) {
-        results = data["Sheet1"];
-      } else if (Array.isArray(data)) {
-        // "Sheet1" 키가 없지만, 기본 배열인 경우(기본 json 파일 얘들)
-        results = data;
-      } else {
-        // 유효한 데이터가 아닐 때
-        resultContainer.innerHTML = '<p>유효한 데이터가 아닙니다.</p>';
-        return;
+      #search-dosi,
+      #search-googun {
+        width: 300px;
+        height: 50px;
+        margin: 10px;
+        padding: 10px 30px;
+        border: none;
+        border-radius: 20px;
+        font-size: large;
       }
-      // 업체명으로 가나다순 정렬
-      results.sort((a, b) => getValue(a, '업체명', '상호', '상호명').localeCompare(getValue(b, '업체명', '상호', '상호명')));
 
+      .search-main>h1 {
+        font-size: 50px;
+        padding: 20px;
+      }
+
+      #magnifier {
+        width: 100px;
+        height: 100px;
+        margin-right: 10%;
+        display: inline-block;
+      }
+
+      #company-name {
+        width: 400px;
+      }
+
+      #company-name,
+      .search-btn {
+        height: 50px;
+        margin: 10px 15px;
+        padding: 10px 30px;
+        border-radius: 20px;
+        border-width: 1px;
+        border: none;
+        font-size: large;
+        background-color: white;
+      }
+
+      .search-btn:hover {
+        background-color: #C5BAAA;
+      }
+
+      .search-result-btn {
+        margin: 40px auto;
+        padding: 15px;
+        width: 80vw;
+        height: 30vh;
+        background-color: #C5BAAA;
+        border-radius: 30px;
+      }
+    </style>
+  </th:block>
+
+  <th:block layout:fragment="script">
+    <script>
+      const googuns = {
+        서울: ["전체", "강북구", "관악구", "광진구", "금천구", "동작구", "마포구", "서초구", "성동구", "영등포구", "용산구"],
+        인천: ["부평구"],
+        대전: ["전체", "동구", "서구", "유성구", "대덕구"],
+        부산: ["전체", "강서구", "기장군", "동구", "동래구", "부산진구", "북구", "사상구", "사하구", "서구", "영도구", "중구", "해운대구"],
+        충북: ["옥천군"],
+        충남: ["부여군"],
+        전북: ["익산시"],
+        세종: ["세종시"]
+      };
 
       // getValue 함수 정의
       function getValue(item, ...fields) {
@@ -210,18 +92,113 @@
         return '';            // json 파일에 해당하는 필드가 전부 없을 경우 ''값 반환
       }
 
-      // 나머지 데이터 처리
-      results.forEach(item => {
-        const resultDiv = document.createElement('div');
-        resultDiv.className = 'search-result-btn';
+      let currentPage = 1;        // 현재 페이지 초기화
+      const itemsPerPage = 5;     // 한 화면에 표시할 페이지 갯수 = 5페이지씩
+      let allCompanies = [];
 
-        const companyName = getValue(item, '업체명', '상호', '상호명');
-        const address = getValue(item, '도로명주소', '소재지', '영업소재지주소', '소재지도로명주소', '영업소재지(도로명주소)', '소재지 주소');
-        const phone = getValue(item, '전화번호', '연락처');
-        const jobType = getValue(item, '업종');
-        const zipNumber = getValue(item, '우편번호');
+      // 페이지 로드 시 모든 업체 데이터를 불러오는 함수
+      function loadAllCompanies() {
+        let completedRequests = 0;
 
-        resultDiv.innerHTML = `
+        // 각 도/시에 대해 모든 구/군을 반복
+        for (const dosi in googuns) {
+          // 구/군 배열을 가져오기
+          const googunList = googuns[dosi];
+
+          // 각 구/군에 대해 요청
+          googunList.forEach(googun => {
+            const jsonFilePath = `http://localhost:8586/${dosi}_${googun}.json`;
+
+            fetch(jsonFilePath)
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error('네트워크 응답이 좋지 않습니다.');
+                }
+                return response.json();
+              })
+              .then(data => {
+                let results = data["Sheet1"] || data;
+                allCompanies.push(...results);
+              })
+              .catch(error => {
+                console.error('문제가 발생했습니다.', error);
+              })
+              .finally(() => {
+                completedRequests++;
+                // 모든 요청이 완료된 후 정렬 및 결과 표시
+                if (completedRequests === Object.keys(googuns).reduce((sum, dosi) => sum + googuns[dosi].length, 0)) {
+                  pagination(allCompanies);
+                }
+              });
+          });
+        }
+      }
+
+      // 도/시 필터
+      function searchDosi() {
+        const dosiSelect = document.getElementById("search-dosi");
+        const googunSelect = document.getElementById("search-googun");
+
+        const dosiSelected = dosiSelect.value;
+
+        // 구/군 목록 초기화
+        googunSelect.innerHTML = '<option value="">구/군</option>';
+
+        // 선택된 도시의 구/군 목록 추가
+        if (googuns[dosiSelected]) {
+          googuns[dosiSelected].forEach(googun => {
+            const option = document.createElement("option");
+            option.value = googun;
+            option.textContent = googun;
+            googunSelect.appendChild(option);
+          });
+        }
+      }
+
+      // 모든 필터, 검색바 초기화
+      function resetSelection() {
+        document.getElementById("search-dosi").value = '';
+        document.getElementById("search-googun").innerHTML = '<option value="">구/군</option>';
+        document.getElementById("company-name").value = '';
+      }
+
+      // displayResults() : 결과를 화면에 표시하는 함수
+      function displayResults(data) {
+        const resultContainer = document.querySelector(".search-result");
+        resultContainer.innerHTML = '';       // 기존 결과 초기화
+
+        if (data.length === 0) {
+          resultContainer.innerHTML = '<p>해당 결과가 없습니다.</p>';
+          return;
+        }
+        let results = [];
+
+        // "Sheet1" 키가 있는지 확인하고, 배열이 있는 경우
+        if (data && Array.isArray(data["Sheet1"])) {
+          results = data["Sheet1"];
+        } else if (Array.isArray(data)) {
+          // "Sheet1" 키가 없지만, 기본 배열인 경우(기본 json 파일 얘들)
+          results = data;
+        } else {
+          // 유효한 데이터가 아닐 때
+          resultContainer.innerHTML = '<p>유효한 데이터가 아닙니다.</p>';
+          return;
+        }
+        // 업체명으로 가나다순 정렬
+        results.sort((a, b) => getValue(a, '업체명', '상호', '상호명').localeCompare(getValue(b, '업체명', '상호', '상호명')));
+
+        // 나머지 데이터 처리
+        results.forEach(item => {
+          const resultDiv = document.createElement('div');
+          resultDiv.className = 'search-result-btn';
+
+          const companyName = getValue(item, '업체명', '상호', '상호명');
+          const address = getValue(item, '도로명주소', '소재지', '영업소재지주소', '소재지도로명주소', '영업소재지(도로명주소)', '소재지 주소');
+          const phone = getValue(item, '전화번호', '연락처');
+          const jobType = getValue(item, '업종');
+          const zipNumber = getValue(item, '우편번호');
+
+          resultDiv.innerHTML = `
           <h2><b>${companyName}</b></h2>
           <p>
           <p>${jobType}</p>
@@ -229,13 +206,134 @@
           <p>${address}</p>
           <p>${phone}</p>
         `;
-        resultContainer.appendChild(resultDiv);
+          resultContainer.appendChild(resultDiv);
+        });
+      }
+
+      // 페이지네이션 함수
+      function pagination(data) {
+        const totalPages = Math.ceil(data.length / itemsPerPage);     // 데이터 길이 (나누기) 5페이지씩 = 총 페이지 갯수
+        const start = (currentPage - 1) * itemsPerPage;               // 현제 페이지의 시작 인덱스
+        const end = start + itemsPerPage;                             // 현재 페이지의 끝 인덱스
+
+        const currentItems = data.slice(start, end);
+        displayResults(currentItems);                                 // 현재 페이지에 맞는 결과 표시
+
+        // 페이지 번호 표시
+        const pageNumbersContainer = document.getElementById("page-numbers");
+        // pageNumbersContainer가 null인지 확인
+        console.log("pageNumbersContainer:", pageNumbersContainer);
+        pageNumbersContainer.innerHTML = '';                // 기존 페이지 번호 초기화
+        for (let i = 1; i <= totalPages; i++) {
+          const pageButton = document.createElement("button");
+          pageButton.textContent = i;                      // 페이지 번호 설정
+          pageButton.addEventListener("click", () => goToPage(i, data));         // 클릭 시 페이지 이동
+          pageNumbersContainer.appendChild(pageButton);                         // 페이지 버튼 추가
+        }
+
+        // 버튼 비활성화 로직
+        document.getElementById("prev-page").disabled = currentPage === 1;            // 첫 페이지일 경우 이전버튼 비활성화
+        document.getElementById("next-page").disabled = currentPage === totalPages;   // 마지막 페이지일 경우 다음버튼 비활성화
+      }
+
+      // 이벤트 리스너 추가
+      document.addEventListener("DOMContentLoaded", () => {
+        loadAllCompanies(); // 초기 데이터 로드 함수
+
+        document.getElementById("prev-page").addEventListener("click", () => {
+          if (currentPage > 1) {
+            goToPage(currentPage - 1, allCompanies);          // 전체 업체 데이터를 전달
+          }
+        });
+
+        document.getElementById("next-page").addEventListener("click", () => {
+          const totalPages = Math.ceil(allCompanies.length / itemsPerPage);
+          if (currentPage < totalPages) {
+            goToPage(currentPage + 1, allCompanies);          // 전체 업체 데이터를 전달
+          }
+        });
       });
-    }
 
-  </script>
-</th:block>
+      // searchCompany() : 사용자 입력을 확인하고 api 호출하는 함수
+      function searchCompany() {
+        const dosiSelected = document.getElementById("search-dosi").value;
+        const googunSelected = document.getElementById("search-googun").value;
+        const companyNameInput = document.getElementById("company-name").value.trim(); // 검색어 입력
 
+        let fetchPromises = [];
+
+        // '전체'를 선택한 경우 해당 도/시의 모든 업체 요청
+        if (googunSelected === "전체" || !googunSelected) {
+          // 해당 도/시에 모든 구/군 요청
+          if (!googuns[dosiSelected] || googuns[dosiSelected].length === 0) {
+            alert("해당 도/시에 업체 정보가 없습니다.");
+            return;
+          }
+          // 구/군이 '전체' 또는 선택하지 않았을 때 모든 구/군 요청
+          fetchPromises = googuns[dosiSelected].map(googun =>
+            fetch(`http://localhost:8586/${dosiSelected}_${googun}.json`)
+              .then(response => {
+                if (!response.ok) {
+                  return []; // 파일이 없을 경우 빈 배열 반환
+                }
+                return response.json();
+              })
+          );
+        } else {
+          // 특정 구/군을 선택한 경우
+          const jsonFilePath = `http://localhost:8586/${dosiSelected}_${googunSelected}.json`;
+          fetchPromises.push(fetch(jsonFilePath).then(response => {
+            if (!response.ok) {
+              throw new Error('네트워크 응답이 좋지 않습니다.');
+            }
+            return response.json();
+          }));
+        }
+
+        // 모든 요청이 완료된 후 결과 표시
+        Promise.all(fetchPromises)
+          .then(datas => {
+            allCompanies = [];
+            datas.forEach(data => {
+              if (Array.isArray(data["Sheet1"])) {
+                allCompanies.push(...data["Sheet1"]);
+              } else if (Array.isArray(data)) {
+                allCompanies.push(...data);
+              }
+            });
+            console.log("All Companies:", allCompanies); // allCompanies 출력
+
+            // 업체명 필터링
+            const filteredResults = allCompanies.filter(company => {
+              const companyName = getValue(company, '업체명', '상호', '상호명');
+              return companyName.includes(companyNameInput);
+            });
+            console.log("Filtered Results:", filteredResults); // filteredResults 출력
+
+            // 결과 표시
+            if (filteredResults.length === 0) {
+              displayResults([]);                     // 빈 배열 전달
+              alert("해당 결과가 없습니다.");
+            } else {
+              currentPage = 1;                        // 페이지를 처음으로 초기화
+              pagination(filteredResults);       // 페이지네이션 함수 호출
+            }
+          })
+          .catch(error => {
+            console.error('문제가 발생했습니다.', error);
+          });
+      }
+
+      function goToPage(page, filteredResults) {
+        currentPage = page;                 // 페이지 번호 업데이트
+        pagination(filteredResults);        // 필터된 결과를 페이지네이션()함수에 전달
+      }
+
+    </script>
+  </th:block>
+</head>
+
+<body>
 <div layout:fragment="content">
   <div class="search-main">
     <h1><b>시공업체 찾기</b></h1>
@@ -274,23 +372,14 @@
       <p>api</p>
     </div>
 
-    <div class="search-result-btn">
-      <h3>api 들어가야함2</h3>
-      <br>
-      <p>(지도 마커 아이콘)</p>
-      <p>api</p>
-      <p>api</p>
-    </div>
-
-    <div class="search-result-btn">
-      <h3>api 들어가야함3</h3>
-      <br>
-      <p>(지도 마커 아이콘)</p>
-      <p>api</p>
-      <p>api</p>
+    <div class="pagination">
+      <button id="prev-page">Previous</button>
+      <span id="page-info"></span>
+      <button id="next-page">Next</button>
+      <div id="page-numbers"></div> <!-- 페이지 번호를 표시할 공간 -->
     </div>
   </div>
-
 </div>
+</body>
 
 </html>
