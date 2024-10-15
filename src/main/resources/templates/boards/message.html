@@ -4,16 +4,11 @@
       layout:decorate="~{layout/layout}">
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-
-        /*<![CDATA[*/
-
-        var message = [[${message}]];
+        var message = /*[[${message}]]*/ '';
 
         alert(message);
 
-        location.replace([[${searchUrl}]]);
-        /*]]>*/
-
+        location.replace(/*[[${searchUrl}]]*/ '');
     </script>
 </th:block>
 <div layout:fragment="content">

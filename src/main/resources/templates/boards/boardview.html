@@ -118,10 +118,10 @@
             <tr>
                 <th>첨부 이미지</th>
                 <td class="image-cell">
-                    <th:block th:if="${imageUrl}"> <!-- imageUrl이 있을 경우 -->
-                        <img th:src="${imageUrl}" alt="첨부 이미지"/>
+                    <th:block th:if="${board.filename}"> <!-- 파일이 있을 경우 -->
+                        <img th:src="@{/files/}+${board.filename}" alt="첨부 이미지"/>
                     </th:block>
-                    <th:block th:unless="${imageUrl}"> <!-- imageUrl이 없을 경우 -->
+                    <th:block th:unless="${board.filename}"> <!-- 파일이 없을 경우 -->
                         이미지가 없습니다.
                     </th:block>
                 </td>

@@ -132,12 +132,12 @@
             <div class="pagination">
                 <!-- 이전 페이지 -->
                 <a th:if="${nowPage > 1}"
-                   th:href="@{/board/list(page=${nowPage-2}, searchKeyword=${param.searchKeyword})}">이전 페이지</a>
+                   th:href="@{/board/list(page=${(nowPage - 2)}, searchKeyword=${param.searchKeyword})}">이전 페이지</a>
 
                 <!-- 페이지 번호 -->
                 <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
                     <a th:if="${page != nowPage}"
-                       th:href="@{/board/list(page=${page-1}, searchKeyword=${param.searchKeyword})}"
+                       th:href="@{/board/list(page=${(page - 1)}, searchKeyword=${param.searchKeyword})}"
                        th:text="${page}"></a>
                     <strong th:if="${page == nowPage}" th:text="${page}"></strong>
                 </th:block>

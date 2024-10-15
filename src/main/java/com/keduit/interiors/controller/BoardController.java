@@ -9,9 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -84,27 +82,30 @@ public class BoardController {
 
     @GetMapping("/board/modify/{id}")
     public String boardModify(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("board", boardService.boardView(id));
+        Board board = boardService.boardView(id);
+        if (board == null) {
+            // 게시글이 없을 경우 에러 페이지로 이동하거나 적절한 처리를 합니다.
+            return "error/404";
+        }
+        model.addAttribute("board", board);
         return "boards/boardmodify";
     }
 
+
     @PostMapping("/board/update/{id}")
-    public String boardUpdate(@PathVariable("id") Long id, Board board, MultipartFile file, RedirectAttributes redirectAttributes) throws Exception {
-        Board boardTemp = boardService.boardView(id);
+    public String boardUpdate(
+            @PathVariable("id") Long id,
+            @ModelAttribute Board board,
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam(value = "deleteFile", required = false) String deleteFile,
+            RedirectAttributes redirectAttributes) throws Exception {
 
-        // 제목과 내용 업데이트
-        boardTemp.setTitle(board.getTitle());
-        boardTemp.setContent(board.getContent());
+        boolean deleteExistingFile = (deleteFile != null && deleteFile.equals("on"));
 
-        // 새 파일이 업로드된 경우 기존 파일을 교체
-        if (file != null && !file.isEmpty()) {
-            boardService.updateFile(boardTemp, file);  // 기존 파일 삭제 및 새 파일 저장
-        }
+        // 게시글 업데이트 로직
+        boardService.update(board, file, deleteExistingFile);
 
-        // 게시글 업데이트 (파일이 없는 경우에도 정상적으로 처리)
-        boardService.update(boardTemp, file);  // 새 파일을 전달하여 게시글 업데이트
-
-        // 수정 완료 후 알림을 위해 리다이렉트할 URL에 쿼리 매개변수 추가
+        // 수정 완료 후 리다이렉트
         return "redirect:/board/list?alert=update_success";
     }
 }
