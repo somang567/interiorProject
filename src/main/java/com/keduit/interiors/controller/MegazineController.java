@@ -90,7 +90,7 @@ public class MegazineController {
     return "redirect:/megazines/list";  //상품등록이 잘 되면 메인으로 이동
   }
 
-
+// 상세보기 관련 Url =================================================================================
   //url path에 있는 것을 변수로 쓰겠어
   @GetMapping("/item/{megazineId}")
   public String itemDtl(@PathVariable("megazineId") Long itemId, Model model) {
