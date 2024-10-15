@@ -1,4 +1,3 @@
-/*
 package com.keduit.interiors.config;
 
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -65,4 +64,3 @@ public class SecurityConfig {
 
 }
 
-*/

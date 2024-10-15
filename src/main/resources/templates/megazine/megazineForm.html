@@ -115,11 +115,6 @@
       color:white;
       font-size:1vw;
     }
-
-
-
-
-
     /*상품 이미지*/
     /*
     .custom-file-label{
@@ -176,11 +171,11 @@
   <form role="form" method="post" th:object="${megazineDTO}" enctype="multipart/form-data">
 
     <!--이미지 비어있는 경우-->
-    <div th:if="${#strings.isEmpty(megazineDTO.imageUrl)}">
+    <div th:if="${#strings.isEmpty(megazineDTO.oriImgName)}">
       <div class="form-group">
         <div class="custom-file img-div">
           <input type="file" class="custom-file-input"
-                 name="imageUrl">
+                 name="itemImgFile">
           <label  hidden class="custom-file-label"
                   th:text="상품이미지 + ${num}"></label>
         </div>
@@ -188,7 +183,7 @@
     </div>
 
 
-    <div th:if="${not #strings.isEmpty(megazineDTO.imageUrl)}">
+    <div th:if="${not #strings.isEmpty(megazineDTO.oriImgName)}">
       <div class="form-group">
         <div class="custom-file img-div">
           <input type="file" class="custom-file-input" name="itemImgFile">

@@ -31,7 +31,7 @@ public class MegazineController {
   private final MegazineRepository memberRepository;
 
   //list를 보여주는 부분이기 때문에 post 필요 없숨~
-  @GetMapping("/items")
+  @GetMapping("/list")
   //@PathVariable("page") Optional<Integer> page: URL 경로에서 페이지 번호를 직접 가져오는 방식입니다.
   public String megazineItem(ItemSearchDTO itemSearchDTO, Optional<Integer> page, Model model){
     Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9); //한 화면에 9개의 상품
@@ -73,7 +73,7 @@ public class MegazineController {
     //제대로 안넣었다면
     //이미지 하나라도 안넣었다면 안넘어간다~
     //이미지 파일 리스트의 첫 번째 파일이 비어 있고, itemDTO의 ID가 null인 경우(즉, 새로 생성하는 경우) 에러 메시지를 모델에 추가하고 폼으로 돌아갑니다.
-    if (megazineDTO.getImageUrl().isEmpty() && megazineDTO.getMno() == null) {
+    if (itemImgFile.isEmpty()) {
       model.addAttribute("errorMessage", "상품 이미지는 필수 입력 입니다.");
       return "megazine/megazineForm";
     }
@@ -82,7 +82,7 @@ public class MegazineController {
     try {
       megazineService.saveItem(megazineDTO, itemImgFile);
     } catch (Exception e) {
-      model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
+      model.addAttribute("errorMessage", "매거진 등록 중 에러가 발생하였습니다.");
       System.out.println("====================================");
       e.printStackTrace();
       return "megazine/megazineForm";
@@ -105,7 +105,7 @@ public class MegazineController {
   }
 
 
-  @PostMapping("user/item/{itemId}")
+  @PostMapping("/item/{megazineId}")
   public String itemUpdate(@Valid MegazineDTO megazineDTO,
                            BindingResult bindingResult,
                            @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
@@ -119,6 +119,7 @@ public class MegazineController {
       return  "megazine/megazineForm";
     }
 
+    /*
     try {
       megazineService.updateItem(megazineDTO, itemImgFileList);
     } catch (Exception e){
@@ -126,6 +127,7 @@ public class MegazineController {
       model.addAttribute("errorMessage", "상품 수정 중 에러가 발생했습니다.");
       return "megazine/megazineForm";
     }
+    */
     //수정 후 메인으로 감
     return "redirect:/megazines/list";
   }

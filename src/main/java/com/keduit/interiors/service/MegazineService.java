@@ -87,13 +87,11 @@ public class MegazineService {
   DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("a hh:mm");
 
 
-
   //여기였던 것 같다!!!
   public Long register(MegazineDTO megazineDTO, Principal principal, MultipartFile itemImgFile) throws Exception {
     Member member = memberRepository.findByEmail(principal.getName());
     //  파일 업로드하고, oriImgName,imgName,imgUrl를 받아서 megazineDTO에 넣어줌.
     //FileService 에서 저 3개를 리턴하게 만들어.
-    //
     String originalFileName = itemImgFile.getOriginalFilename();
     String imgName = "";  //경로를 가져오아서
     String imgUrl = "";
@@ -136,11 +134,20 @@ public class MegazineService {
 
     /* public Long saveItem(MegazineDTO megazineDTO, List<MultipartFile> itemImgFileList) throws Exception{
      */
-    //상품 등록
-    //Item 엔티티 가져와서 매핑
+
+    //매핑하기 전에 서비스에서 가져와서 저장하는 거 해줘야 함.
+
+    System.out.println("saveItem 들어감----------------------------------->");
+    
+    String oriImgName = itemImgFile.getOriginalFilename();
+    String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
+    String imgUrl = "/images/item/" + imgName;
+
+    megazineDTO.setImgName(imgName);
+    megazineDTO.setOriImgName(oriImgName);
+    megazineDTO.setImageUrl(imgUrl);
+
     Megazine megazine = megazineDTO.createItem();
-    //
-    //모델 매퍼 사용
     megazineRepository.save(megazine);  //리포지토리는 엔티티를 줘야 하기 때문에
 
     //이미지 등록
@@ -148,7 +155,7 @@ public class MegazineService {
     for( int i = 0; i < 1; i++){
       itemImgService.saveItemImg(itemImg, itemImgFileList.get(i));
     }
-*/
+    */
 
     /*   for( int i = 0; i < itemImgFileList.size(); i++){
       ItemImg itemImg = new ItemImg();
@@ -189,12 +196,11 @@ public class MegazineService {
       // 
       String oriImgName = megazineDTO.getOriImgName();
       String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
-      String imgUrl = "/images/item" + imgName;
+      String imgUrl = "/images/item/" + imgName;
 
       megazineDTO.setImgName(imgName);
       megazineDTO.setOriImgName(oriImgName);
       megazineDTO.setImageUrl(imgUrl);
-
 
       Megazine megazine = megazineDTO.createItem();
       megazineRepository.save(megazine);
