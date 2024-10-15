@@ -28,7 +28,7 @@ public class MemberController {
     System.out.println("--------boardForm-----------");
     //생성한 MemberDTO 객체를 model에 "memberDTO"라는 이름으로 추가합니다. 이 모델은 뷰에서 사용할 수 있게 됩니다.
     model.addAttribute("memberDTO", new MemberDTO()); //비어있는 상태 /폼에서 입력된 데이터를 받을 준비
-    return "member/memberRegisterForm"; //memberForm여기서
+    return "member/memberForm"; //memberForm여기서
   }
 
   // memberDTO의 유효성 체크하기
@@ -37,7 +37,7 @@ public class MemberController {
   @PostMapping("/new")
   public String memberForm(@Valid MemberDTO memberDTO, BindingResult bindingResult, Model model){
     if(bindingResult.hasErrors()){
-      return"member/memberRegisterForm";
+      return"member/memberForm";
     }
 
     try{
@@ -45,7 +45,7 @@ public class MemberController {
       memberService.saveMember(member);
     }catch(IllegalStateException e){
       model.addAttribute("errorMessage",e.getMessage());
-      return"member/memberRegisterForm";
+      return"member/memberForm";
     }
 
     return"redirect:/";
