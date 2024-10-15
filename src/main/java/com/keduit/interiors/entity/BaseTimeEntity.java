@@ -27,12 +27,12 @@ public abstract class BaseTimeEntity {
   @LastModifiedDate
   private LocalDateTime updateTime;
 
-  // Getter 메서드를 오버라이드하여 포맷팅된 날짜 반환
-  public String getRegTime() {
-    return regTime != null ? regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "";
-  }
-
-  public String getUpdateTime() {
-    return updateTime != null ? updateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "";
-  }
+//  // Getter 메서드를 오버라이드하여 포맷팅된 날짜 반환
+//  public String getRegTime() {
+//    return regTime != null ? regTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "";
+//  }
+//
+//  public String getUpdateTime() {
+//    return updateTime != null ? updateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) : "";
+//  }
 }

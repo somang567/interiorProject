@@ -122,7 +122,8 @@
                 <td>
                     <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}">제목입니다.</a>
                 </td>
-                <td th:text="${board.regTime}"></td>
+                <!-- 작성일을 포맷팅하여 표시 -->
+                <td th:text="${#temporals.format(board.regTime, 'yyyy-MM-dd HH:mm')}"></td>
             </tr>
             </tbody>
         </table>

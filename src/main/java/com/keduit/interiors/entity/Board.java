@@ -1,21 +1,26 @@
 package com.keduit.interiors.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 public class Board extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 게시글 번호
 
-    private String title;
-    private String content;
-    private String author;
+    private String title; // 제목
+    private String content; // 내용
+    private String author; // 작성자
 
     // 이미지 파일 관련 필드
     private String imageFilename;  // 이미지 파일명
