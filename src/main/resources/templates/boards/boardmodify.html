@@ -39,7 +39,6 @@
                 margin: auto;
             }
 
-            /* 이미지 미리보기 영역 스타일 */
             .image-preview-container {
                 display: flex;
                 justify-content: space-between;
@@ -49,13 +48,17 @@
 
             .image-box {
                 width: 45%;
-                text-align: center;
+                position: relative;
             }
 
             .image-box h2 {
                 font-size: 1rem;
-                margin-bottom: 0.5vw;
                 color: #666;
+                position: absolute;
+                top: -2vw;
+                left: 0;
+                width: 100%;
+                text-align: center;
             }
 
             .image-box img {
@@ -133,7 +136,7 @@
             </div>
 
             <div class="form-group">
-                <label for="file">첨부 파일(이미지 변경시 이전 이미지는 삭제됩니다.)</label>
+                <label for="file">첨부 파일(이미지 선택시 기존 이미지가 변경됩니다.)</label>
                 <input type="file" class="form-control-file" id="file" name="file" onchange="previewNewImage(event)">
             </div>
 

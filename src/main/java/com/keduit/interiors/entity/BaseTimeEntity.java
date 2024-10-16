@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 // Auditing을 적용하기 위해 @EntityListeners 애노테이션을 추가
 @EntityListeners(value={AuditingEntityListener.class})

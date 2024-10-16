@@ -66,8 +66,6 @@ public class BoardService {
     }
 
     // 게시글 저장 (write)
-    // 게시글을 새로 생성할때 board테이블에서 가장큰 게시글 번호를 가져온후 비교, 그다음 번호부터 작성
-    // 게시글을 지우면 지운게시글의 번호가 emptyNumber테이블에 들어가고, 다음게시글을 작성할때 테이블에 들어갔던 번호를 다시 사용
     public void write(BoardDTO boardDTO, MultipartFile file) throws Exception {
         Board board = dtoToEntity(boardDTO);
         // 빈 번호 확인 및 처리
@@ -94,11 +92,6 @@ public class BoardService {
         Board board = dtoToEntity(boardDTO);
         Board existingBoard = boardRepository.findById(board.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid board Id:" + board.getId()));
-
-        // 기존 파일 삭제 체크박스가 선택된 경우 파일 삭제
-        if (deleteExistingFile) {
-            deleteFile(existingBoard);
-        }
 
         // 새로운 파일이 업로드된 경우 처리
         if (file != null && !file.isEmpty()) {
@@ -158,8 +151,15 @@ public class BoardService {
 
     // 게시글 상세 조회
     public BoardDTO boardView(Long id) {
-        Optional<Board> board = boardRepository.findById(id);
-        return board.map(this::entityToDto).orElse(null);
+        Optional<Board> boardOpt = boardRepository.findById(id);
+
+        if (boardOpt.isPresent()) {
+            Board board = boardOpt.get();
+            board.setViewCount(board.getViewCount() + 1); // 조회수 증가
+            boardRepository.save(board); // 변경사항 저장
+            return entityToDto(board);
+        }
+        return null;
     }
 
     // 게시글 삭제

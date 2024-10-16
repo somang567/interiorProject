@@ -1,7 +1,9 @@
-HELP.md
+# 빌드 관련 파일들
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
+
+# 빌드 관련 파일들 제외
 !**/src/main/**/build/
 !**/src/test/**/build/
 
@@ -35,3 +37,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### 파일 업로드 경로 설정 관련 ###
+src/main/resources/application.properties
+src/main/resources/application.yml
