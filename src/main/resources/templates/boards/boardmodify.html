@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
+
 <div layout:fragment="content">
     <th:block layout:fragment="css">
         <style>
             .form-container {
-                max-width: 600px;
+                max-width: 70vw;
                 margin: 4vw auto;
                 padding: 2vw;
-                background-color: white;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                background-color: #f4f4f4;
+                border-radius: 0.8vw;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                font-size: 1rem;
+                margin-bottom: 2vw;
             }
 
             h1 {
@@ -29,28 +32,63 @@
             }
 
             .form-control, .form-control-file {
-                width: 100%;
+                width: 98%;
                 padding: 0.8vw;
                 border: 1px solid #ccc;
                 border-radius: 4px;
+                margin: auto;
             }
 
-            .btn-primary, .btn-secondary {
+            /* 이미지 미리보기 영역 스타일 */
+            .image-preview-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-top: 2vw;
+            }
+
+            .image-box {
+                width: 45%;
+                text-align: center;
+            }
+
+            .image-box h2 {
+                font-size: 1rem;
+                margin-bottom: 0.5vw;
+                color: #666;
+            }
+
+            .image-box img {
+                max-width: 100%;
+                max-height: 300px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 0.5vw;
+                object-fit: cover;
+            }
+
+            .button-container {
+                text-align: center;
+                margin-top: 2vw;
+            }
+
+            .button {
+                padding: 0.8vw 1.6vw;
                 background-color: #3498db;
-                border: none;
-                padding: 0.8vw 1.5vw;
                 color: white;
+                border: none;
+                border-radius: 0.4vw;
                 cursor: pointer;
-                border-radius: 5px;
-                transition: background-color 0.3s;
+                font-size: 1rem;
+                margin: 0.5vw;
+                text-decoration: none;
             }
 
-            .btn-primary:hover {
+            .button:hover {
                 background-color: #2980b9;
             }
 
             .btn-secondary {
-                margin-left: 1vw;
                 background-color: #95a5a6;
             }
 
@@ -63,13 +101,10 @@
                 color: #555;
             }
 
-            .text-center {
+            .form-footer {
                 display: flex;
                 justify-content: center;
-            }
-
-            .text-center .btn {
-                margin: 10px;
+                margin-top: 2vw;
             }
         </style>
     </th:block>
@@ -78,41 +113,58 @@
           onsubmit="return showAlert()">
         <div class="form-container">
             <h1>게시글 수정</h1>
+
             <div class="form-group">
                 <label for="title">제목</label>
                 <input type="text" class="form-control" id="title" name="title"
                        th:value="${board.title}" placeholder="제목을 입력하세요" required>
             </div>
+
             <div class="form-group">
                 <label for="author">작성자</label>
                 <input type="text" class="form-control" id="author" name="author"
                        th:value="${board.author}" readonly>
             </div>
+
             <div class="form-group">
                 <label for="content">내용</label>
                 <textarea class="form-control" id="content" name="content"
                           placeholder="내용을 입력하세요" rows="5" required th:text="${board.content}"></textarea>
             </div>
+
             <div class="form-group">
-                <label for="file">첨부 파일(이미지 변경시 파일삭제 체크후 이미지선택)</label>
-                <input type="file" class="form-control-file" id="file" name="file">
-                <div class="file-info">
+                <label for="file">첨부 파일(이미지 변경시 이전 이미지는 삭제됩니다.)</label>
+                <input type="file" class="form-control-file" id="file" name="file" onchange="previewNewImage(event)">
+            </div>
+
+            <!-- 이미지 미리보기 영역 -->
+            <div class="image-preview-container">
+                <!-- 이전 이미지 -->
+                <div class="image-box">
+                    <h2>이전 이미지</h2>
                     <th:block th:if="${board.filename}">
-                        <p>현재 첨부 파일: <a th:href="@{/files/}+${board.filename}" target="_blank"
-                                        th:text="${board.filename}"></a></p>
-                        <img th:src="@{/files/}+${board.filename}" alt="첨부 이미지" style="max-width:100%;">
-                        <!-- 파일 삭제 체크박스 추가 -->
-                        <div>
-                            <input type="checkbox" id="deleteFile" name="deleteFile">
-                            <label for="deleteFile">기존 파일 삭제</label>
-                        </div>
+                        <img id="previous-image" th:src="@{/files/}+${board.filename}" alt="이전 첨부 이미지">
                     </th:block>
+                </div>
+
+                <!-- 새로운 이미지 미리보기 -->
+                <div class="image-box">
+                    <h2>새로운 이미지</h2>
+                    <img id="new-image-preview" alt="새로 업로드한 이미지 미리보기" style="display:none;">
                 </div>
             </div>
         </div>
-        <div class="text-center">
-            <a href="/board/list" role="button" class="btn btn-secondary" onclick="alert('수정이 취소되었습니다.')">취소</a>
-            <button type="submit" class="btn btn-primary">수정</button>
+
+        <!-- 버튼 영역 -->
+        <div class="button-container">
+            <!-- 목록으로 버튼 추가 -->
+            <a href="/board/list" class="button btn-secondary"
+               onclick="return confirmAction('정말 목록으로 돌아가시겠습니까?')">목록으로</a>
+            <!-- 취소 버튼: 게시글 상세보기로 이동 -->
+            <a th:href="@{/board/view(id=${board.id})}" class="button btn-secondary"
+               onclick="return confirmAction('정말 게시글 수정 페이지를 나가시겠습니까?')">취소</a>
+            <!-- 수정 버튼 -->
+            <button type="submit" class="button btn-primary">수정</button>
         </div>
     </form>
 
@@ -121,6 +173,27 @@
             function showAlert() {
                 alert('수정이 완료되었습니다.');
                 return true;
+            }
+
+            function confirmAction(message) {
+                return confirm(message);
+            }
+
+            function previewNewImage(event) {
+                const file = event.target.files[0];
+                const newImagePreview = document.getElementById('new-image-preview');
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        newImagePreview.src = e.target.result;
+                        newImagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    newImagePreview.style.display = 'none';
+                    newImagePreview.src = '';
+                }
             }
         </script>
     </th:block>

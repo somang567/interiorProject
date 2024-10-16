@@ -22,10 +22,10 @@ public abstract class BaseTimeEntity {
 
   @CreatedDate
   @Column(updatable = false)
-  private LocalDateTime regTime;
+  private LocalDateTime regTime; // 작성일
 
   @LastModifiedDate
-  private LocalDateTime updateTime;
+  private LocalDateTime updateTime; // 수정일
 
 //  // Getter 메서드를 오버라이드하여 포맷팅된 날짜 반환
 //  public String getRegTime() {

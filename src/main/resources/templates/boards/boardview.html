@@ -116,6 +116,10 @@
                 </td>
             </tr>
             <tr>
+                <th>수정일</th>
+                <td th:text="${#temporals.format(board.updateTime, 'yyyy-MM-dd HH:mm')}">수정일</td>
+            </tr>
+            <tr>
                 <th>첨부 이미지</th>
                 <td class="image-cell">
                     <th:block th:if="${board.filename}"> <!-- 파일이 있을 경우 -->
