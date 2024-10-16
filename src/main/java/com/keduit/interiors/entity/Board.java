@@ -1,6 +1,5 @@
 package com.keduit.interiors.entity;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,9 +14,7 @@ import java.util.List;
 public class Board extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 게시글 번호
-
+    private Long id; // 게시글 번호 (수동 관리)
     private String title; // 제목
     private String content; // 내용
     private String author; // 작성자

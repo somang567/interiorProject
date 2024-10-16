@@ -1,9 +1,11 @@
 package com.keduit.interiors.service;
 
 import com.keduit.interiors.entity.Board;
+import com.keduit.interiors.entity.EmptyNumber;
 import com.keduit.interiors.repository.BoardRepository;
+import com.keduit.interiors.repository.EmptyNumberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value; // 추가
+import org.springframework.beans.factory.annotation.Value;  // 추가
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,21 +23,39 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
-    // 설정 파일에서 업로드 경로를 주입받습니다. 없을 경우 기본값으로 "uploads" 사용
-    @Value("${file.upload-dir:uploads}")
+    @Autowired
+    private EmptyNumberRepository emptyNumberRepository;
+
+    // 설정 파일에서 업로드 경로를 주입받습니다.
+    @Value("${file.upload-dir}")
     private String uploadDir;
 
     public void write(Board board, MultipartFile file) throws Exception {
-        // 파일 저장 경로를 외부 디렉토리로 변경
-        String projectPath = System.getProperty("user.dir") + "/" + uploadDir;
+        // 1. 빈 번호가 있는지 확인
+        Optional<EmptyNumber> emptyNumberOpt = emptyNumberRepository.findFirstByOrderByNumberAsc();
 
-        // 디렉토리 확인 및 생성
-        File dir = new File(projectPath);
-        if (!dir.exists()) {
-            dir.mkdirs();
+        Long boardId;
+        if (emptyNumberOpt.isPresent()) {
+            // 2. 빈 번호가 있으면 그 번호를 사용
+            boardId = emptyNumberOpt.get().getNumber();
+            emptyNumberRepository.deleteById(boardId); // 사용된 빈 번호 삭제
+        } else {
+            // 3. 빈 번호가 없으면 기존 게시글 중 최대 번호 + 1 사용
+            boardId = boardRepository.findAll().stream()
+                    .mapToLong(Board::getId)
+                    .max()
+                    .orElse(0L) + 1;
         }
 
-        // 파일이 비어있을 경우에도 게시글을 작성할 수 있도록 로직 수정
+        // 4. 게시글 ID 설정
+        board.setId(boardId);
+
+        // 파일 저장 로직 (경로 수정: uploadDir 사용)
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();  // 디렉토리 없으면 생성
+        }
+
         if (file == null || file.isEmpty()) {
             board.setFilename(null);
             board.setFilepath(null);
@@ -43,12 +63,10 @@ public class BoardService {
             UUID uuid = UUID.randomUUID();
             String filename = uuid + "_" + file.getOriginalFilename();
             File saveFile = new File(dir, filename);
-
-            // 파일 저장
             file.transferTo(saveFile);
 
             board.setFilename(filename);
-            board.setFilepath("/files/" + filename); // DB에 파일 경로 저장
+            board.setFilepath("/files/" + filename);
         }
 
         boardRepository.save(board);
@@ -78,10 +96,10 @@ public class BoardService {
     // 기존 파일 삭제 메서드
     public void deleteFile(Board board) {
         if (board.getFilename() != null && !board.getFilename().isEmpty()) {
-            String filePath = System.getProperty("user.dir") + "/" + uploadDir + "/" + board.getFilename();
+            String filePath = uploadDir + "/" + board.getFilename();
             File file = new File(filePath);
             if (file.exists()) {
-                file.delete(); // 파일 삭제
+                file.delete();  // 파일 삭제
             }
             // 데이터베이스에서 파일 정보 삭제
             board.setFilename(null);
@@ -95,16 +113,14 @@ public class BoardService {
         deleteFile(board);
 
         // 새 파일 저장
-        String projectPath = System.getProperty("user.dir") + "/" + uploadDir;
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();  // 디렉토리 없으면 생성
+        }
+
         UUID uuid = UUID.randomUUID();
         String filename = uuid + "_" + file.getOriginalFilename();
-        File saveFile = new File(projectPath, filename);
-
-        // 디렉토리 확인 및 생성
-        File dir = new File(projectPath);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        File saveFile = new File(dir, filename);
 
         // 파일 저장
         file.transferTo(saveFile);
@@ -129,6 +145,11 @@ public class BoardService {
             // 게시글 삭제 전에 파일 삭제
             deleteFile(board);
             boardRepository.deleteById(id);
+
+            // 빈 번호 테이블에 삭제된 게시글 번호 추가
+            EmptyNumber emptyNumber = new EmptyNumber();
+            emptyNumber.setNumber(id);
+            emptyNumberRepository.save(emptyNumber);
         }
     }
 
