@@ -1,5 +1,6 @@
 package com.keduit.interiors.controller;
 
+import com.keduit.interiors.dto.BoardDTO;
 import com.keduit.interiors.entity.Board;
 import com.keduit.interiors.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class MainController {
                          direction = Sort.Direction.DESC) Pageable pageable) {
 
     // 리스트 부분
-    Page<Board> list = boardService.boardList(pageable);
+    Page<BoardDTO> list = boardService.boardList(pageable);
 
     model.addAttribute("list", list);
     return "main";  // main.html로 이동
