@@ -101,33 +101,33 @@ public class MegazineController {
       model.addAttribute("errorMessaage", "존재하지 않는 상품 입니다");
       model.addAttribute("megazineDTO", new MegazineDTO());
     }
-    return "megazine/megazineForm"; //버튼 있으면 저장 없으면 수정버튼이 보임 itemForm으로 똑같이 보내기로 함
+    return "megazine/megazineDetail"; //버튼 있으면 저장 없으면 수정버튼이 보임 itemForm으로 똑같이 보내기로 함
   }
 
 
   @PostMapping("/item/{megazineId}")
   public String itemUpdate(@Valid MegazineDTO megazineDTO,
                            BindingResult bindingResult,
-                           @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList,
+                           @RequestParam("itemImgFile") MultipartFile itemImgFileList,
                            Model model) {
     if (bindingResult.hasErrors()) {
-      return "megazine/megazineForm"; //에러 나면 다시
+      return "megazine/megazineDetail"; //에러 나면 다시
     }
     //비어 있으면
-    if (itemImgFileList.get(0).isEmpty() && megazineDTO.getMno() == null) {
+    if (itemImgFileList.isEmpty() && megazineDTO.getMno() == null) {
       model.addAttribute("errorMessage", "첫번재 상품 이미지는 필수입력입니다.");
-      return  "megazine/megazineForm";
+      return  "megazine/megazineDetail";
     }
 
-    /*
+
     try {
-      megazineService.updateItem(megazineDTO, itemImgFileList);
+      megazineService.updateItemImg(itemImgFileList,megazineDTO);
     } catch (Exception e){
       System.out.println(e.getMessage()); //에러 메시지 확인
       model.addAttribute("errorMessage", "상품 수정 중 에러가 발생했습니다.");
       return "megazine/megazineForm";
     }
-    */
+
     //수정 후 메인으로 감
     return "redirect:/megazines/list";
   }

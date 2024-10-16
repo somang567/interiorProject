@@ -12,38 +12,38 @@
     <script th:inline="javascript">
         $(document).ready(function(){
 
-        console.log("javascript 스크립트 입니다------------------------------");
-        //등록 버튼 클릭하면 /megazines/register로 이동.
+            console.log("javascript 스크립트 입니다------------------------------");
+            //등록 버튼 클릭하면 /megazines/register로 이동.
             $("#regBtn").on("click", function() {
-					self.location = "/megazines/user/write/new";
-        });
-        const result = [[${result}]];
-        console.log("result ------> " + result);
-        checkModal(result);
+                self.location = "/megazines/user/write/new";
+            });
+            const result = [[${result}]];
+            console.log("result ------> " + result);
+            checkModal(result);
 
-        // 등록, 수정, 삭제 후 모달처리
-				function checkModal(result) {
-				//history.state는 웹 브라우저의 History API의 일부로, 현재 활성화된 히스토리 항목의 상태 객체를 반환합니다.
-				//이 객체는 pushState() 또는 replaceState() 메서드를 사용하여 설정한 데이터에 접근할 수 있게 해줍니다.
-					if (result === '' || history.state) {
-						return;
-					}
+            // 등록, 수정, 삭제 후 모달처리
+            function checkModal(result) {
+                //history.state는 웹 브라우저의 History API의 일부로, 현재 활성화된 히스토리 항목의 상태 객체를 반환합니다.
+                //이 객체는 pushState() 또는 replaceState() 메서드를 사용하여 설정한 데이터에 접근할 수 있게 해줍니다.
+                if (result === '' || history.state) {
+                    return;
+                }
 
-					if (parseInt(result) > 0) {
-						$(".modal-body").html(
-								"게시글 " + parseInt(result) + " 번이 등록 되었습니다.");
-					}
+                if (parseInt(result) > 0) {
+                    $(".modal-body").html(
+                        "게시글 " + parseInt(result) + " 번이 등록 되었습니다.");
+                }
 
-					$("#myModal").modal("show");
-				}
+                $("#myModal").modal("show");
+            }
 
-                $(".move").on("click", function(e){
-                    e.preventDefault();	// 1. 링크의 기본 클릭 동작을 방지합니다.
-                    $("input[name='mno']").remove();	// 2. 기존에 있는 mno 입력 필드를 제거합니다.
-                    actionForm.append("<input type='hidden' name='mno' value='"+$(this).attr("href")+"'>"); // 3. 클릭한 링크의 href 값을 가진 숨겨진 입력 필드를 추가합니다.
-                    actionForm.attr("action","/megazines/get");	// 4. actionForm의 제출 URL을 설정합니다.
-                    actionForm.submit(); // 5. actionForm을 제출합니다.
-                });
+            $(".move").on("click", function(e){
+                e.preventDefault();	// 1. 링크의 기본 클릭 동작을 방지합니다.
+                $("input[name='mno']").remove();	// 2. 기존에 있는 mno 입력 필드를 제거합니다.
+                actionForm.append("<input type='hidden' name='mno' value='"+$(this).attr("href")+"'>"); // 3. 클릭한 링크의 href 값을 가진 숨겨진 입력 필드를 추가합니다.
+                actionForm.attr("action","/megazines/get");	// 4. actionForm의 제출 URL을 설정합니다.
+                actionForm.submit(); // 5. actionForm을 제출합니다.
+            });
         });
     </script>
 </th:block>
@@ -53,251 +53,301 @@
 <th:block layout:fragment="css">
     <style>
         *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-.wrap{
-    width:80vw;
-    height:100%;
-    margin: 0 auto;
-
-}
-.mga_banner{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width:100%;
-    height:24vw;
-    text-align: center;
-    margin-bottom: 5vw;
-    color: rgb(255, 255, 255);
-    background-color: rgb(98, 98, 98);
-}
-.banner_title{
-    font-size: 2vw;
-}
-.main_title1{
-    color:rgb(0, 0, 0);
-}
-.famous_lists{
-    display: flex;
-    justify-content: space-between;
-    width:100%;
-    height:15vw;
-    margin-top: 2vw;
-    margin-bottom: 5vw;
-    background-color: antiquewhite;
-}
-.fmgabox_list{
-    width:25vw;
-    height:100%;
-    background-color: rgb(176, 140, 85);
-    list-style-type: none;
-}
-/*검색하는 부분*/
-.main_title2{
-    color:rgb(0, 0, 0);
-    margin-top: 2vw;
-}
-.mga_search{
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width:100%;
-    height:6vw;
-    border: 0.1vw solid rgb(206, 206, 206);
-    border-radius: 1vw;
-    margin-top: 2vw;
-}
-.mga_search_li{
-    list-style-type:none;
-    width:8vw;
-    height:2.2vw;
-    /*background-color: aqua;*/
-    border-bottom: 0.1vw solid gray ;
-}
-.mga_search_li_btn{
-    list-style-type:none;
-    width:8vw;
-    height:2.2vw;
-    /*background-color: aqua;*/
-    text-align: center;
-}
-.search_btn{
-    width:5vw;
-    height:100%;
-    border-radius: 0.2vw;
-    background-color: rgb(67, 67, 67);
-    border: none;
-    font-size: 1vw;
-    color: white;
-}
-.search_btn:hover{
-    background-color:#EE7828;
-    transition: all 1s ease;
-}
-/*전체 매거진 글 수*/
-.total_cnt{
-    margin: 5vw 0 1vw 0;
-    font-size:1vw;
-}
-.elementWrap{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3개의 열 */
-    gap: 3vw; /* 박스 간의 간격 */
-    width:100%;
-    height:60vw;
-    margin: 0 auto;
-}
-.mga_element{
-    width: 24vw;
-    height:18vw;
-    background-color: aqua;
-}
-.mga_img{
-    width:100%;
-    height:10vw;
-    background-color: blue;
-}
-.count_and_btn{
-display:flex;
-justify-content: space-between;
-width:100%;
-height:10vw;
-}
-#regBtn{
-display:flex;
-justify-content: end;
-    height:2vw;
-}
-/*carousel slide 안의 배경 이미지*/
-
-.carousel-inner > .item { width:100vw; height:350px;}
-.item{width:100vw; height:350px;}
-
-</style>
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .wrap{
+            width:100vw;
+            height:100%;
+        }
+        .wrap_layout{
+            width:80vw;
+            height:100%;
+            margin: 0 auto;
+        }
+        .mga_banner{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width:100%;
+            height:24vw;
+            text-align: center;
+            margin-bottom: 5vw;
+            color: rgb(255, 255, 255);
+            background-color: rgb(98, 98, 98);
+        }
+        .banner_title{
+            font-size: 2vw;
+        }
+        .main_title1{
+            color:rgb(0, 0, 0);
+        }
+        .famous_lists{
+            display: flex;
+            justify-content: space-between;
+            width:100%;
+            height:15vw;
+            margin-top: 2vw;
+            margin-bottom: 5vw;
+            background-color: antiquewhite;
+        }
+        .fmgabox_list{
+            width:25vw;
+            height:100%;
+            background-color: rgb(176, 140, 85);
+            list-style-type: none;
+        }
+        /*검색하는 부분*/
+        .main_title2{
+            color:rgb(0, 0, 0);
+            margin-top: 2vw;
+        }
+        .mga_search{
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width:100%;
+            height:6vw;
+            border: 0.1vw solid rgb(206, 206, 206);
+            border-radius: 1vw;
+            margin-top: 2vw;
+        }
+        .mga_search_li{
+            list-style-type:none;
+            width:8vw;
+            height:2.2vw;
+            /*background-color: aqua;*/
+            border-bottom: 0.1vw solid gray ;
+        }
+        .mga_search_li_btn{
+            list-style-type:none;
+            width:8vw;
+            height:2.2vw;
+            /*background-color: aqua;*/
+            text-align: center;
+        }
+        .search_btn{
+            width:5vw;
+            height:100%;    /*li 안에 같이 만들어버림*/
+            border-radius: 0.2vw;
+            background-color: rgb(67, 67, 67);
+            border: none;
+            font-size: 1vw;
+            color: white;
+        }
+        .search_btn:hover{
+            background-color:#EE7828;
+            transition: all 1s ease;
+        }
+        /*전체 매거진 글 수*/
+        .total_cnt{
+            font-size:1vw;
+        }
+        .count_and_btn{
+            display:flex;
+            justify-content: space-between;
+            align-content: center;
+            width:100%;
+            margin-top:5vw;
+            background: #7f8c8d;
+        }
+        #regBtn{
+            width:5vw;
+            height:3vw;
+            padding:1vw;
+            background-color: #ff2f2f;
+            border-radius: 0.2vw;
+            color:white;
+            font-size: 1vw;
+        }
+        /*==카드 관련 css==*/
+        .mega_wrap{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.25vw;
+        }
+        .mega_card{
+            width:25vw;
+            height:28vw;
+            background-color: #ffffff;
+            border-radius: 0.5vw;
+            border: 0.1vw solid #d6d6d6;
+            text-align: center;
+            box-shadow: 0.1vw 0.1vw 0.4vw #939393;
+        }
+        .mega_card_img{
+            width:100%;
+            height:20vw;
+            margin: 0 auto;
+        }
+        .card-title{
+            font-size: 1vw;
+            font-weight: bold;
+            color:black;
+            margin:1vw;
+        }
+    </style>
 </th:block>
 
 
 <body>
 <div layout:fragment="content">
-<div class="row">
+    <div class="row">
 
 
+        <div class="wrap">
+            <div class="mga_banner"></div>
+
+            <div class="wrap_layout">
+                <h2 class="main_title1">요즘 유행하는 매거진</h2>
+
+                <!-- 크롤링 카드뉴스 넣을 부분/ 이후 진행 -->
+                <ul class="famous_lists">
+                    <li class="fmgabox_list"></li>
+                    <li class="fmgabox_list"></li>
+                    <li class="fmgabox_list"></li>
+                </ul>
+
+                <h2 class="main_title2">Megazine Search</h2>
+                <ul class="mga_search">
+                    <li class="mga_search_li">등록순 ▼</li>
+                    <li class="mga_search_li">주거형태 ▼</li>
+                    <li class="mga_search_li">평수 ▼</li>
+                    <li class="mga_search_li">스타일 ▼</li>
+                    <li class="mga_search_li_btn"><button class="search_btn">적용</button></li>
+                </ul>
+
+                <div class="count_and_btn">
+                    <h3 class="total_cnt">전체 매거진 글 수</h3>
+                    <button type="button" id="regBtn"
+                            class="btn btn-primary btn-xs pull-right display-right float-right register-btn">글쓰기</button>
+                </div>
+
+                <!-- 카드 하나 -->
+                <!-- status: 반복의 상태 정보를 담는 변수 -->
+                <!--megazineItems에서 모든 콘텐츠들을 가져와-->
+                <div class="mega_wrap">
+                    <th:block th:each="megazineItem, status: ${megazineItems.getContent()}">
+
+                        <a th:href="'/megazines/item/' + ${megazineItem.mno}" class="mega_card" >
+                            <img th:src="${megazineItem.imageUrl}" th:alt="${megazineItem.title}" class="mega_card_img" height="400">
+                            <div class="card-body">
+                                <h4 class="card-title">[[${megazineItem.title}]]</h4>
+                                <p class="card-text">[[${megazineItem.user}]]</p>
+                                <h4 class="card-title text-danger">[[${megazineItem.regTime}]]</h4>
+                            </div>
+                        </a>
+
+                    </th:block>
+                </div>
+
+            </div><!--wrap-->
+        </div><!--wrap-->
+    </div>
 
 
-    <div class="wrap">
+    <!-- start: ( 현재페이지 번호 / 보여줄 페이지 수 ) * 보여줄 페이지 수 + 1 -->
+    <!-- end : 현재 페이지에서 보여줄 마지막 페이지 번호 -->
+    <!--
+    <div th:with="start=${(items.number / maxPage) * maxPage + 1},
+                      end=(${(items.totalPages == 0 ) ? 1 :
+                      (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) :
+                      items.totalPages)})">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${items.first} ? 'disabled'">
+                <a th:onclick="'javascript: page(' + ${items.number -1} + ')'"
+                   aria-label="Previous" class="page-link">
+                    <span aria-hidden="true">Previous</span>
+                </a>
+            </li>
+            Page 객체에서 number는 현재 페이지를 나타냄. -->
+            <!-- "$(page)" : 타임리프에서 HTML 콘텐츠 영역 안에 직접 데이터를 출력할 때 사용 -->
+            <!-- Page 객체에서 시작 페이지는 0부터 이므로 해당 페이지를 호출할 때에는 페이지 -1를 해야함
 
-        <h2 class="main_title1">요즘 유행하는 매거진</h2>
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
+                th:classappend="${items.number eq page -1} ? 'active' : ''">
+                <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+                   th:inline="text" class="page-link">[[${page}]]</a>
+            </li>
 
-        <!-- 크롤링 카드뉴스 넣을 부분/ 이후 진행 -->
-        <ul class="famous_lists">
-            <li class="fmgabox_list"></li>
-            <li class="fmgabox_list"></li>
-            <li class="fmgabox_list"></li>
+            <li class="page-item" th:classappend="${items.last} ? 'disable'">
+                <a th:onclick="'javascript: page(' + ${items.number + 1} + ')'"
+                   aria-label="Next" class="page-link">
+                    <span aria-hidden="true">Next</span>
+                </a>
+            </li>
         </ul>
+    </div>
 
-        <h2 class="main_title2">Megazine Search</h2>
-        <ul class="mga_search">
-            <li class="mga_search_li">등록순 ▼</li>
-            <li class="mga_search_li">주거형태 ▼</li>
-            <li class="mga_search_li">평수 ▼</li>
-            <li class="mga_search_li">스타일 ▼</li>
-            <li class="mga_search_li_btn"><button class="search_btn">적용</button></li>
-        </ul>
+   검색 하는 부분 ========================================================
+    <div class="form-inline justify-content-center" th:object="${itemSearchDTO}">
+        <select th:field="*{searchDateType}" class="form-control" style="width:auto;">
+            <option value="all">전체기간</option>
+            <option value="1d">1일</option>
+            <option value="1w">1주</option>
+            <option value="1m">1개월</option>
+            <option value="6m">6개월</option>
+        </select>
 
-        <div class="count_and_btn">
-            <h3 class="total_cnt">전체 매거진 글 수</h3>
-            <button type="button" id="regBtn"
-                    class="btn btn-primary btn-xs pull-right display-right float-right register-btn">글쓰기</button>
-        </div>
+        <select th:field="*{searchSellStatus}" class="form-control" style="width:auto;">
+            <option value="all">판매상태(전체)</option>
+            <option value="SELL">판매</option>
+            <option value="SOLD_OUT">품절</option>
+        </select>
 
-        <!-- 시작 부분 -->
+        <select th:field="*{searchBy}" class="form-control" style="width:auto;">
+            <option value="itemNm">상품명</option>
+            <option value="createBy">등록자</option>
+        </select>
 
-        <!-- status: 반복의 상태 정보를 담는 변수 -->
-        <!--megazineItems에서 모든 콘텐츠들을 가져와-->
-        <th:block th:each="megazineItem, status: ${megazineItems.getContent()}">
-            <div class="col-md-4 margin">
-                <div class="card">
-                    <a th:href="'/megazines/item/' + ${megazineItem.mno}" class="text-dark">
-                        <img th:src="${megazineItem.imageUrl}" th:alt="${megazineItem.title}" class="card-img-top" height="400">
-                        <div class="card-body">
-                            <h4 class="card-title">[[${megazineItem.title}]]</h4>
-                            <p class="card-text">[[${megazineItem.user}]]</p>
-                            <h4 class="card-title text-danger">[[${megazineItem.regTime}]]</h4>
-                        </div>
-                    </a>
+        <input th:field="*{searchQuery}" class="form-control"
+               placeholder="검색어를 입력해주세요.">
+        <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Modal================================================== -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">처리가 완료되었습니다.</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
                 </div>
             </div>
-        </th:block>
-        </div><!--wrap-->
-    </div><!--wrap-->
-</div>
-
-
-<!-- 페이지 처리 부분 -->
-<div th:with="start=${(items.number/maxPage)*maxPage + 1},
-                  end=(${(items.totalPages == 0)? 1 :
-                  (start + (maxPage -1) < items.totalPages ? start + (maxPage -1) : items.totalPages)})"><!--realEnd 시작 -->
-    <ul class="pagination justify-content-center">
-        <li class="page-item" th:classappend="${items.first}? 'disabled'">
-            <a th:href="@{ '/' + '?searchQuery=' + ${itemSearchDTO.searchQuery} + '&page=' + ${items.number -1}}"
-               aria-label="Previous" class="page-link"><!--items.number: 현재 페이지 -->
-                <span aria-hidden="true">Previous</span>
-            </a>
-        </li>
-
-        <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}"
-            th:classappend="${items.number eq page -1} ? 'active' : ''"><!--items.number: 현재 페이지가 0부터 이기 때문에 1을 빼줌 -->
-            <a th:href="@{'/' + '?searchQuery=' + ${itemSearchDTO.searchQuery} + '&page=' + ${page - 1}}"
-               th:inline="text" class="page-link">[[${page}]]</a>
-        </li>
-
-
-        <li class="page-item" th:classappend="${items.last}? 'disabled'">
-            <a th:href="@{'/' + '?searchQuery=' + ${itemSearchDTO.searchQuery} + '&page=' + ${items.number +1}}"
-               aria-label="Next" class="page-link"><!--items.number: 현재 페이지 -->
-                <span aria-hidden="true">Next</span>
-            </a>
-        </li>
-
-    </ul>
-</div>
-
-
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-            <div class="modal-body">처리가 완료되었습니다.</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">Close</button>
-            </div>
+            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-content -->
+        <!-- /.modal-dialog -->
     </div>
-    <!-- /.modal-dialog -->
-</div>
 
-  <!--  <div class="card" style="width: 18rem;">
-        <img src="..." class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-    </div>-->
 
 </body>
 </html>
