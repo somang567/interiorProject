@@ -419,13 +419,15 @@
                 items.forEach(item => item.classList.remove('active'));
             };
 
-            const Click = (element, index) => {
-                // 만약 이미 활성화된 상태라면, 그 아이템을 닫음
+            const Click = (element, index, event) => {
+                // 만약 이미 활성화된 상태라면 페이지 이동을 허용
                 if (element.classList.contains('active')) {
-                    element.classList.remove('active');
+                    // 두 번째 클릭 시 기본 동작을 수행 (링크로 이동)
                     localStorage.removeItem('accordionIndex');
+                    return;
                 } else {
-                    // 모든 항목을 초기화하고, 새로 클릭된 항목만 활성화
+                    // 첫 번째 클릭 시 페이지 이동을 막고 아코디언 기능 실행
+                    event.preventDefault();
                     resetItems();
                     element.classList.add('active');
                     localStorage.setItem('accordionIndex', index);
@@ -434,8 +436,8 @@
 
             // 각 버튼에 클릭 이벤트 바인딩
             items.forEach((item, index) => {
-                item.addEventListener('click', function () {
-                    Click(item, index);
+                item.addEventListener('click', function (event) {
+                    Click(item, index, event);
                 });
             });
 
@@ -445,6 +447,8 @@
                 items[activeItemIndex].classList.add('active');
             }
         });
+
+
 
 
     </script>
@@ -510,56 +514,22 @@
     <h3 style="padding-left: 3%; margin: 25px 0 25px 0;">TIP&매거진</h3>
     <br>
     <section class="tip">   <!-- accordion -->
-        <button class="ar-item" onclick="Click(this,0)">    <!-- accordion-item-->
-            <img th:src="@{/img/main.jpg}" alt="">
-            <div class="arco-tip">    <!-- content -->
-                <span>블라블라블라</span>
-                <div>
-                    <h2>뿌잉</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
-                </div>
-            </div>
-        </button>
-        <button class="ar-item" onclick="Click(this,1)">    <!-- accordion-item-->
-            <img th:src="@{/img/main1.jpg}" alt="">
-            <div class="arco-tip">    <!-- content -->
-                <span>블라11</span>
-                <div>
-                    <h2>뿌잉</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
-                </div>
-            </div>
-        </button>
-        <button class="ar-item" onclick="Click(this,2)">    <!-- accordion-item-->
-            <img th:src="@{/img/main2.jpg}" alt="">
-            <div class="arco-tip">    <!-- content -->
-                <span>P</span>
-                <div>
-                    <h2>뿌잉</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
-                </div>
-            </div>
-        </button>
-        <button class="ar-item" onclick="Click(this,3)">    <!-- accordion-item-->
-            <img th:src="@{/img/arco2.jpg}" alt="">
-            <div class="arco-tip">    <!-- content -->
-                <span>P</span>
-                <div>
-                    <h2>뿌잉</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
-                </div>
-            </div>
-        </button>
-
-        <button class="ar-item" onclick="Click(this,4)">    <!-- accordion-item-->
-            <img th:src="@{/img/arco1.jpg}" alt="">
-            <div class="arco-tip">    <!-- content -->
-                <div>
-                    <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
-                </div>
-            </div>
-        </button>
+        <th:block th:each="item, status : ${items}">
+            <!-- 반복 횟수를 5개로 제한 -->
+            <th:block th:if="${status.index < 5}">
+                <button class="ar-item" th:onclick="'Click(this,' + ${status.index} + ')'">
+                    <a th:href="'/megazines/item/' + ${item.mno}">
+                        <img th:src="${item.imageUrl}" th:alt="${item.title}">
+                        <div class="arco-tip">
+                            <div>
+                                <h2>[[${item.title}]]</h2>
+                                <p>none</p>
+                            </div>
+                        </div>
+                    </a>
+                </button>
+            </th:block>
+        </th:block>
     </section>
 
     <br>
