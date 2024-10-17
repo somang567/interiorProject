@@ -33,14 +33,35 @@ public class MegazineController {
   //list를 보여주는 부분이기 때문에 post 필요 없숨~
   @GetMapping("/list")
   //@PathVariable("page") Optional<Integer> page: URL 경로에서 페이지 번호를 직접 가져오는 방식입니다.
-  public String megazineItem(ItemSearchDTO itemSearchDTO, Optional<Integer> page, Model model){
+  public String megazineItem(ItemSearchDTO itemSearchDTO, @PathVariable("page")Optional<Integer> page, Model model){
+
+
     Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9); //한 화면에 9개의 상품
     Page<Megazine> items = megazineService.getListItemPage(pageable);//엔티티에서 값을 service에서 가져온다. pageable이라는 매개변수만 가져와서 리스트로 뿌려준다.
-    model.addAttribute("itemSearchDTO", itemSearchDTO);
+    //Page<Megazine> page_items = megazineService.getAdminItemPage(itemSearchDTO, pageable); //얘가 그 유명한 items임
+    //model.addAttribute("items", page_items);
+    //model.addAttribute("itemSearchDTO", itemSearchDTO);
     model.addAttribute("maxPage", 9); //한 화면에 5개의 페이지네이션
     model.addAttribute("megazineItems", items);  //boardLists.html 로 가서 리스트를 뿌려준다.
     return "megazine/megazineMain";
   }
+
+  //shop
+//  //상품 관리 게시판 페이지 + 검색기능
+//  //그냥 왔을 경우/ 페이지 번호 받아왔을 경우 둘 다 해당
+//  @GetMapping({"/list", "/list/{megazineId}"})
+//  public String itemManage(ItemSearchDTO itemSearchDTO,
+//                           @PathVariable("megazineId")Optional<Integer> page, Model model){
+//
+//    Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9); //한 페이지데 3개 씩 읽어온다. 페이지네이션이 3개이다.
+//    Page<Megazine> items = megazineService.getAdminPage(itemSearchDTO, pageable); //얘가 그 유명한 items임
+//    model.addAttribute("items", items);
+//    model.addAttribute("itemSearchDTO", itemSearchDTO);
+//    model.addAttribute("maxPage", 5); //한 화면에 다섯개의 페이지를 보여준다?
+//    return "megazine/megazineMain"; // 검색기능 매거진 메인에 존재.
+//  }
+
+
 
   //상품 등록
   @GetMapping("/user/write/new")
@@ -61,7 +82,6 @@ public class MegazineController {
     /*
       public String itemNew(@Valid MegazineDTO megazineDTO, BindingResult bindingResult, Model model,
                         @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) {
-
      */
 
 
@@ -91,11 +111,23 @@ public class MegazineController {
   }
 
 // 상세보기 관련 Url =================================================================================
-  //url path에 있는 것을 변수로 쓰겠어
+
+  //User 매거진 상세보기 페이지
   @GetMapping("/item/{megazineId}")
-  public String itemDtl(@PathVariable("megazineId") Long itemId, Model model) {
+  public String itemDtl(Model model, @PathVariable("megazineId") Long megazineId){
+
+    MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
+    model.addAttribute("megazineDTO", megazineDTO);
+    return "megazine/megazineDetail";
+  }
+
+  //Admin 매거진 상세보기 페이지
+  //url path에 있는 것을 변수로 쓰겠어
+  @GetMapping("admin/item/{megazineId}")
+  public String itemDtl(@PathVariable("megazineId") Long megazineId, Model model) {
+
     try {
-      MegazineDTO megazineDTO = megazineService.getItemDtl(itemId);
+      MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
       model.addAttribute("megazineDTO", megazineDTO);
     } catch (EntityNotFoundException e) {
       model.addAttribute("errorMessaage", "존재하지 않는 상품 입니다");
@@ -105,7 +137,7 @@ public class MegazineController {
   }
 
 
-  @PostMapping("/item/{megazineId}")
+  @PostMapping("admin/item/{megazineId}")
   public String itemUpdate(@Valid MegazineDTO megazineDTO,
                            BindingResult bindingResult,
                            @RequestParam("itemImgFile") MultipartFile itemImgFileList,
@@ -131,11 +163,6 @@ public class MegazineController {
     //수정 후 메인으로 감
     return "redirect:/megazines/list";
   }
-
-
-
-
-
 
 
 

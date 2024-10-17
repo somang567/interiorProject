@@ -2,6 +2,7 @@
 package com.keduit.interiors.service;
 
 import com.keduit.interiors.dto.ItemImgDTO;
+import com.keduit.interiors.dto.ItemSearchDTO;
 import com.keduit.interiors.dto.MegazineDTO;
 import com.keduit.interiors.entity.ItemImg;
 import com.keduit.interiors.entity.Megazine;
@@ -78,6 +79,16 @@ public class MegazineService {
     return megazineRepository.findAll(pageable); //모든 아이템을 가져온다.
     //.getListItemPage(pageable);
   }
+
+  //검색 기능=====================================================================
+  //읽기 전용 상품 검색, 페이지별로 볼 수 있는 기능.
+  //관리자가 아이템 페이지를 가져온다는 의미입니다.
+  //@Transactional(readOnly = true)
+  //Page는 페이징 처리된 데이터와 관련된 여러 정보를 제공하는 Spring Data의 인터페이스입니다.
+
+  //public Page<Megazine> getAdminItemPage(ItemSearchDTO itemSearchDTO, Pageable pageable){
+  //  return megazineRepository.getMegazineItemPage(itemSearchDTO, pageable);
+  //}
 
 
   // 포맷팅을 위해 LocalDateTime의 now()메소드를 사용해 현재 시간 구한다.
@@ -232,9 +243,10 @@ public class MegazineService {
     //위에 이미지 읽었으니 아이템 읽어야즤
     Megazine megazine = megazineRepository.findById(megazineId)
         .orElseThrow(EntityNotFoundException::new);
+
     MegazineDTO megazineDTO = MegazineDTO.of(megazine); // 매핑해줌 아이템DTO로 변경해줌
     //앞에서 이미지 담아서 주려고
-   /* megazineDTO.setItemImgDTOList(itemImgDTOList);*/
+    /*megazineDTO.setItemImgDTOList(itemImgDTOList);*/
 
     return megazineDTO;
   }
@@ -268,15 +280,7 @@ public class MegazineService {
 
 
 
-
-
-
-
-
-
-
   //-------------------------------------------------------------
-
   /*
   public MegazineService(MegazineRepository megazineRepository, FileService fileService) {
     this.megazineRepository = megazineRepository;

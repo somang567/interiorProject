@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<!-- 사용자 js 추가 -->
+<th:block layout:fragment="script">
+
+  <script th:inline="javascript">
+    $(document).ready(function(){
+      console.log("------자바스크립트 진입------");
+      const errorMessage = [[${errorMessage}]];
+      if(errorMessage != null){
+        alert(errorMessage);
+      }
+
+      bindDomEvent();
+    });
+
+    //이미지가 바뀌었을때
+    function bindDomEvent(){
+      //이미지 변경이 일어나면 변경이 일어난 곳에 값을 가져와서 잘라 \\를 기준으로 , 꺼내 맨 뒤에 있는 것(fileName)
+      //apple.jpg -> .을 기준으로 가져오면 +1 부분이 jpg 이게 됨. .을 기준으로 끝까지
+      $(".custom-file-input").on("change", function(){
+        const fileName = $(this).val().split("\\").pop(); //stack 라스트 인 퍼스트 아웃 식으로 처리 -> 이미지의 파일 명을 알아낼 수 있다.
+        let fileExt = fileName.substring(fileName.lastIndexOf(".")+1);   // 확장자 추출
+        fileExt = fileExt.toLowerCase();  //소문자로 변환
+
+        if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
+          alert("이미지 파일만 등록이 가능합니다.");
+          return;
+        }
+
+        //파일 네임이 찍히게 된다.
+        $(this).siblings(".custom-file-label").html(fileName);
+        //html 부분의 url을 변경시켜줘 다시 써줘
+
+
+        //innerHtml로 다시 작성해주는 부분
+        const file = this.target.files[0]; // 선택한 파일을 가져옴
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const img = document.getElementById('image');
+            img.src = e.target.result; // 선택한 이미지의 URL로 변경
+          };
+          reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기
+        }
+      });
+    }
+  </script>
+</th:block>
+
+
+<!-- 사용자 css 추가 -->
+<th:block layout:fragment="css">
+  <style>
+    .wrap{
+      width:60vw;
+      height:100%;
+      margin:3vw auto;
+    }
+    .input-group{
+      margin-bottom: 15px;
+    }
+    .img-div{
+      margin-bottom: 10px;
+    }
+    .fieldError{
+      color:#bd2130;
+    }
+    .know_how_box{
+      width:100%;
+      height:18vw;
+      padding:3vw;
+      background-color:white;
+      border-radius:1vw;
+      border:0.3vw solid #C6BAAA;
+    }
+    .know_how_title{
+      font-size:1.5vw;
+      margin-bottom:1.5vw;
+    }
+    .know_how_title > span{
+      font-size:0.8vw;
+    }
+    .know_how_lists{
+      line-height:2vw;
+    }
+    .know_how_list{
+      font-size:1vw;
+      list-style-type:circle;
+    }
+    /*발행 신청 버튼*/
+    .btn_edit{
+      padding:1vw 1.5vw;
+      background-color:#2C2C2C;
+      border-radius:0.5vw;
+      color:white;
+      font-size:1vw;
+    }
+    /*input 영역======================================================*/
+    /*이미지 파일 불러오는 box 영역*/
+    .custom-file{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      width:67vw;
+      height:20vw;
+      background-color:#F7F8FA;
+      border-radius:0.5vw;
+      margin:0 auto;
+      text-align:center;
+    }
+    /*선택된 파일 없음*/
+    .custom-file-input{
+      padding:1vw 1.5vw;
+      background-color:#2C2C2C;
+      border-radius:0.5vw;
+      color:white;
+      font-size:1vw;
+    }
+    /*파일 선택 버튼 css*/
+    #file-upload-button{
+      padding:1vw 1.5vw;
+      background-color:#2C2C2C;
+      border-radius:0.5vw;
+      color:white;
+      font-size:1vw;
+    }
+    /*상품 이미지*/
+    /*
+    .custom-file-label{
+      padding:1vw 1.5vw;
+      background-color:red;
+      border-radius:0.5vw;
+      color:white;
+      font-size:1vw;
+    }
+    */
+    /*form-title input 영역*/
+    input{
+      border:none;
+    }
+    /*form-content 영역*/
+    .form-num{
+        font-size: 1.5vw;
+        margin-bottom: 1vw;
+    }
+    .form-title{
+      width:67vw;
+      height:4vw;
+      font-size: 2vw;
+      border-bottom: 0.2vw solid #2C2C2C;
+    }
+    .form-content{
+      width:67vw;
+      height:15vw;
+      background-color:#F7F8FA;
+      border-radius:0.5vw;
+      border:none;
+      font-size:1.5vw;
+    }
+    .show-img-box{
+      margin: 5vw 0;
+    }
+  </style>
+</th:block>
+
+
+<div layout:fragment="content">
+  <div class="wrap">
+    <h1 hidden>매거진 상세보기 페이지</h1>
+    <input type="hidden" id="megazineId" th:value="${megazineDTO.mno}">
+
+    <!-- enctype="multipart/form-data" 이미지 등록 -->
+    <!-- itemDTO 에서 선택한 객체에 접근해서 HTMl 태그의 id,name,value 속성을 자동처리 -->
+    <div th:object="${megazineDTO}">
+
+        <!-- 매거진 제목 -->
+        <h3 class="form-num" th:text="'매거진 번호' + ${megazineDTO.mno}"></h3>
+        <h2 class="form-title" th:text="${megazineDTO.title}"></h2>
+        <!-- 매거진 이미지 -->
+        <div class="show-img-box">
+          <img th:src="${megazineDTO.imageUrl}" th:alt="${megazineDTO.oriImgName}" class="card-img-top" height="400">
+        </div>
+        <!-- 매거진 상세내용 -->
+          <div class="form-content" th:text="${megazineDTO.content}"></div>
+    </div>
+  </div>
+</div>
+</html>
