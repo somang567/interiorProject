@@ -187,6 +187,24 @@
         <!-- 매거진 상세내용 -->
           <div class="form-content" th:text="${megazineDTO.content}"></div>
     </div>
-  </div>
+
+
+      <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+          <button th:formaction="@{'/admin/item/' + ${megazineDTO.mno}}" type="submit"
+                  class="btn_edit">
+              수정
+          </button>
+      </div>
+      <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+          <button th:formaction="@{'/admin/item/' + ${megazineDTO.mno}}" type="submit"
+                  class="btn_edit">
+              삭제
+          </button>
+      </div>
+  </div><!-- content -->
+
+
+
+
 </div>
 </html>

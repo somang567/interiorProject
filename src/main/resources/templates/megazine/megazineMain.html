@@ -188,6 +188,12 @@
             margin: 0 auto;
         }
         .card-title{
+            font-size: 1.2vw;
+            font-weight: bold;
+            color:black;
+            margin:1vw;
+        }
+        .card-date{
             font-size: 1vw;
             font-weight: bold;
             color:black;
@@ -249,7 +255,7 @@
                             <div class="card-body">
                                 <h4 class="card-title">[[${megazineItem.title}]]</h4>
                                 <p class="card-text">[[${megazineItem.user}]]</p>
-                                <h4 class="card-title text-danger">[[${megazineItem.regTime}]]</h4>
+                                <p class="card-date text-danger" th:text="${#temporals.format(megazineItem.regTime, 'yyyy-mm-dd HH:mm')}"></p>
                             </div>
                         </a>
 

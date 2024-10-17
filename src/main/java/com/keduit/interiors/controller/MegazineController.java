@@ -118,7 +118,7 @@ public class MegazineController {
 
     MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
     model.addAttribute("megazineDTO", megazineDTO);
-    return "megazine/megazineDetail";
+    return "megazine/megazineUserDetail";
   }
 
   //Admin 매거진 상세보기 페이지
