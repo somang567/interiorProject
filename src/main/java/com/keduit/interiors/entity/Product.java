@@ -1,6 +1,7 @@
 package com.keduit.interiors.entity;
 
 import com.keduit.interiors.constant.ProductSell;
+import com.keduit.interiors.constant.ProductType;
 import com.keduit.interiors.dto.ProductDTO;
 import com.keduit.interiors.entity.BaseEntity;
 import com.keduit.interiors.entity.Member;
@@ -30,36 +31,47 @@ public class Product extends BaseEntity {
 
 	@Lob
 	@Column(name = "product_name", nullable = false , length = 50)
-	private String product_name;
+	private String productName;
 
 	@Lob
-	@Column(name = "product_Detail", nullable = false)
-	private String product_Detail;     // 상품 상세설명
+	@Column(name = "product_detail", nullable = false)
+	private String productDetail;
 
 	@Column(name = "price")
 	private int price;
 
-	@Column(name = "product_sell")
+	@Column(name = "stockNumber")
+	private int stockNumber;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "productSell")
 	private ProductSell productSell;
 
-	// 추가: 상품 종류 필드
-	@Column(name = "product_type")
-	private String productType;
+	// ProductType enum으로 수정
+	@Enumerated(EnumType.STRING)
+	@Column(name = "productType")
+	private ProductType productType;
 
-	@OneToMany(mappedBy = "product_id", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductImg> productImgList = new ArrayList<>();
+
+
+//	@OneToMany(mappedBy = "product" , cascade = CascadeType.REMOVE)
+//	private List<ProductScrap> scrapList = new ArrayList<>();
+//
 
 	// 상품 이미지 추가 메소드
 	public void addProductImage(ProductImg productImg) {
 		productImgList.add(productImg);
-		productImg.setProduct_id(this); // 양방향 관계 설정
+		productImg.setProduct(this);
 	}
 
 	public void updateItem(ProductDTO product) {
-		this.product_name = product.getProductName();
-		this.product_Detail = product.getProductDetail();
+		this.productName = product.getProductName();
+		this.productDetail = product.getProductDetail();
 		this.price = product.getPrice();
+		this.stockNumber = product.getStockNumber();
 		this.productSell = product.getProductSell();
-		this.productType = product.getProductType(); // 추가된 필드 업데이트
+		this.productType = product.getProductType();
 	}
 }

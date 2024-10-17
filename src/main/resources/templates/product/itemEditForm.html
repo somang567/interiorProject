@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<head>
+    <style>
+        .item_editContainer {
+            width: 60%;
+            margin: auto;
+            padding: 2vw;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .item_editContainer h1 {
+            font-size: 2vw;
+            font-weight: 700;
+            margin-bottom: 1.5vw;
+        }
+
+        .item_editContainer label {
+            font-size: 1.2vw;
+            font-weight: 600;
+            margin-bottom: 0.5vw;
+            display: block;
+        }
+
+        .item_editContainer input, .item_editContainer textarea {
+            width: 100%;
+            padding: 0.5vw;
+            font-size: 1vw;
+            margin-bottom: 1.5vw;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .item_editContainer textarea {
+            height: 10vw;
+        }
+
+        .item_editContainer button {
+            background-color: #007bff;
+            color: white;
+            padding: 0.7vw 1.5vw;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1vw;
+        }
+
+        .item_editContainer button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+
+<div class="item_editContainer" layout:fragment="content">
+    <h1 class="productTitle">상품 수정</h1>
+    <hr class="editTitle_line">
+
+    <form th:action="@{'/item/updateItem/' + ${productDTO.id}}" method="post" th:object="${productDTO}">
+        <!-- 상품명 -->
+        <div>
+            <label for="productName">상품명</label>
+            <input type="text" id="productName" th:field="*{productName}" placeholder="상품명을 입력하세요">
+        </div>
+
+        <!-- 가격 -->
+        <div>
+            <label for="price">가격</label>
+            <input type="text" id="price" th:field="*{price}" placeholder="가격을 입력하세요">
+        </div>
+
+        <!-- 재고 수량 -->
+        <div>
+            <label for="stockNumber">재고 수량</label>
+            <input type="text" id="stockNumber" th:field="*{stockNumber}" placeholder="재고 수량을 입력하세요">
+        </div>
+
+        <!-- 상품 상세 설명 -->
+        <div>
+            <label for="productDetail">상품 상세 설명</label>
+            <textarea id="productDetail" th:field="*{productDetail}" placeholder="상품 상세 설명을 입력하세요"></textarea>
+        </div>
+
+        <!-- 저장 버튼 -->
+        <div>
+            <button type="submit">저장</button>
+        </div>
+    </form>
+</div>
+</html>

@@ -1,0 +1,46 @@
+/* 전체 그리드 스타일 */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3개의 열로 균등하게 나눔 */
+    grid-row-gap: 3vw; /* 각 상품 사이 간격 */
+    grid-column-gap: 3vw;
+    padding: 2vw;
+    background-color: #ffffff;
+    justify-items: center; /* 그리드 내에서 아이템들을 수평 중앙 정렬 */
+}
+
+/* 버튼과 상품 정보를 가로로 배치할 컨테이너 */
+.product-content {
+    display: grid;
+}
+
+/* 상품 버튼 스타일 */
+.product-item {
+    width: 30vw; /* 너비를 약간 줄여 그리드 안에서 중앙 정렬이 더 잘 되도록 */
+    height: 30vw;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #ddd;
+    border-radius: 10%;
+    cursor: pointer;
+}
+
+/* 상품명과 가격을 오른쪽에 배치 */
+.product-info {
+    margin-left: 1vw; /* 버튼과 텍스트 사이의 간격 */
+}
+
+.product-name {
+    font-weight: bold;
+    color: #000000;
+}
+
+.product-price {
+    margin-top: 5px;
+    color: #268bcc;
+}
+
+/* 버튼이 클릭되었을 때 스타일 */
+.product-item:hover {
+    background-color: #f0f0f0;
+}

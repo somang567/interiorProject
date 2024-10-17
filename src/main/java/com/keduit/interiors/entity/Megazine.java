@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Setter
@@ -49,6 +50,10 @@ public class Megazine extends BaseEntity {
   @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "member_id")
   private Member member;
+
+
+//  @OneToMany(mappedBy = "magazine", cascade = CascadeType.REMOVE)
+//  private List<MegazineScrap> magazineScrapList;
 
 
   //엔티티에다 바로 넣어줌

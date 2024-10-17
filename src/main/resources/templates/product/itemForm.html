@@ -3,112 +3,127 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-<div class="item_detailContainer" layout:fragment="content">
-    <div id="carouselExampleIndicators" class="carousel slide carousel_slide">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="..." class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="..." class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="..." class="d-block w-100" alt="...">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-        <form role="form" method="post" th:object="${ProductDTO}" enctype="multipart/form-data">
-            <input type="hidden" th:field="*{id}">
+<head>
+    <style>
+        .fieldError { color: #bd2130; }
+        .file-upload { margin-bottom: 1vw; }
+    </style>
+</head>
+
+<th:block layout:fragment="script">
+    <script>
+        $(document).ready(function() {
+            var fileIndex = 1; // 파일 인덱스를 1로 시작 (기본 파일 필드가 0이므로)
+
+            // 파일 추가 버튼 클릭 시 파일 업로드 필드 추가
+            $('#addFileButton').click(function() {
+                var newFileInput = `
+                <div class="file-upload preview-image">
+                    <input type="text" class="upload-name" value="파일선택" disabled="disabled">
+                    <label for="input-file-${fileIndex}">업로드</label>
+                    <input type="file" name="multipartFileList" class="upload-hidden" id="input-file-${fileIndex}">
+                </div>`;
+                $('.ImageUploaded').append(newFileInput);
+                fileIndex++;
+            });
+
+            // 파일 삭제 버튼 클릭 시 마지막으로 추가된 파일 업로드 필드 삭제
+            $('#DeleteFileButton').click(function() {
+                $('.ImageUploaded .file-upload').last().remove();
+                fileIndex = Math.max(1, fileIndex - 1); // 최소 한 개의 파일 필드는 유지
+            });
+
+            // 파일 선택 시 파일명 표시
+            $(document).on('change', '.upload-hidden', function() {
+                var filename = $(this).val().split("\\").pop(); // 파일명 추출
+                $(this).siblings('.upload-name').val(filename); // 선택된 파일명을 표시
+            });
+        });
+    </script>
+</th:block>
+
+<div id="ItemFormContainer" layout:fragment="content">
+    <h1 class="productTitle">상품 등록</h1>
+    <hr class="enrollTitle_line">
+    <form role="form" method="post" th:object="${productDTO}" enctype="multipart/form-data">
+
+        <!-- 숨겨진 필드로 상품 ID 저장 -->
+        <input type="hidden" th:field="*{id}">
+
+        <div class="typeContainer">
+            <!-- 상품 판매 상태 -->
             <div class="form-group">
-                <select th:field="*{productSell}" class="custom-select">
+                <select th:field="*{productSell}" id="productSell">
                     <option value="SELL">판매중</option>
                     <option value="SOLD_OUT">품절</option>
                 </select>
             </div>
 
-    <div class="itemDetail_container">
-        <div id="carouselExample" class="carousel slide carousel_itemSlide">
-            <div class="carousel-inner">
-                <!-- th:each를 사용하여 productImgList를 반복 -->
-                <div th:each="img, stat : ${ProductDTO.productImgList}"
-                     th:class="${stat.index == 0} ? 'carousel-item active' : 'carousel-item'">
-                    <!-- 이미지 URL을 동적으로 설정 -->
-                    <img th:src="@{${img.imgUrl}}" class="d-block w-100" alt="Product Image">
+            <!-- 상품 타입 선택 -->
+            <div class="form-group">
+                <select th:field="*{productType}" id="productType">
+                    <option value="TILE">타일</option>
+                    <option value="WALL">벽지</option>
+                    <option value="STOCK">수납</option>
+                    <option value="FURNITURE">가구</option>
+                    <option value="FLOOR">바닥재</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="product_img_group">
+            <div class="ImageUploaded">
+                <!-- 기본 파일 업로드 필드 -->
+                <div class="file-upload preview-image">
+                    <input type="text" class="upload-name" value="파일선택" disabled="disabled">
+                    <label for="input-file-0">업로드</label>
+                    <input type="file" th:field="*{multipartFileList}" class="upload-hidden" id="input-file-0">
                 </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
 
-        <div class="itemDetailExpain">
-            <form th:action="@{/item/addItem}" method="post" th:object="${productDTO}">
-                <p style="font-size: 2vw; color: black; font-weight: 800; padding-top: 4vw;">
-                    <input type="text" th:field="*{productName}" placeholder="상품 제목을 입력해주세요." style="border: none; font-size: 2vw; color: black; font-weight: 800; width: 100%; padding: 0;">
-                </p>
-
-                <div class="itemPrice">
-                    <p style="font-size: 2vw; color: red; font-weight: 800; padding-left: 5vw;">60%</p>
-                    <p style="font-size: 2vw; color: black; font-weight: 800; padding-left: 2vw;">17,000원</p>
+            <div class="productExplain">
+                <!-- 상품명 입력 -->
+                <div class="form-group">
+                    <label for="productName">상품명</label>
+                    <input type="text" th:field="*{productName}" placeholder="상품명을 입력해주세요" id="productName">
+                    <p th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}" class="fieldError">상품명 오류</p>
                 </div>
 
-                <div class="itemColor" style="padding-top: 2vw;">
-                    <p style="font-size: 2vw; color: black; font-weight: 800;">상품색상</p>
-                    <div class="ItemImageBox" style="padding-top: 2vw;">
-                        <button class="itemColorButton"></button>
-                        <button class="itemColorButton"></button>
-                    </div>
-
-                    <div class="ItemSizeContainer" style="padding-top: 2vw;">
-                        <p style="font-size: 2vw; color: black; font-weight: 800;">상품사이즈 선택</p>
-                        <div class="ItemSizeBox" style="padding-top: 2vw;">
-                            <button class="itemSize1">
-                                <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
-                            </button>
-                            <button class="itemSize2">
-                                <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
-                            </button>
-                            <button class="itemSize3">
-                                <p style="font-size: 0.7vw; font-weight: 700">137mm x 133mm</p>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="itemStock" style="padding-top: 2vw;">
-                        <p style="font-size: 2vw; font-weight: 600">현재 재고 수량 : </p>
-                    </div>
-
-                    <div class="warningItemDetail" style="padding-top: 2vw;">
-                        <p style="font-size: 2vw; font-weight: 600">- 상품 주의사항</p>
-                        <p style="font-size: 1vw; font-weight: 600">
-                            <textarea th:field="*{productDetail}" placeholder="상품 상세 설명" rows="4" style="width: 100%; font-size: 1vw; font-weight: 600;"></textarea>
-                        </p>
-                    </div>
+                <!-- 가격 입력 -->
+                <div class="form-group">
+                    <label for="price">가격</label>
+                    <input type="text" th:field="*{price}" placeholder="상품의 가격을 입력해주세요" id="price">
+                    <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">가격 오류</p>
                 </div>
-            </form>
+
+                <div class="form-group">
+                    <label for="stockNumber">현재 재고현황</label>
+                    <input type="text" th:field="*{stockNumber}" placeholder="상품의 가격을 입력해주세요" id="stockNumber">
+                    <p th:if="${#fields.hasErrors('stockNumber')}" th:errors="*{stockNumber}" class="fieldError">가격 오류</p>
+                </div>
+
+                <!-- 상품 상세 설명 입력 -->
+                <div class="form-group">
+                    <label for="productDetail">상품 상세 내용</label>
+                    <textarea th:field="*{productDetail}" placeholder="상품 상세 내용을 입력해주세요" id="productDetail"></textarea>
+                    <p th:if="${#fields.hasErrors('productDetail')}" th:errors="*{productDetail}" class="fieldError">상세 내용 오류</p>
+                </div>
+            </div>
         </div>
 
-        <div class="snsShare">
-        <p style="font-size: 2vw; font-weight: 800; margin-top: 3.5vw; text-align: center;">SNS 공유하기</p>
+        <div class="ButtonItems">
+            <div class="fileButton">
+                <!-- 파일 추가 버튼 -->
+                <button type="button" id="addFileButton" class="addImageButton">파일 추가</button>
+                <!-- 파일 삭제 버튼 -->
+                <button type="button" id="DeleteFileButton" class="addImageButton">파일 삭제</button>
+            </div>
+            <!-- 저장 버튼 -->
+            <div class="addItemButton2">
+                <button type="submit" class="addItemButton">저장</button>
+            </div>
+        </div>
 
-    </div>
+    </form>
 </div>
-</div>
+</html>

@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Service
 @Log
-public class FileService {	//업로드 해주고
+public class FileService {
 	public String uploadFile(String uploadPath, String originalFileName, byte[] fileData) throws Exception {
 
 		// Universally Unique IdentiFier : 범용 고유 식별자, 중복되지 않는 유일한 값을 구성할 때 사용

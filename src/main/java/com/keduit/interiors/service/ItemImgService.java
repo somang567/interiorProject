@@ -38,13 +38,14 @@ public class ItemImgService {
       //기존 이미지를 삭제하고 옴
       String oriImgName = itemImgFile.getOriginalFilename();
       String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
-      String imgUrl = "/images/item" + imgName;
+      String imgUrl = "/Users/juntk/MyFinalPoject/uploads/images" + imgName;
       savedItemImg.updateItemImg(oriImgName, imgName, imgUrl);
     }
   }
 
   public void saveItemImg(ItemImg itemImg, MultipartFile itemImgFile) throws Exception {
     String originalFileName = itemImgFile.getOriginalFilename();
+    System.out.println("original -------------> " + originalFileName);
     String imgName = "";  //경로를 가져오아서
     String imgUrl = "";
 
@@ -54,7 +55,7 @@ public class ItemImgService {
     if(!StringUtils.isEmpty(originalFileName)){
       //itemImgLocation 이친구가 uploadPathpath임, 파일 위치, 오리지날 파일 이름, 바이트 배열(이미지 파일이니까)
       imgName = fileService.uploadFile(itemImgLocation, originalFileName, itemImgFile.getBytes());
-      imgUrl ="/images/item/" + imgName;  //cONFIGURE 파일에서 선언되어 있음.
+      imgUrl ="/Users/juntk/MyFinalPoject/uploads/images" + imgName;  //cONFIGURE 파일에서 선언되어 있음.
     }
 
     //상품 이미지 정보 저장

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<div id="container" layout:fragment="content">
+    <!-- 상품 리스트 그리드 -->
+    <div class="product-grid">
+        <div class="product-item-container" th:each="productDTO : ${productList}">
+            <!-- 버튼과 상품명, 가격을 가로로 배치할 컨테이너 -->
+            <div class="product-content">
+                <!-- 버튼 부분 -->
+                <button class="product-item"
+                        th:style="|background-image: url(${productDTO.firstImageUrl}); background-size: cover;|"
+                        th:onclick="|location.href='/item/product/' + ${productDTO.id}|">
+                </button>
+                <!-- 상품명과 가격 부분 -->
+                <div class="product-info">
+                    <p class="product-name" th:text="${productDTO.productName}">상품명</p>
+                    <p class="product-price" th:text="${productDTO.price} + '원'">가격</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 등록하기 버튼 -->
+    <div class="crudButtonContainer">
+        <button type="button" class="addItemButton" id="addButton"
+                onclick="window.location.href='/item/addItem'">상품 등록하기</button>
+    </div>
+</div>
+</html>
