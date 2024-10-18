@@ -62,6 +62,26 @@
     <hr class="editTitle_line">
 
     <form th:action="@{'/item/updateItem/' + ${productDTO.id}}" method="post" th:object="${productDTO}">
+        <div class="typeContainer">
+            <!-- 상품 판매 상태 -->
+            <div class="form-group">
+                <select th:field="*{productSell}" id="productSell">
+                    <option value="SELL">판매중</option>
+                    <option value="SOLD_OUT">품절</option>
+                </select>
+            </div>
+
+            <!-- 상품 타입 선택 -->
+            <div class="form-group">
+                <select th:field="*{productType}" id="productType">
+                    <option value="TILE">타일</option>
+                    <option value="WALL">벽지</option>
+                    <option value="STOCK">수납</option>
+                    <option value="FURNITURE">가구</option>
+                    <option value="FLOOR">바닥재</option>
+                </select>
+            </div>
+        </div>
         <!-- 상품명 -->
         <div>
             <label for="productName">상품명</label>

@@ -3,88 +3,30 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-<head>
-    <link rel="stylesheet" href="/css/product.css">
-</head>
-
 <div id="container" layout:fragment="content">
-    <div id="carouselExampleIndicators" class="carousel slide carousel_slide">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="..." class="d-block w-100" alt="...">
+    <!-- 상품 리스트 그리드 -->
+    <div class="product-grid">
+        <div class="product-item-container" th:each="productDTO : ${productList}">
+            <!-- 버튼과 상품명, 가격을 가로로 배치할 컨테이너 -->
+            <div class="product-content">
+                <!-- 버튼 부분 -->
+                <button class="product-item"
+                        th:style="|background-image: url(${productDTO.firstImageUrl}); background-size: cover;|"
+                        th:onclick="|location.href='/item/product/' + ${productDTO.id}|">
+                </button>
+                <!-- 상품명과 가격 부분 -->
+                <div class="product-info">
+                    <p class="product-name" th:text="${productDTO.productName}">상품명</p>
+                    <p class="product-price" th:text="${productDTO.price} + '원'">가격</p>
+                </div>
             </div>
-            <div class="carousel-item">
-                <img src="..." class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="..." class="d-block w-100" alt="...">
-            </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-    <div class="SearchContainer">
-        <div class="SearchBox">
-            <input class="form-control me-2" type="search" placeholder="검색할 상품을 입력해주세요" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-            </svg></button>
-        </div>
-        <hr class="Search_line">
     </div>
 
-    <div class="item_Contatiner">
-        <div class="itemBox">
-            <button class="item">상품1
-                <img src="" alt="">
-            </button>
-
-            <button class="item">상품2
-                <img src="" alt="">
-            </button>
-
-            <button class="item">상품3
-                <img src="" alt="">
-            </button>
-        </div>
-        <div class="itemBox">
-            <button class="item">상품4
-                <img src="" alt="">
-            </button>
-
-            <button class="item">상품5
-                <img src="" alt="">
-            </button>
-
-            <button class="item">상품6
-                <img src="" alt="">
-            </button>
-        </div>
-
-        <div class="itemBox">
-            <button class="item">상품7
-                <img src="" alt="">
-            </button>
-
-            <button class="item">상품8
-                <img src="" alt="">
-            </button>
-
-            <button class="item">상품9
-                <img src="" alt="">
-            </button>
-        </div>
-
+    <!-- 상품 등록하기 버튼 -->
+    <div class="crudButtonContainer">
+        <button type="button" class="addItemButton" id="addButton"
+                onclick="window.location.href='/item/addItem'">상품 등록하기</button>
     </div>
 </div>
+</html>

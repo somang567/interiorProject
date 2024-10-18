@@ -41,7 +41,7 @@
     <!-- 반반 나눠진 영역 시작 -->
     <div class="item-detail-wrapper">
         <div id="imageSlideIndicator" class="carousel slide">
-            <div class="imageSlider">
+            <div class="imageSlider" style="background-color: black">
                 <button type="button" data-bs-target="#imageSlideIndicator" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#imageSlideIndicator" data-bs-slide-to="1" aria-label="Slide 2"></button>
                 <button type="button" data-bs-target="#imageSlideIndicator" data-bs-slide-to="2" aria-label="Slide 3"></button>
@@ -91,7 +91,7 @@
     <div class="item-buttons" style="margin-top: 2vw;">
         <!-- 수정 버튼 -->
         <button class="EditButtons"
-                onclick="window.location.href='/item/updateItem/' + [[${productDTOList.id}]]">수정</button>
+                th:onclick="|location.href='/item/updateItem/' + ${productDTOList.id}|">수정</button>
 
         <!-- 삭제 버튼 -->
         <form th:action="@{'/item/deleteItem/' + ${productDTOList.id}}" method="post" style="display:inline;">

@@ -64,7 +64,7 @@ public class ProductService {
 			}
 		}
 
-		return product.getId(); // 저장된 product의 ID 반환
+		return product.getProductId(); // 저장된 product의 ID 반환
 	}
 
 	// 첫 번째 이미지 URL 가져오기
@@ -94,7 +94,7 @@ public class ProductService {
 				.map(product -> {
 					ProductDTO productDTO = ProductDTO.of(product);
 					// 썸네일 이미지 URL 설정
-					String firstImageUrl = getFirstImageUrl(product.getId());
+					String firstImageUrl = getFirstImageUrl(product.getProductId());
 					productDTO.setFirstImageUrl(firstImageUrl);
 					return productDTO;
 				})
@@ -103,8 +103,7 @@ public class ProductService {
 
 	// 상품 수정
 	public void updateProduct(Long id, ProductDTO productDTO) {
-		Product product = productRepository.findById(id)
-				.orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
+		Product product = productRepository.findProductById(id);
 		product.updateItem(productDTO); // 수정 메서드 호출
 		productRepository.save(product);
 	}

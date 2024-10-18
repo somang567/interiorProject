@@ -22,19 +22,19 @@ public class Product extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "product_id")
-	private Long id;
+	@Column(name = "productId")
+	private Long productId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
 
 	@Lob
-	@Column(name = "product_name", nullable = false , length = 50)
+	@Column(name = "productName", nullable = false , length = 50)
 	private String productName;
 
 	@Lob
-	@Column(name = "product_detail", nullable = false)
+	@Column(name = "productDetail", nullable = false)
 	private String productDetail;
 
 	@Column(name = "price")

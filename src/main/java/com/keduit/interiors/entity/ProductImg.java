@@ -16,20 +16,20 @@ public class ProductImg extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "product_img_id")
+	@Column(name = "productImgId")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id")
+	@JoinColumn(name = "productId")
 	private Product product; // 이름 수정
 
-	@Column(name = "origin_img_name")
+	@Column(name = "originImgName")
 	private String originImgName; // 카멜케이스로 수정
 
-	@Column(name = "image_url")
+	@Column(name = "imageUrl")
 	private String fileUrl; // 카멜케이스로 수정
 
-	@Column(name = "img_name")
+	@Column(name = "imgName")
 	private String imgName; // 카멜케이스로 수정
 
 	private boolean isThumbnail;  // 썸네일 여부를 나타내는 필드 추가
