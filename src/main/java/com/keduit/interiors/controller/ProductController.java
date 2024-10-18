@@ -63,8 +63,8 @@ public class ProductController {
 		return "redirect:" + redirectUrl; // 해당 타입별 페이지로 리다이렉트
 	}
 
-	@GetMapping("/product/{product_id}")
-	public String getProductDetail(@PathVariable("product_id") Long productId, Model model) {
+	@GetMapping("/product/{productId}")
+	public String getProductDetail(@PathVariable("productId") Long productId, Model model) {
 		// productId에 해당하는 상품 정보를 조회
 		ProductDTO productDTO = productService.getProductById(productId);
 

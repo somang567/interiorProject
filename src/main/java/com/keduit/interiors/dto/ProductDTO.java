@@ -21,7 +21,7 @@ import java.util.List;
 @Setter
 @ToString
 public class ProductDTO {
-	private Long productId;
+	private Long id;
 
 	@NotBlank(message = "상품 이름 입력은 필수입니다.")
 	private String productName;

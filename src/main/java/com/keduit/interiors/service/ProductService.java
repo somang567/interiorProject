@@ -64,12 +64,12 @@ public class ProductService {
 			}
 		}
 
-		return product.getProductId(); // 저장된 product의 ID 반환
+		return product.getId(); // 저장된 product의 ID 반환
 	}
 
 	// 첫 번째 이미지 URL 가져오기
-	public String getFirstImageUrl(Long productId) {
-		Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
+	public String getFirstImageUrl(Long id) {
+		Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("상품을 찾을 수 없습니다."));
 		// 썸네일로 지정된 이미지의 URL을 가져옴
 		for (ProductImg img : product.getProductImgList()) {
 			if (img.isThumbnail()) {
@@ -94,7 +94,7 @@ public class ProductService {
 				.map(product -> {
 					ProductDTO productDTO = ProductDTO.of(product);
 					// 썸네일 이미지 URL 설정
-					String firstImageUrl = getFirstImageUrl(product.getProductId());
+					String firstImageUrl = getFirstImageUrl(product.getId());
 					productDTO.setFirstImageUrl(firstImageUrl);
 					return productDTO;
 				})

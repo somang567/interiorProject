@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ProductImgRepository extends JpaRepository<ProductImg, Long> {
 	// product 필드로 상품 이미지를 찾음 (연관관계에 맞게 수정)
-	List<ProductImg> findByProductIdOrderByIdAsc(Long productId);
+	List<ProductImg> findByProductIdOrderByIdAsc(Long id);
 }
