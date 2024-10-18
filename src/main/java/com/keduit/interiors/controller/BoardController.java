@@ -24,7 +24,7 @@ public class BoardController {
     private BoardService boardService;
 
     @Autowired
-    private CommentService commentService;  // 댓글 서비스 추가
+    private CommentService commentService;
 
     // 게시글 작성 폼
     @GetMapping("/board/write")

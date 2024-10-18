@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 public class CommentService {
 
     // CommentRepository와 BoardRepository를 주입받음
-    private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
 
     // 댓글 저장 메서드
     public void saveComment(CommentDTO commentDTO) {
