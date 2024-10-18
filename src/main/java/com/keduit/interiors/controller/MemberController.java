@@ -28,7 +28,7 @@ public class MemberController {
   public String memberForm(Model model) {
     System.out.println("--------boardForm-----------");
     model.addAttribute("memberDTO", new MemberDTO()); //비어있는 상태 /폼에서 입력된 데이터를 받을 준비
-    return "member/login"; //memberForm여기서
+    return "member/memberRegisterForm"; //memberForm여기서
   }
 
   // memberDTO의 유효성 체크하기
@@ -38,7 +38,7 @@ public class MemberController {
   public String memberForm(@Valid MemberDTO memberDTO, BindingResult bindingResult, Model model) {
 
     if (bindingResult.hasErrors()) {
-      return "member/login";
+      return "member/memberRegisterForm";
     }
 
     try {
@@ -46,23 +46,22 @@ public class MemberController {
       memberService.saveMember(member);
     } catch (IllegalStateException e) {
       model.addAttribute("errorMessage", e.getMessage());
-      return "member/login";
+      return "member/memberRegisterForm";
     }
 
     return "redirect:/";  //회원가입 완료 후 메인 페이지로 이동
   }
 
-
   @GetMapping("/login")
   public String loginMember() {
-    return "member/login";
+    return "member/memberForm";
   }
 
   @GetMapping("/login/error")
   public String loginError(Model model) {
     model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요.");
 
-    return "member/login";
+    return "member/memberForm";
 
   }
 }
