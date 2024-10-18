@@ -17,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 public class MemberDTO {
 	// Null Check , length = 0인 애들.
 	@NotBlank(message = "이름은 필수입력입니다.")
-	private String userName;
+	private String name;
 
 	@NotEmpty(message = "이메일은 필수입력입니다.")
 	@Email(message = "이메일 형식으로 입력해주세요.")
