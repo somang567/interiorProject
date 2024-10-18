@@ -269,39 +269,39 @@
 
     <!-- start: ( 현재페이지 번호 / 보여줄 페이지 수 ) * 보여줄 페이지 수 + 1 -->
     <!-- end : 현재 페이지에서 보여줄 마지막 페이지 번호 -->
-<!--
-    <div th:with="start=${(items.number / maxPage) * maxPage + 1},
-                      end=(${(items.totalPages == 0 ) ? 1 :
-                      (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) :
-                      items.totalPages)})">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${items.first} ? 'disabled'">
-                <a th:onclick="'javascript: page(' + ${items.number -1} + ')'"
-                   aria-label="Previous" class="page-link">
-                    <span aria-hidden="true">Previous</span>
-                </a>
-            </li>
-            Page 객체에서 number는 현재 페이지를 나타냄.
-             "$(page)" : 타임리프에서 HTML 콘텐츠 영역 안에 직접 데이터를 출력할 때 사용 -->
-            <!-- Page 객체에서 시작 페이지는 0부터 이므로 해당 페이지를 호출할 때에는 페이지 -1를 해야함
+    <!--
+        <div th:with="start=${(items.number / maxPage) * maxPage + 1},
+                          end=(${(items.totalPages == 0 ) ? 1 :
+                          (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) :
+                          items.totalPages)})">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${items.first} ? 'disabled'">
+                    <a th:onclick="'javascript: page(' + ${items.number -1} + ')'"
+                       aria-label="Previous" class="page-link">
+                        <span aria-hidden="true">Previous</span>
+                    </a>
+                </li>
+                Page 객체에서 number는 현재 페이지를 나타냄.
+                 "$(page)" : 타임리프에서 HTML 콘텐츠 영역 안에 직접 데이터를 출력할 때 사용 -->
+    <!-- Page 객체에서 시작 페이지는 0부터 이므로 해당 페이지를 호출할 때에는 페이지 -1를 해야함
 
-            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
-                th:classappend="${items.number eq page -1} ? 'active' : ''">
-                <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
-                   th:inline="text" class="page-link">[[${page}]]</a>
-            </li>
+    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
+        th:classappend="${items.number eq page -1} ? 'active' : ''">
+        <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
+           th:inline="text" class="page-link">[[${page}]]</a>
+    </li>
 
-            <li class="page-item" th:classappend="${items.last} ? 'disable'">
-                <a th:onclick="'javascript: page(' + ${items.number + 1} + ')'"
-                   aria-label="Next" class="page-link">
-                    <span aria-hidden="true">Next</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    -->
+    <li class="page-item" th:classappend="${items.last} ? 'disable'">
+        <a th:onclick="'javascript: page(' + ${items.number + 1} + ')'"
+           aria-label="Next" class="page-link">
+            <span aria-hidden="true">Next</span>
+        </a>
+    </li>
+</ul>
+</div>
+-->
 
-<!--   검색 하는 부분 ========================================================-->
+    <!--   검색 하는 부분 ========================================================-->
     <!--
     <div class="form-inline justify-content-center" th:object="${itemSearchDTO}">
         <select th:field="*{searchDateType}" class="form-control" style="width:auto;">

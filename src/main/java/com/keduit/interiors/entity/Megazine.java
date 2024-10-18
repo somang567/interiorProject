@@ -17,7 +17,7 @@ import java.util.List;
 public class Megazine extends BaseEntity {
 
   @Id
-  @Column(name = "magazine_id")
+  @Column(name="megazine_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long mno;
 

@@ -9,6 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MegazineRepository extends JpaRepository<Megazine, Long>{
-   // Page<Megazine> getMegazineItemPage(ItemSearchDTO itemSearchDTO, Pageable pageable);
+    // Page<Megazine> getMegazineItemPage(ItemSearchDTO itemSearchDTO, Pageable pageable);
 }
 

@@ -31,18 +31,41 @@ public class MegazineController {
   private final MegazineRepository memberRepository;
 
   //list를 보여주는 부분이기 때문에 post 필요 없숨~
+  /*
   @GetMapping("/list")
   //@PathVariable("page") Optional<Integer> page: URL 경로에서 페이지 번호를 직접 가져오는 방식입니다.
-  public String megazineItem(ItemSearchDTO itemSearchDTO, @PathVariable("page")Optional<Integer> page, Model model){
-
+  public String megazineItem( @PathVariable("page")Optional<Integer> page, Model model){
 
     Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9); //한 화면에 9개의 상품
-    Page<Megazine> items = megazineService.getListItemPage(pageable);//엔티티에서 값을 service에서 가져온다. pageable이라는 매개변수만 가져와서 리스트로 뿌려준다.
-    //Page<Megazine> page_items = megazineService.getAdminItemPage(itemSearchDTO, pageable); //얘가 그 유명한 items임
-    //model.addAttribute("items", page_items);
+    Page<Megazine> megazineItems = megazineService.getListItemPage(pageable); //메인페이지 리스트 부분
+    model.addAttribute("megazineItems", megazineItems); //메인페이지 리스트 부분
+
+    //Page<MegazineDTO> items = megazineService.getMegazineBy(pageable);
+    //model.addAttribute("items", items);
+
     //model.addAttribute("itemSearchDTO", itemSearchDTO);
-    model.addAttribute("maxPage", 9); //한 화면에 5개의 페이지네이션
-    model.addAttribute("megazineItems", items);  //boardLists.html 로 가서 리스트를 뿌려준다.
+    model.addAttribute("maxPage", 5); //한 화면에 5개의 페이지네이션
+    return "megazine/megazineMain";
+  }
+  */
+
+  @GetMapping("/list")
+  public String megazineItem(@RequestParam(value = "searchQuery", defaultValue = "") String searchQuery,
+                             @RequestParam(value = "page", defaultValue = "0") int page,
+                             Model model) {
+
+    Pageable pageable = PageRequest.of(page, 9); // 한 화면에 9개의 상품
+
+    // 검색어에 따라 Megazine 리스트 가져오기
+    Page<Megazine> megazineItems = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
+    model.addAttribute("megazineItems", megazineItems); // 메인페이지 리스트 부분
+
+    // 검색어에 따른 DTO 리스트 가져오기
+    //Page<MegazineDTO> items = megazineService.getMegazineBy(searchQuery, pageable);
+    //model.addAttribute("items", items);
+
+    model.addAttribute("searchQuery", searchQuery); // 검색어를 모델에 추가
+    model.addAttribute("maxPage", 5); // 한 화면에 5개의 페이지네이션
     return "megazine/megazineMain";
   }
 
@@ -68,7 +91,6 @@ public class MegazineController {
       return "megazine/megazineForm"; //item에 있는 itemForm.html
     }
 
-    //제대로 안넣었다면
     //이미지 하나라도 안넣었다면 안넘어간다~
     //이미지 파일 리스트의 첫 번째 파일이 비어 있고, itemDTO의 ID가 null인 경우(즉, 새로 생성하는 경우) 에러 메시지를 모델에 추가하고 폼으로 돌아갑니다.
     if (itemImgFile.isEmpty()) {
@@ -88,72 +110,22 @@ public class MegazineController {
     return "redirect:/megazines/list";  //상품등록이 잘 되면 메인으로 이동
   }
 
-// 게시물 수정 버튼 이동=================================================================================
-
-
-  @GetMapping("/register")
-  public String magazineRegister(Model model){
-    return "megazine/megazineRegister";
-  }
-
-  //기존에 글이 있다면 ~그대로 받아와서 넣어주고
-  //
-  @GetMapping("/edit")
-  public String magazineEdit(Model model, MegazineDTO megazineDTO){
-
-    //기존의 mno의 글을 가져와
-    return "megazine/megazineForm";
-  }
-
-  @PostMapping("/edit")
-  public String magazineEdit2(Model model, MegazineDTO megazineDTO){
-
-    //기존의 mno의 글을 가져와
-    megazineService.getMegazine(megazineDTO.getMno());
-    model.addAttribute("megazineEdit", megazineService.getMegazine(megazineDTO.getMno()));
-    return "megazine/megazineForm";
-  }
-
-  //수정 로직 : megazineService.getMegazine(megazineDTO.getMno())가 존재하면!!~~redirect해서 memberForm으로 보내주고
-  // 보내준 경로에서 이미 값이 있으면 ~~ 값을 보여준 채로 label input 그대로 해서 수정할 수 있고 안의 값을 볼 수 있도록 하기=======================================================
-
-
-
-
-
-
-
-
-
-
-
-
-  @GetMapping("/delete/{megazineId}")
-  public String magazineDelete(@PathVariable("megazineId") Long megazineId, Model model){
-    System.out.println("삭제합니다.====================" + megazineId);
-    model.addAttribute("message",megazineId + "를 삭제하였습니다.");
-    megazineService.delete(megazineId); //dto에서 mno(id)값 받아옴
-    return "megazine/megazineMain";
-  }
-
-
 // 상세보기 관련 Url =================================================================================
 
   //User 매거진 상세보기 페이지
-//  @GetMapping("/item/{megazineId}")
-//  public String itemDtl(Model model, @PathVariable("megazineId") Long megazineId){
-//
-//    MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
-//    model.addAttribute("megazineDTO", megazineDTO);
-//    return "megazine/megazineDetail";
-//  }
-
-  //상세보기 + 등록==============================>
   @GetMapping("/list/{megazineId}")
-  public String megazineDtl(@PathVariable("megazineId") Long megazineId, Model model) {
+  public String itemDtl(Model model, @PathVariable("megazineId") Long megazineId){
 
-    //안에 내용이 있으면 세부사항 보여주고
-    //상세보기가 없다면 새로운 폼을 만들어서 준비시켜 -등록 
+    MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
+    model.addAttribute("megazineDTO", megazineDTO);
+    return "megazine/megazineUserDetail";
+  }
+
+  //Admin 매거진 상세보기 페이지
+  //url path에 있는 것을 변수로 쓰겠어
+  @GetMapping("admin/item/{megazineId}")
+  public String itemDtl(@PathVariable("megazineId") Long megazineId, Model model) {
+
     try {
       MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
       model.addAttribute("megazineDTO", megazineDTO);
@@ -161,39 +133,35 @@ public class MegazineController {
       model.addAttribute("errorMessaage", "존재하지 않는 상품 입니다");
       model.addAttribute("megazineDTO", new MegazineDTO());
     }
-    return "megazine/megazineUserDetail"; //버튼 있으면 저장 없으면 수정버튼이 보임 itemForm으로 똑같이 보내기로 함
+    return "megazine/megazineDetail"; //버튼 있으면 저장 없으면 수정버튼이 보임 itemForm으로 똑같이 보내기로 함
   }
 
 
-  //상세보기 유효성 검사는 수정할 때 하는건디?
-  @PostMapping("/list/{megazineId}")
+  @PostMapping("admin/item/{megazineId}")
   public String itemUpdate(@Valid MegazineDTO megazineDTO,
                            BindingResult bindingResult,
                            @RequestParam("itemImgFile") MultipartFile itemImgFileList,
                            Model model) {
-
-    //유효성 겁사에서 이슈 발생 시
     if (bindingResult.hasErrors()) {
-      return "megazine/megazineMain"; //에러 나면 다시
+      return "megazine/megazineDetail"; //에러 나면 다시
     }
-    //이미지가 비어 있으면
+    //비어 있으면
     if (itemImgFileList.isEmpty() && megazineDTO.getMno() == null) {
       model.addAttribute("errorMessage", "첫번재 상품 이미지는 필수입력입니다.");
-      return  "megazine/megazineForm";
+      return  "megazine/megazineDetail";
     }
 
 
     try {
       megazineService.updateItemImg(itemImgFileList,megazineDTO);
-
     } catch (Exception e){
       System.out.println(e.getMessage()); //에러 메시지 확인
       model.addAttribute("errorMessage", "상품 수정 중 에러가 발생했습니다.");
-      return "megazine/megazineUserDetail";///////
+      return "megazine/megazineForm";
     }
 
     //수정 후 메인으로 감
-    return "megazine/megazineMain";
+    return "redirect:/megazines/list";
   }
 
 

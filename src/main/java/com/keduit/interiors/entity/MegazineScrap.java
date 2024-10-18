@@ -21,6 +21,6 @@
 //	private Member member;
 //
 //	@ManyToOne
-//	@JoinColumn(name = "magazine_id")
+//	@JoinColumn(name = "megazine_id")
 //	private Megazine megazine;
 //}

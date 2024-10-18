@@ -21,7 +21,7 @@ public class MegazineDTO {
   private String title; //제목
 
   /*private String user;  //글 등록한 사용자*/
-  
+
   private String content; //내용
 
   private int viewCount;  //조회수
@@ -29,9 +29,9 @@ public class MegazineDTO {
   private int scrapCount; //스크랩 수
 
   private String oriImgName;  //원본 이미지 이름 사용자가 올린 원본 파일 이미지 이름
-//
+  //
   private String imgName; //이미지 이름 UUID + 확장자(oriImgName 여기서 긁어옴)
-//
+  //
   private String imageUrl;  //이미지 Url 경로 어플리케이션 프로퍼티스 + fileName 둘 다 들어가는거
 
 
