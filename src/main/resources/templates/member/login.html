@@ -249,8 +249,8 @@
 
             <h2 class="form__title">회원가입</h2>
             <!--이름-->
-            <input type="text" placeholder="User" class="input" th:field="*{name}"/>
-            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect Data</p>
+            <input type="text" placeholder="User" class="input" th:field="*{userName}"/>
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{userName}" class="fieldError">Incorrect Data</p>
 
             <!--이메일-->
             <input type="email" placeholder="Email" class="input" th:field="*{email}"/>
