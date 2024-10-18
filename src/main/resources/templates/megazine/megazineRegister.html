@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<!-- 사용자 js 추가 -->
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            console.log("------자바스크립트 진입------");
+            const errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+
+            bindDomEvent();
+
+        });
+
+        //이미지가 바뀌었을때
+        function bindDomEvent(){
+            //이미지 변경이 일어나면 변경이 일어난 곳에 값을 가져와서 잘라 \\를 기준으로 , 꺼내 맨 뒤에 있는 것(fileName)
+            //apple.jpg -> .을 기준으로 가져오면 +1 부분이 jpg 이게 됨. .을 기준으로 끝까지
+            $(".custom-file-input").on("change", function(){
+                const fileName = $(this).val().split("\\").pop(); //stack 라스트 인 퍼스트 아웃 식으로 처리 -> 이미지의 파일 명을 알아낼 수 있다.
+                let fileExt = fileName.substring(fileName.lastIndexOf(".")+1);   // 확장자 추출
+                fileExt = fileExt.toLowerCase();  //소문자로 변환
+
+                if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
+                    alert("이미지 파일만 등록이 가능합니다.");
+                    return;
+                }
+
+                //파일 네임이 찍히게 된다.
+                $(this).siblings(".custom-file-label").html(fileName);
+                //html 부분의 url을 변경시켜줘 다시 써줘
+
+
+                //innerHtml로 다시 작성해주는 부분
+                const file = this.target.files[0]; // 선택한 파일을 가져옴
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.getElementById('image');
+                        img.src = e.target.result; // 선택한 이미지의 URL로 변경
+                    };
+                    reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기
+                }
+            });
+        }
+
+        const formObj = $("#modForm");
+        $('button').on("click", function(e){
+            console.log("버튼 클릭함 ---------------------------")
+            e.preventDefault();    // submit button의 기본 동작을 막음.
+            const operation = $(this).data("oper");   // data-oper의 갑을 가져옴.
+            console.log("operation=====> ", operation);
+
+            if(operation === 'remove'){
+                console.log("remove-------------------");
+                formObj.attr("action", "/todo/remove")
+                    .attr("method", "POST");
+            } else if (operation === 'modify'){
+                console.log("modify-------------------");
+                formObj.attr("action", "/todo/modify")
+                    .attr("method", "POST");
+            } else if(operation === 'list'){
+                console.log("List-------------------");
+                const pageNumTag = $("input[name='pageNum']").clone();
+                const amountTag = $("input[name='amount']").clone();
+                const typeTag = $("input[name='type']").clone();
+                const keywordTag = $("input[name='keyword']").clone();
+
+                console.log("==============" , pageNumTag);
+
+                formObj.attr("action", "/todo/list")
+                    //url로 데이터를 보내야 하기 때문에
+                    .attr("method", "GET");
+                formObj.empty();
+                formObj.append(pageNumTag);
+                formObj.append(amountTag);
+                formObj.append(typeTag);
+                formObj.append(keywordTag);
+            }
+
+            formObj.submit();
+        });
+    </script>
+</th:block>
+
+
+<!-- 사용자 css 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .wrap{
+            width:60vw;
+            height:100%;
+            margin:3vw auto;
+        }
+        .input-group{
+            margin-bottom: 15px;
+        }
+        .img-div{
+            margin-bottom: 10px;
+        }
+        .fieldError{
+            color:#bd2130;
+        }
+        .know_how_box{
+            width:100%;
+            height:18vw;
+            padding:3vw;
+            background-color:white;
+            border-radius:1vw;
+            border:0.3vw solid #C6BAAA;
+        }
+        .know_how_title{
+            font-size:1.5vw;
+            margin-bottom:1.5vw;
+        }
+        .know_how_title > span{
+            font-size:0.8vw;
+        }
+        .know_how_lists{
+            line-height:2vw;
+        }
+        .know_how_list{
+            font-size:1vw;
+            list-style-type:circle;
+        }
+        /*발행 신청 버튼*/
+        .btn_edit{
+            padding:1vw 1.5vw;
+            background-color:#2C2C2C;
+            border-radius:0.5vw;
+            color:white;
+            font-size:1vw;
+        }
+        .btn_delete{
+            padding:1vw 1.5vw;
+            background-color: #ff2a2a;
+            border-radius:0.5vw;
+            color:white;
+            font-size:1vw;
+        }
+
+        /*input 영역======================================================*/
+        /*이미지 파일 불러오는 box 영역*/
+        .custom-file{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            width:67vw;
+            height:20vw;
+            background-color:#F7F8FA;
+            border-radius:0.5vw;
+            margin:0 auto;
+            text-align:center;
+        }
+        /*선택된 파일 없음*/
+        .custom-file-input{
+            padding:1vw 1.5vw;
+            background-color:#2C2C2C;
+            border-radius:0.5vw;
+            color:white;
+            font-size:1vw;
+        }
+        /*파일 선택 버튼 css*/
+        #file-upload-button{
+            padding:1vw 1.5vw;
+            background-color:#2C2C2C;
+            border-radius:0.5vw;
+            color:white;
+            font-size:1vw;
+        }
+        /*상품 이미지*/
+        /*
+        .custom-file-label{
+          padding:1vw 1.5vw;
+          background-color:red;
+          border-radius:0.5vw;
+          color:white;
+          font-size:1vw;
+        }
+        */
+        /*form-title input 영역*/
+        input{
+            border:none;
+        }
+        .form-title{
+            width:67vw;
+            height:5vw;
+            font-size: 2vw;
+            border-bottom: 0.2vw solid #2C2C2C;
+        }
+        /*form-title content 영역*/
+        .form-title{
+            width:100%;
+        }
+        .form-content{
+            width:67vw;
+            height:15vw;
+            background-color:#F7F8FA;
+            border-radius:0.5vw;
+            border:none;
+            font-size:2vw;
+        }
+        .show-img-box{
+            margin: 5vw 0;
+        }
+    </style>
+</th:block>
+
+
+<div layout:fragment="content">
+    <div class="wrap">
+        <h1 hidden>매거진 상세보기 페이지</h1>
+
+
+        <!-- enctype="multipart/form-data" 이미지 등록 -->
+        <!-- itemDTO 에서 선택한 객체에 접근해서 HTMl 태그의 id,name,value 속성을 자동처리 -->
+        <form role="form" method="post" th:object="${megazineDTO}" enctype="multipart/form-data">
+
+
+            <div class="form-group">
+                <div class="input-group">
+
+                    <label hidden th:for="title" class="input-group-text">제목</label>
+                    <input type="text" class="form-title" th:field="*{title}" placeholder="제목을 입력해주세요.">
+                    <p th:if="${#fields.hasErrors('title')}"
+                       th:errors="*{title}" class="fieldError">Incorrect data</p>
+                </div>
+            </div>
+
+
+            <!-- ================지금 하고 있는 부분============================================ -->
+            <!--이미지 이미 있는 경우 megazineDTO 여기에서 imageUrl 을 불러와서 화면에 뿌려준다.-->
+            <!-- 어드민 상품 수정 관련 화면에 보여지고 수정하는 부분 -->
+            <div>
+                <div class="show-img-box">
+                    <img th:src="${megazineDTO.imageUrl}" th:alt="${megazineDTO.oriImgName}" class="card-img-top" height="400">
+                    <div class="custom-file img-div">
+                        <!-- -->
+                        <input type="file" class="custom-file-input"
+                               name="itemImgFile">
+                        <label  hidden class="custom-file-label"
+                                th:text="매거진이미지 + ${num}"></label>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- 어드민 상품 수정 관련  -->
+            <!-- <div th:if="${#lists.isEmpty(megazineDTO.itemImgDTOList)}">
+               <div class="form-group" th:each="num: ${#numbers.sequence(1,1)}">
+                 <div class="custom-file img-div">
+                   <input type="file" class="custom-file-input"
+                          name="itemImgFile">
+                   <label  hidden class="custom-file-label"
+                           th:text="상품이미지 + ${num}"></label>
+                 </div>
+               </div>
+             </div>-->
+
+            <!--이미지 비어있는 경우-->
+            <!--      <div th:if="${#strings.isEmpty(megazineDTO.oriImgName)}">-->
+            <!--        <div class="form-group">-->
+            <!--          <div class="custom-file img-div">-->
+            <!--            &lt;!&ndash;<input type="file" class="custom-file-input"-->
+            <!--                   name="itemImgFile">&ndash;&gt;-->
+            <!--            <img th:src="${megazineDTO.oriImgName}" th:alt="${megazineDTO.oriImgName}" class="card-img-top" height="400">-->
+            <!--            <label  hidden class="custom-file-label"-->
+            <!--                    th:text="매거진이미지 + ${num}"></label>-->
+            <!--          </div>-->
+            <!--        </div>-->
+            <!--      </div>-->
+
+
+            <!-- shop에서 가져온거 -->
+            <!--    <input type="hidden" id="itemId" th:value="${megazineDTO.mno}">
+                <div class="d-flex">
+                  <div class="repImgDiv">
+                    &lt;!&ndash; item -> itemDTO 에서 가져옴&ndash;&gt;
+                    <img th:src="${megazineDTO.imageUrl}" th:alt="${megazineDTO.itemName}" class="rounded repImg">
+                  </div>-->
+
+
+
+
+
+
+            <!--비어있지 않은 경우 이미지가 있는 경우-->
+            <!--itemDTO.itemImgDTOList가 비어 있지 않은 경우에만 이 <div> 블록이 렌더링됩니다-->
+            <div th:if="${not #strings.isEmpty(megazineDTO.itemImgDTOList)}">
+                <div class="form-group" th:each="itemImgDTO, status: ${megazineDTO.itemImgDTOList}">
+                    <div class="custom-file img-div">
+                        <input type="file" class="custom-file-input" name="itemImgFile">
+                        <input type="hidden" name="itemImgIds" th:value="${itemImgDTO.mno}">
+                        <label class="custom-file-label"
+                               th:text="${not #strings.isEmpty(itemImgDTO.oriImgName)} ?
+                      ${itemImgDTO.oriImgName} : '상품이미지' + ${status.count}"></label>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <label hidden th:for="content" class="input-group-text">내용</label>
+                    </div>
+                    <textarea class="form-content" th:field="*{content}" placeholder="내용을 입력해주세요."></textarea>
+                    <p th:if="${#fields.hasErrors('content')}"
+                       th:errors="*{content}" class="fieldError">Incorrect data</p>
+                </div>
+            </div>
+            <!--
+                  <div  style="text-align: center">
+                   여기로 처리
+                    <button th:formaction="@{/megazines/list}" type="submit"
+                            class="btn_register btn btn-info">
+                      목록으로
+                    </button>
+                  </div>
+
+
+                  <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+                    <button th:formaction="@{'/megazines/list' + ${megazineDTO.mno}}" type="submit"
+                            class="btn_edit">
+                      수정
+                    </button>
+                  </div>
+
+                  <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+                    <button  th:formaction="@{'/megazines/delete/' + ${megazineDTO.mno}}" type="submit"
+                             th:method="delete"
+                             class="btn_delete">
+                      삭제
+                    </button>
+                  </div>
+
+            -->
+        </form>
+
+        <form role="form" action="/megazines" th:object="${megazineDTO}"  method="get">
+
+            <div  style="text-align: center">
+                여기로 처리
+                <button th:formaction="@{/megazines/list}" type="submit"
+                        class="btn_register btn btn-info">
+                    목록으로
+                </button>
+            </div>
+
+
+            <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+                <button th:formaction="@{/megazines/register}" type="submit"
+                        class="btn_edit">
+                    수정
+                </button>
+            </div>
+
+            <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+                <button  th:formaction="@{'/megazines/delete/' + ${megazineDTO.mno}}" type="submit"
+                         th:method="delete"
+                         class="btn_delete">
+                    삭제
+                </button>
+            </div>
+        </form>
+    </div><!--wrap-->
+</html>

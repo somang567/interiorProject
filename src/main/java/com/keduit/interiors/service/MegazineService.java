@@ -34,12 +34,9 @@ import java.util.Optional;
 @Transactional
 public class MegazineService {
 
-  //@Autowired
   private final MegazineRepository megazineRepository;
-
-  //@Autowired
   private final MemberRepository memberRepository;
-
+  private final FileService fileService;
   /*
   @Autowired
   private ItemImgService itemImgService;
@@ -48,7 +45,7 @@ public class MegazineService {
   @Autowired
   private ItemImgRepository itemImgRepository;
 */
-  private final FileService fileService;
+
 
   @Transactional(readOnly = true) //데이터 베이스 성능 최적화를 위함.
   //CartDetailDTO 응? 여기서 리스트를 뽑아온다? 얘가 몬데 씌벌?
@@ -123,8 +120,6 @@ public class MegazineService {
     megazineDTO.setOriImgName(originalFileName);
     megazineDTO.setImageUrl(imgUrl);
     //
-
-
 
     Megazine megazine = megazineDTO.createItem();
     System.out.println("----------------register: " + megazine);
@@ -292,16 +287,16 @@ public class MegazineService {
     return megazineRepository.findAll();
   }
 
-  public Optional<Megazine> getBoard(Long bno) {
-    return megazineRepository.findById(bno);
+  public Optional<Megazine> getMegazine(Long mno) {
+    return megazineRepository.findById(mno);
   }
 
   public void save(Megazine megazine) {
     megazineRepository.save(megazine);
   }
 
-  public void delete(Long bno) {
-    megazineRepository.deleteById(bno);
+  public void delete(Long mno) {
+    megazineRepository.deleteById(mno);
   }
 
 

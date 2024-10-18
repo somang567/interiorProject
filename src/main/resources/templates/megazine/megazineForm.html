@@ -227,10 +227,16 @@
 
 
     <div class="form-group">
-      <div class="input-group">
-
+      <div class="input-group" th:if="${#strings.isEmpty(megazineDTO.mno)}">
         <label hidden th:for="title" class="input-group-text">제목</label>
         <input type="text" class="form-title" th:field="*{title}" placeholder="제목을 입력해주세요.">
+        <p th:if="${#fields.hasErrors('title')}"
+           th:errors="*{title}" class="fieldError">Incorrect data</p>
+      </div>
+    <!-- if/unless 따로 만들어서 진행 해븀 -->
+      <div class="input-group" th:unless="${#strings.isEmpty(megazineDTO.mno)}">
+        <label hidden th:for="title" class="input-group-text">제목</label>
+        <input type="text" class="form-title" th:field="*{megazineDTO.title}" placeholder="제목을 입력해주세요.">
         <p th:if="${#fields.hasErrors('title')}"
            th:errors="*{title}" class="fieldError">Incorrect data</p>
       </div>
@@ -261,11 +267,19 @@
 
 
     <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
-      <button th:formaction="@{'/admin/item/' + ${megazineDTO.mno}}" type="submit"
+      <button th:formaction="@{'/megazines/list/' + ${megazineDTO.mno}}" type="submit"
               class="btn_edit">
         수정
       </button>
     </div>
+
+<!--    <div th:if="${#strings.isEmpty(itemDTO.id)}"-->
+<!--         style="text-align: center">-->
+<!--      <button th:formaction="@{/admin/item/new}" type="submit"-->
+<!--              class="btn btn-primary">-->
+<!--        저장-->
+<!--      </button>-->
+<!--    </div>-->
 
 
     <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->

@@ -170,7 +170,9 @@
 
 <div layout:fragment="content">
   <div class="wrap">
-    <h1 hidden>매거진 상세보기 페이지</h1>
+      <form role="form" th:object="${megazineDTO}"  method="get">
+
+      <h1 hidden>매거진 상세보기 페이지</h1>
     <input type="hidden" id="megazineId" th:value="${megazineDTO.mno}">
 
     <!-- enctype="multipart/form-data" 이미지 등록 -->
@@ -188,23 +190,27 @@
           <div class="form-content" th:text="${megazineDTO.content}"></div>
     </div>
 
+      <!--<form role="form" action="/megazines" th:object="${megazineDTO}"  method="get">-->
+            <div class="btn-wrap">
+                  <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+                      <button th:formaction="@{'/megazines/' + ${megazineDTO.mno}}" type="submit"
+                              class="btn_edit">
+                          수정
+                      </button>
+                  </div>
+                  <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+                      <button th:formaction="@{'/megazines/delete'}" type="submit"
+                              class="btn_edit">
+                          삭제
+                      </button>
+                  </div>
+            </div>
+      <!--</form>-->
+  <!-- content -->
+    </form>
 
-      <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
-          <button th:formaction="@{'/admin/item/' + ${megazineDTO.mno}}" type="submit"
-                  class="btn_edit">
-              수정
-          </button>
-      </div>
-      <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
-          <button th:formaction="@{'/admin/item/' + ${megazineDTO.mno}}" type="submit"
-                  class="btn_edit">
-              삭제
-          </button>
-      </div>
-  </div><!-- content -->
 
 
-
-
+</div>
 </div>
 </html>

@@ -15,6 +15,7 @@
       }
 
       bindDomEvent();
+
     });
 
     //이미지가 바뀌었을때
@@ -48,6 +49,43 @@
         }
       });
     }
+
+    const formObj = $("#modForm");
+    $('button').on("click", function(e){
+      console.log("버튼 클릭함 ---------------------------")
+      e.preventDefault();    // submit button의 기본 동작을 막음.
+      const operation = $(this).data("oper");   // data-oper의 갑을 가져옴.
+      console.log("operation=====> ", operation);
+
+      if(operation === 'remove'){
+        console.log("remove-------------------");
+        formObj.attr("action", "/todo/remove")
+                .attr("method", "POST");
+      } else if (operation === 'modify'){
+        console.log("modify-------------------");
+        formObj.attr("action", "/todo/modify")
+                .attr("method", "POST");
+      } else if(operation === 'list'){
+        console.log("List-------------------");
+        const pageNumTag = $("input[name='pageNum']").clone();
+        const amountTag = $("input[name='amount']").clone();
+        const typeTag = $("input[name='type']").clone();
+        const keywordTag = $("input[name='keyword']").clone();
+
+        console.log("==============" , pageNumTag);
+
+        formObj.attr("action", "/todo/list")
+                //url로 데이터를 보내야 하기 때문에
+                .attr("method", "GET");
+        formObj.empty();
+        formObj.append(pageNumTag);
+        formObj.append(amountTag);
+        formObj.append(typeTag);
+        formObj.append(keywordTag);
+      }
+
+      formObj.submit();
+    });
   </script>
 </th:block>
 
@@ -99,6 +137,14 @@
       color:white;
       font-size:1vw;
     }
+    .btn_delete{
+      padding:1vw 1.5vw;
+      background-color: #ff2a2a;
+      border-radius:0.5vw;
+      color:white;
+      font-size:1vw;
+    }
+
     /*input 영역======================================================*/
     /*이미지 파일 불러오는 box 영역*/
     .custom-file{
@@ -272,41 +318,59 @@
              th:errors="*{content}" class="fieldError">Incorrect data</p>
         </div>
       </div>
-
-
-
-
-      <!-- 조건부로 버튼을 생성: 삽입버튼/ 수정버튼 id가 비어있으면 저장/ 아님 unless  수정-->
-      <!--${#strings.isEmpty(megazineDTO.mno)} : Thymeleaf의 유틸리티 함수 -->
-      <div th:if="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
-        <!--여기로 처리 -->
-        <button th:formaction="@{/megazines/user/write/new}" type="submit"
-                class="btn_register">
-          발행신청
+<!--
+      <div  style="text-align: center">
+       여기로 처리
+        <button th:formaction="@{/megazines/list}" type="submit"
+                class="btn_register btn btn-info">
+          목록으로
         </button>
       </div>
 
 
       <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
-        <button th:formaction="@{'/admin/item/' + ${megazineDTO.mno}}" type="submit"
+        <button th:formaction="@{'/megazines/list' + ${megazineDTO.mno}}" type="submit"
                 class="btn_edit">
           수정
         </button>
       </div>
 
-
-      <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
-      <!--
-      <div class="form-group">
-        <div class="input-group">
-          <div class="form-control">상품이미지1</div>
-          <div class="input-group-append">
-            <input type="button" value="Browse" class="input-group-text">
-          </div>
-        </div>
+      <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+        <button  th:formaction="@{'/megazines/delete/' + ${megazineDTO.mno}}" type="submit"
+                 th:method="delete"
+                 class="btn_delete">
+          삭제
+        </button>
       </div>
-      -->
+
+-->
     </form>
-  </div>
+
+    <form role="form" action="/megazines" th:object="${megazineDTO}"  method="get">
+
+      <div  style="text-align: center">
+        여기로 처리
+        <button th:formaction="@{/megazines/list}" type="submit"
+                class="btn_register btn btn-info">
+          목록으로
+        </button>
+      </div>
+
+
+      <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+        <button th:formaction="@{/megazines/register}" type="submit"
+                class="btn_edit">
+          수정
+        </button>
+      </div>
+
+      <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
+        <button  th:formaction="@{'/megazines/delete/' + ${megazineDTO.mno}}" type="submit"
+                 th:method="delete"
+                 class="btn_delete">
+          삭제
+        </button>
+      </div>
+    </form>
 </div><!--wrap-->
 </html>

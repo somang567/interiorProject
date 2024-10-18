@@ -95,8 +95,146 @@
                 height: auto;
                 margin-top: 1rem;
             }
+
+            /* 댓글 스타일 */
+            .comments-container {
+                margin-top: 2vw;
+            }
+
+            .comments-container h3 {
+                margin-bottom: 1rem;
+                color: #333;
+                border-bottom: 2px solid #ddd;
+                padding-bottom: 0.5rem;
+            }
+
+            .comment {
+                padding: 1rem;
+                border-bottom: 1px solid #ddd;
+                position: relative;
+            }
+
+            .comment-author {
+                font-weight: bold;
+                color: #555;
+            }
+
+            .comment-content {
+                margin-top: 0.5rem;
+                color: #333;
+            }
+
+            .comment-time {
+                font-size: 0.8rem;
+                color: #999;
+                margin-top: 0.5rem;
+            }
+
+            .comment-actions {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .comment-actions button {
+                background: none;
+                border: none;
+                color: #007bff;
+                cursor: pointer;
+                font-size: 0.9rem;
+                margin-left: 0.5rem;
+            }
+
+            .comment-actions button:hover {
+                text-decoration: underline;
+            }
+
+            /* 댓글 수정 폼 스타일 */
+            .edit-comment-form {
+                margin-top: 1rem;
+                display: none; /* 초기에는 숨김 */
+            }
+
+            .edit-comment-form textarea {
+                width: 100%;
+                height: 80px;
+                padding: 0.8rem;
+                border: 1px solid #ddd;
+                border-radius: 0.4vw;
+                font-size: 1rem;
+                resize: vertical;
+            }
+
+            .edit-comment-form button {
+                margin-top: 0.5rem;
+                padding: 0.6rem 1.2rem;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 0.4vw;
+                cursor: pointer;
+                font-size: 0.9rem;
+            }
+
+            .edit-comment-form button:hover {
+                background-color: #218838;
+            }
+
+            /* 댓글 작성 폼 스타일 */
+            .comment-form {
+                margin-top: 2vw;
+                padding: 1rem;
+                background-color: #f9f9f9;
+                border-radius: 0.4vw;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .comment-form h3 {
+                margin-bottom: 1rem;
+                color: #333;
+            }
+
+            .comment-form textarea {
+                width: 96%;
+                height: 100px;
+                padding: 0.8rem;
+                border: 1px solid #ddd;
+                border-radius: 0.4vw;
+                font-size: 1rem;
+                resize: vertical;
+            }
+
+            .comment-form button {
+                margin-top: 1rem;
+                padding: 0.8rem 1.6rem;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 0.4vw;
+                cursor: pointer;
+                font-size: 0.9rem;
+            }
+
+            .comment-form button:hover {
+                background-color: #218838;
+            }
         </style>
     </th:block>
+
+    <!-- JavaScript 추가 -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function toggleEditForm(commentId) {
+            var form = document.getElementById('edit-form-' + commentId);
+            if (form.style.display === 'none' || form.style.display === '') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        }
+
+        /*]]>*/
+    </script>
 
     <div class="view-container">
         <!-- 게시글 상세 내용 -->
@@ -122,21 +260,66 @@
             <tr>
                 <th>첨부 이미지</th>
                 <td class="image-cell">
-                    <th:block th:if="${board.filename}"> <!-- 파일이 있을 경우 -->
+                    <th:block th:if="${board.filename}">
                         <img th:src="@{/files/}+${board.filename}" alt="첨부 이미지"/>
                     </th:block>
-                    <th:block th:unless="${board.filename}"> <!-- 파일이 없을 경우 -->
+                    <th:block th:unless="${board.filename}">
                         이미지가 없습니다.
                     </th:block>
                 </td>
             </tr>
         </table>
 
+        <!-- 댓글 리스트 -->
+        <div class="comments-container">
+            <h3>댓글</h3>
+            <th:block th:if="${!#lists.isEmpty(comments)}">
+                <th:block th:each="comment : ${comments}">
+                    <div class="comment">
+                        <div>
+                            <div class="comment-author" th:text="${comment.author} + ' 님'"></div>
+                            <div class="comment-content" th:text="${comment.content}"></div>
+                            <div class="comment-time"
+                                 th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}"></div>
+                        </div>
+                        <div class="comment-actions" th:if="${comment.isEditable}">
+                            <!-- 수정 및 삭제 버튼 -->
+                            <button type="button" onclick="toggleEditForm([[${comment.id}]])">수정</button>
+                            <a th:href="@{/comment/delete/{id}(id=${comment.id}, boardId=${board.id})}"
+                               onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</a>
+                        </div>
+
+                        <!-- 댓글 수정 폼 -->
+                        <div class="edit-comment-form" th:id="'edit-form-' + ${comment.id}">
+                            <form th:action="@{/comment/update/{id}(id=${comment.id})}" method="post">
+                                <input type="hidden" name="boardId" th:value="${board.id}"/>
+                                <textarea name="content" th:text="${comment.content}" required></textarea>
+                                <button type="submit">수정 완료</button>
+                            </form>
+                        </div>
+                    </div>
+                </th:block>
+            </th:block>
+            <th:block th:unless="${!#lists.isEmpty(comments)}">
+                <p>댓글이 없습니다.</p>
+            </th:block>
+        </div>
+
+        <!-- 댓글 작성 폼 -->
+        <div class="comment-form">
+            <h3>댓글 작성</h3>
+            <form th:action="@{/board/{boardId}/comment(boardId=${board.id})}" method="post">
+                <textarea name="content" placeholder="댓글을 입력하세요" required></textarea>
+                <button type="submit">댓글 작성</button>
+            </form>
+        </div>
+
         <!-- 버튼 -->
         <div class="button-container">
             <a href="/board/list" class="button">목록으로</a>
             <a th:href="@{/board/modify/{id}(id=${board.id})}" class="button">수정하기</a>
-            <a th:href="@{/board/delete/{id}(id=${board.id})}" class="button" onclick="return confirm('정말 삭제하시겠습니까?');">삭제하기</a>
+            <a th:href="@{/board/delete/{id}(id=${board.id})}" class="button"
+               onclick="return confirm('정말 삭제하시겠습니까?');">삭제하기</a>
         </div>
     </div>
 </div>

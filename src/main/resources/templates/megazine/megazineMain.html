@@ -250,7 +250,7 @@
                 <div class="mega_wrap">
                     <th:block th:each="megazineItem, status: ${megazineItems.getContent()}">
 
-                        <a th:href="'/megazines/item/' + ${megazineItem.mno}" class="mega_card" >
+                        <a th:href="'/megazines/list/' + ${megazineItem.mno}" class="mega_card" >
                             <img th:src="${megazineItem.imageUrl}" th:alt="${megazineItem.title}" class="mega_card_img" height="400">
                             <div class="card-body">
                                 <h4 class="card-title">[[${megazineItem.title}]]</h4>

@@ -15,6 +15,7 @@ public class Board extends BaseEntity {
 
     @Id
     private Long id; // 게시글 번호 (수동 관리)
+
     private String title; // 제목
     private String content; // 내용
     private String author; // 작성자
