@@ -224,15 +224,20 @@
     <!-- JavaScript 추가 -->
     <script th:inline="javascript">
         /*<![CDATA[*/
+        // 댓글 수정 폼을 보이거나 숨기는 함수
         function toggleEditForm(commentId) {
+            // 해당 댓글의 수정 폼을 ID로 가져옴
             var form = document.getElementById('edit-form-' + commentId);
+
+            // 폼의 현재 display 속성에 따라 보이거나 숨기기
             if (form.style.display === 'none' || form.style.display === '') {
+                // 폼이 숨겨져 있다면 보이도록 설정
                 form.style.display = 'block';
             } else {
+                // 폼이 보이는 상태라면 숨기도록 설정
                 form.style.display = 'none';
             }
         }
-
         /*]]>*/
     </script>
 

@@ -52,6 +52,7 @@
             }
 
             .image-box h2 {
+                line-height: 2.3vw;
                 font-size: 1rem;
                 color: #666;
                 position: absolute;
@@ -165,12 +166,13 @@
                onclick="return confirmAction('정말 목록으로 돌아가시겠습니까?')">목록으로</a>
             <!-- 취소 버튼: 게시글 상세보기로 이동 -->
             <a th:href="@{/board/view(id=${board.id})}" class="button btn-secondary"
-               onclick="return confirmAction('정말 게시글 수정 페이지를 나가시겠습니까?')">취소</a>
+               onclick="return confirmAction('게시글 수정을 취소하시겠습니까?')">취소</a>
             <!-- 수정 버튼 -->
             <button type="submit" class="button btn-primary">수정</button>
         </div>
     </form>
 
+    <!-- JavaScript 추가 -->
     <th:block layout:fragment="script">
         <script>
             // 게시글 수정 완료 시 경고(alert) 메시지를 표시하는 함수

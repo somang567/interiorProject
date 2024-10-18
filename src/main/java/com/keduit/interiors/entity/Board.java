@@ -35,4 +35,8 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Attachment> attachments;
 
+    // 댓글 목록 관리 (CascadeType.REMOVE를 추가하여 게시글 삭제 시 댓글도 함께 삭제되도록 설정)
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
 }

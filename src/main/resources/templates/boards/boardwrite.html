@@ -81,7 +81,7 @@
                 border: 1px solid #ccc;
                 border-radius: 8px;
                 padding: 0.5vw;
-                display: none; /* 초기에는 미리보기가 표시되지 않음 */
+                display: none;
             }
 
             small {
@@ -112,7 +112,8 @@
             <!-- 내용 입력 -->
             <div class="form-group">
                 <label for="content">내용</label>
-                <textarea class="form-control" id="content" name="content" placeholder="내용을 입력하세요" rows="5" required></textarea>
+                <textarea class="form-control" id="content" name="content" placeholder="내용을 입력하세요" rows="5"
+                          required></textarea>
             </div>
 
             <!-- 이미지 파일 업로드 -->
@@ -137,34 +138,39 @@
         <script>
             // 이미지 미리보기 함수
             function previewImage(event) {
-                const file = event.target.files[0];
-                const preview = document.getElementById('img-preview');
+                // event.target.files는 사용자가 선택한 파일들을 나타내는 FileList 객체(FileList 객체는 사용자가 파일을 선택할 때 자동으로 생성.)
+                // 이 객체는 선택된 모든 파일을 배열과 비슷한 형태로 가지고 있으며, 각 파일은 인덱스로 접근 가능
+                const file = event.target.files[0];  // 사용자가 선택한 첫 번째 파일을 가져옴
+                const preview = document.getElementById('img-preview');  // 이미지 미리보기를 표시할 요소
+
                 if (file) {
-                    const reader = new FileReader();
+                    const reader = new FileReader();  // 파일을 읽기 위한 FileReader 객체 생성
                     reader.onload = function (e) {
-                        preview.src = e.target.result;
-                        preview.style.display = 'block'; // 파일이 있을 경우 미리보기 표시
+                        preview.src = e.target.result;  // 파일을 읽어서 미리보기 요소의 src 속성에 설정
+                        preview.style.display = 'block';  // 파일이 있으면 미리보기 이미지를 표시
                     };
-                    reader.readAsDataURL(file);
+                    reader.readAsDataURL(file);  // 파일을 Data URL 형식으로 읽음 (이미지 미리보기를 위해)
                 } else {
-                    preview.style.display = 'none'; // 파일이 없을 경우 미리보기 숨김
-                    preview.src = '';
+                    preview.style.display = 'none';  // 파일이 없으면 미리보기를 숨김
+                    preview.src = '';  // 미리보기 이미지 src를 초기화
                 }
             }
 
-            // 간단한 폼 유효성 검사
+            // 간단한 폼 유효성 검사 함수
             function validateForm() {
-                const title = document.getElementById('title').value;
-                const author = document.getElementById('author').value;
-                const content = document.getElementById('content').value;
+                const title = document.getElementById('title').value;  // 제목 입력 필드의 값 가져오기
+                const author = document.getElementById('author').value;  // 작성자 입력 필드의 값 가져오기
+                const content = document.getElementById('content').value;  // 내용 입력 필드의 값 가져오기
 
+                // 제목, 작성자, 내용 중 하나라도 비어 있으면 경고 메시지를 띄우고 폼 제출을 중지
                 if (!title || !author || !content) {
                     alert('모든 필수 항목을 입력해주세요.');
-                    return false; // 유효성 검사를 통과하지 못하면 폼 제출 중지
+                    return false;  // 유효성 검사를 통과하지 못하면 폼 제출 중지
                 }
-                return true; // 유효성 검사를 통과하면 폼 제출 허용
+                return true;  // 모든 필드가 입력되었으면 폼 제출 허용
             }
         </script>
+
     </th:block>
 </div>
 </html>

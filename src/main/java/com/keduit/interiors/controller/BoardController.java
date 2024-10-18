@@ -45,10 +45,18 @@ public class BoardController {
     @GetMapping("/board/list")
     public String boardList(Model model,
                             @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                            String searchKeyword) {
+                            @RequestParam(required = false) String searchType,
+                            @RequestParam(required = false) String searchKeyword) {
         Page<BoardDTO> list;
-        if (searchKeyword != null) {
-            list = boardService.boardSearchList(searchKeyword, pageable);
+
+        if (searchKeyword != null && !searchKeyword.isEmpty()) {
+            if ("title".equals(searchType)) {
+                list = boardService.boardSearchByTitle(searchKeyword, pageable);
+            } else if ("content".equals(searchType)) {
+                list = boardService.boardSearchByContent(searchKeyword, pageable);
+            } else {
+                list = boardService.boardSearchByTitleOrContent(searchKeyword, pageable);
+            }
         } else {
             list = boardService.boardList(pageable);
         }
@@ -64,6 +72,7 @@ public class BoardController {
 
         return "boards/boardlist";
     }
+
 
     // 게시글 상세 조회 및 댓글 조회
     @GetMapping("/board/view")
