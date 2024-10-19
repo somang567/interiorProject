@@ -72,7 +72,7 @@ public class MegazineController {
 
   //상품 등록========================================================
   @GetMapping("/user/write/new")
-  public String magazineNew(Model model){
+  public String megazineNew(Model model){
     model.addAttribute("megazineDTO", new MegazineDTO());
     return "megazine/megazineForm";
   }
@@ -85,7 +85,7 @@ public class MegazineController {
   //itemImgFileList: 사용자가 업로드한 이미지 파일 리스트를 나타냅니다.
   public String itemNew(@Valid MegazineDTO megazineDTO, BindingResult bindingResult, Model model,
                         @RequestParam("itemImgFile") MultipartFile itemImgFile) {
-
+           
     //유효성 검사에서 에러가 발생한 경우, 사용자에게 폼을 다시 보여줍니다. 이때 itemForm.html이 반환됩니다.
     if (bindingResult.hasErrors()) {
       return "megazine/megazineForm"; //item에 있는 itemForm.html

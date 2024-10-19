@@ -110,8 +110,8 @@
                 setActiveTab('products');
             });
 
-            document.getElementById('tab-magazine').addEventListener('click', function () {
-                setActiveTab('magazine');
+            document.getElementById('tab-megazine').addEventListener('click', function () {
+                setActiveTab('megazine');
             });
 
             function setActiveTab(tab) {
@@ -131,11 +131,11 @@
                 alert('다음 상품으로 이동');
             });
 
-            document.getElementById('prev-magazine').addEventListener('click', function () {
+            document.getElementById('prev-megazine').addEventListener('click', function () {
                 alert('이전 매거진으로 이동');
             });
 
-            document.getElementById('next-magazine').addEventListener('click', function () {
+            document.getElementById('next-megazine').addEventListener('click', function () {
                 alert('다음 매거진으로 이동');
             });
         });
@@ -160,7 +160,7 @@
         <!-- 탭 -->
         <div class="tabs">
             <div class="tab active" id="tab-products">상품</div>
-            <div class="tab" id="tab-magazine">매거진</div>
+            <div class="tab" id="tab-megazine">매거진</div>
         </div>
 
         <!-- 콘텐츠 영역 -->
@@ -175,14 +175,14 @@
             </div>
         </div>
 
-        <div class="content-area" id="content-magazine">
+        <div class="content-area" id="content-megazine">
             <div class="carousel">
-                <button class="btn" id="prev-magazine">◀</button>
+                <button class="btn" id="prev-megazine">◀</button>
                 <img src="https://via.placeholder.com/100" alt="매거진 1">
                 <img src="https://via.placeholder.com/100" alt="매거진 2">
                 <img src="https://via.placeholder.com/100" alt="매거진 3">
                 <img src="https://via.placeholder.com/100" alt="매거진 4">
-                <button class="btn" id="next-magazine">▶</button>
+                <button class="btn" id="next-megazine">▶</button>
             </div>
         </div>
 
