@@ -38,14 +38,6 @@ public class MegazineService {
     private final MegazineRepository megazineRepository;
     private final MemberRepository memberRepository;
     private final FileService fileService;
-  /*
-  @Autowired
-  private ItemImgService itemImgService;
-*/
-  /*
-  @Autowired
-  private ItemImgRepository itemImgRepository;
-*/
 
 
     @Transactional(readOnly = true) //데이터 베이스 성능 최적화를 위함.
@@ -70,6 +62,11 @@ public class MegazineService {
             boardDTOList.add(megazineDTO);
         }
         return boardDTOList;
+    }
+
+    //전체 게시글 수 세는 메서드
+    public long countTotalMagazines() {
+        return megazineRepository.count();
     }
 
     @Transactional(readOnly = true)

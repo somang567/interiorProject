@@ -92,9 +92,24 @@
             list-style-type:circle;
         }
         /*발행 신청 버튼*/
+        .btn-wrap{
+            display: flex;
+            justify-content: space-between;
+            width:10.3vw;
+            height:fit-content;
+            margin: 2vw auto;
+            /*background: #007bff;*/
+        }
         .btn_edit{
             padding:1vw 1.5vw;
             background-color:#2C2C2C;
+            border-radius:0.5vw;
+            color:white;
+            font-size:1vw;
+        }
+        .btn_delete{
+            padding:1vw 1.5vw;
+            background-color: #ff4242;
             border-radius:0.5vw;
             color:white;
             font-size:1vw;
@@ -193,14 +208,16 @@
             <!--<form role="form" action="/megazines" th:object="${megazineDTO}"  method="get">-->
             <div class="btn-wrap">
                 <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
-                    <button th:formaction="@{'/megazines/' + ${megazineDTO.mno}}" type="submit"
-                            class="btn_edit">
-                        수정
-                    </button>
+<!--                    <button th:formaction="@{'/megazines/list' + ${megazineDTO.mno}}" type="submit"-->
+<!--                            class="btn_edit">-->
+<!--                        수정-->
+<!--                    </button>-->
+                    <button th:onclick="|location.href='/megazines/edit' + ${megazineDTO.mno}|">수정</button>
+
                 </div>
                 <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
                     <button th:formaction="@{'/megazines/delete'}" type="submit"
-                            class="btn_edit">
+                            class="btn_delete">
                         삭제
                     </button>
                 </div>

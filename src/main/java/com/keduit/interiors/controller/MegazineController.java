@@ -38,8 +38,13 @@ public class MegazineController {
     Pageable pageable = PageRequest.of(page, 9); // 한 화면에 9개의 상품
 
     Page<Megazine> megazineItems = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
-    model.addAttribute("megazineItems", megazineItems); // 메인페이지 리스트 부분
+    model.addAttribute("megazineItems", megazineItems);
 
+    List<Megazine> itemsList = megazineItems.getContent();
+    System.out.println("Magazines: " + itemsList);
+
+    long totalCnt = megazineService.countTotalMagazines();  //전체 매거진 개수
+    model.addAttribute("totalCnt", totalCnt);
     // 검색어에 따른 DTO 리스트 가져오기
 //    Page<MegazineDTO> items = megazineService.getMegazineBy(searchQuery, pageable);
 //    model.addAttribute("items", items);
@@ -99,6 +104,14 @@ public class MegazineController {
     MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
     model.addAttribute("megazineDTO", megazineDTO);
     return "megazine/megazineUserDetail";
+  }
+
+  @GetMapping("/edit/{megazineId}")
+  public String itemEdit(Model model, @PathVariable("megazineId") Long megazineId){
+
+    MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
+    model.addAttribute("megazineDTO", megazineDTO);
+    return "megazine/megazineForm";
   }
 
   //Admin 매거진 상세보기 페이지
