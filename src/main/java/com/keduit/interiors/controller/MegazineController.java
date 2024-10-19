@@ -28,26 +28,7 @@ import java.util.Optional;
 public class MegazineController {
 
   private final MegazineService megazineService;
-  private final MegazineRepository memberRepository;
-
-  //list를 보여주는 부분이기 때문에 post 필요 없숨~
-  /*
-  @GetMapping("/list")
-  //@PathVariable("page") Optional<Integer> page: URL 경로에서 페이지 번호를 직접 가져오는 방식입니다.
-  public String megazineItem( @PathVariable("page")Optional<Integer> page, Model model){
-
-    Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 9); //한 화면에 9개의 상품
-    Page<Megazine> megazineItems = megazineService.getListItemPage(pageable); //메인페이지 리스트 부분
-    model.addAttribute("megazineItems", megazineItems); //메인페이지 리스트 부분
-
-    //Page<MegazineDTO> items = megazineService.getMegazineBy(pageable);
-    //model.addAttribute("items", items);
-
-    //model.addAttribute("itemSearchDTO", itemSearchDTO);
-    model.addAttribute("maxPage", 5); //한 화면에 5개의 페이지네이션
-    return "megazine/megazineMain";
-  }
-  */
+  private final MegazineRepository megazineRepository;
 
   @GetMapping("/list")
   public String megazineItem(@RequestParam(value = "searchQuery", defaultValue = "") String searchQuery,
@@ -56,13 +37,12 @@ public class MegazineController {
 
     Pageable pageable = PageRequest.of(page, 9); // 한 화면에 9개의 상품
 
-    // 검색어에 따라 Megazine 리스트 가져오기
     Page<Megazine> megazineItems = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
     model.addAttribute("megazineItems", megazineItems); // 메인페이지 리스트 부분
 
     // 검색어에 따른 DTO 리스트 가져오기
-    //Page<MegazineDTO> items = megazineService.getMegazineBy(searchQuery, pageable);
-    //model.addAttribute("items", items);
+//    Page<MegazineDTO> items = megazineService.getMegazineBy(searchQuery, pageable);
+//    model.addAttribute("items", items);
 
     model.addAttribute("searchQuery", searchQuery); // 검색어를 모델에 추가
     model.addAttribute("maxPage", 5); // 한 화면에 5개의 페이지네이션
@@ -98,7 +78,7 @@ public class MegazineController {
       return "megazine/megazineForm";
     }
 
-    // 앞에서 계속 익셉션으로 넘겼기 때문에
+
     try {
       megazineService.saveItem(megazineDTO, itemImgFile);
     } catch (Exception e) {
@@ -110,8 +90,8 @@ public class MegazineController {
     return "redirect:/megazines/list";  //상품등록이 잘 되면 메인으로 이동
   }
 
-// 상세보기 관련 Url =================================================================================
 
+// 상세보기 관련 Url --------
   //User 매거진 상세보기 페이지
   @GetMapping("/list/{megazineId}")
   public String itemDtl(Model model, @PathVariable("megazineId") Long megazineId){

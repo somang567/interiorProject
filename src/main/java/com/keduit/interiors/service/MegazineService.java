@@ -139,9 +139,6 @@ public class MegazineService {
     //상품이 몇번인지 Long으로 등록
     public Long saveItem(MegazineDTO megazineDTO, MultipartFile itemImgFile) throws Exception {
 
-        /* public Long saveItem(MegazineDTO megazineDTO, List<MultipartFile> itemImgFileList) throws Exception{
-         */
-
         //매핑하기 전에 서비스에서 가져와서 저장하는 거 해줘야 함.
 
         System.out.println("saveItem 들어감----------------------------------->");
@@ -154,10 +151,9 @@ public class MegazineService {
         megazineDTO.setOriImgName(oriImgName);
         megazineDTO.setImageUrl(imgUrl);
 
-        String uploadDir = "file:///C:/Users/user/Desktop/fileUploads/";
-        File dir = new File(uploadDir);
-        if (!dir.exists()) {
-            dir.mkdirs();  // 디렉토리 생성
+        File directory = new File("C:\\Users\\user\\Desktop\\fileUploads\\item");
+        if (!directory.exists()) {
+            directory.mkdirs();
         }
 
         Megazine megazine = megazineDTO.createItem();

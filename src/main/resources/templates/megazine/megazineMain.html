@@ -226,9 +226,6 @@
                     <li class="fmgabox_list"></li>
                 </ul>
 
-
-
-
                 <h2 class="main_title2">Megazine Search</h2>
                 <ul class="mga_search">
                     <li class="mga_search_li">등록순 ▼</li>
@@ -258,7 +255,6 @@
                                 <p class="card-date text-danger" th:text="${#temporals.format(megazineItem.regTime, 'yyyy-mm-dd HH:mm')}"></p>
                             </div>
                         </a>
-
                     </th:block>
                 </div>
 
@@ -300,29 +296,6 @@
 </ul>
 </div>
 -->
-
-    <!--   검색 하는 부분 ========================================================-->
-    <!--
-    <div class="form-inline justify-content-center" th:object="${itemSearchDTO}">
-        <select th:field="*{searchDateType}" class="form-control" style="width:auto;">
-            <option value="all">전체기간</option>
-            <option value="1d">1일</option>
-            <option value="1w">1주</option>
-            <option value="1m">1개월</option>
-            <option value="6m">6개월</option>
-        </select>
-
-        <select th:field="*{searchBy}" class="form-control" style="width:auto;">
-            <option value="itemNm">상품명</option>
-            <option value="createBy">등록자</option>
-        </select>
-
-        <input th:field="*{searchQuery}" class="form-control"
-               placeholder="검색어를 입력해주세요.">
-        <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
-    </div>
-    -->
-
 
 
     <!--Modal==================================================-->
