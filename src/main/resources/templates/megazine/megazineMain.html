@@ -18,6 +18,7 @@
             $("#regBtn").on("click", function() {
                 self.location = "/megazines/user/write/new";
             });
+
             const result = [[${result}]];
             console.log("result ------> " + result);
 
@@ -63,33 +64,6 @@
                         currentIdx -= 1;
                     }
                 }
-            }
-
-
-
-
-
-
-            function searchCompany() {
-                const companyNameInput = document.getElementById("userSearch").value.trim();
-
-                // 업체명 필터링
-            const filteredResults = allCompanies.filter(company => {
-                const companyName = getValue(company, '업체명', '상호', '상호명');
-                return companyName.includes(companyNameInput);
-            });
-
-            // 결과 표시
-            if (filteredResults.length === 0) {
-                displayResults([]);                   // 빈 배열 전달
-                alert("해당 결과가 없습니다.");
-            } else {
-                displayResults(filteredResults);
-            }
-
-            .catch(error => {
-                    console.error('문제가 발생했습니다.', error);
-                });
             }
         }
     </script>
@@ -270,10 +244,10 @@
             color:white;
             font-size: 1vw;
         }
-        #regBtn:hover{
-            transition: all 1s ease;
-            background-color: #EF7828;
-        }
+        /*#regBtn:hover{*/
+        /*    transition: all 1s ease;*/
+        /*    background-color: #EF7828;*/
+        /*}*/
         /*==카드 관련 css==*/
         .mega_wrap{
             display: flex;
@@ -312,12 +286,24 @@
             background-color: #7f8c8d;
         }
         .pageNation-wrap{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1vw;
             width:20vw;
             height:3vw;
-            background-color: #28a745;
+            /*background-color: #28a745;*/
+            margin:3vw auto;
         }
-        .register-btn{
-
+        .pageNation-wrap > a,strong{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width:2vw;
+            height:2vw;
+            border-radius: 0.5vw;
+            margin: 0.2vw;
+            background-color: #efefef;
         }
     </style>
 </th:block>
@@ -358,9 +344,9 @@
                 </ul>
 
                 <h2 class="main_title2">매거진 검색</h2>
-                <form action="@{/megazines/list}" method="get">
+                <form th:action="@{/megazines/list}" method="get">
                     <input type="text" name="searchKeyword">
-                    <button type="submit" class="search-btn mga_search" onclick="checkModal()">검색</button>
+                    <button type="submit" class="search-btn mga_search">검색</button>
                 </form>
 
                 <div class="count_and_btn">
@@ -386,59 +372,18 @@
                         </a>
                     </th:block>
                 </div>
+            <div class="pageNation-wrap">
+                <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}" >
 
+                        <a th:if="${page != nowPage}" th:href="@{/megazines/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
+                        <strong th:if="${page == nowPage}" th:text="${page}" style="color: red" ></strong>
+
+                </th:block>
+            </div>
             </div><!--wrap-->
         </div><!--wrap-->
     </div>
-
-    <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}" class="pageNation-wrap">
-        <a th:if="${page != nowPage}" th:href="@{/megazines/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
-        <strong th:if="${page == nowPage}" th:text="${page}" style="color: red"></strong>
-    </th:block>
-
-
-
-
-
-
-
-
-
-
-    <!-- start: ( 현재페이지 번호 / 보여줄 페이지 수 ) * 보여줄 페이지 수 + 1 -->
-    <!-- end : 현재 페이지에서 보여줄 마지막 페이지 번호 -->
-<!--
-        <div th:with="start=${(items.number / maxPage) * maxPage + 1},
-                          end=(${(items.totalPages == 0 ) ? 1 :
-                          (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) :
-                          items.totalPages)})">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${items.first} ? 'disabled'">
-                    <a th:onclick="'javascript: page(' + ${items.number -1} + ')'"
-                       aria-label="Previous" class="page-link">
-                        <span aria-hidden="true">Previous</span>
-                    </a>
-                </li>
-              Page 객체에서 number는 현재 페이지를 나타냄
-               "$(page)" : 타임리프에서 HTML 콘텐츠 영역 안에 직접 데이터를 출력할 때 사용
-     Page 객체에서 시작 페이지는 0부터 이므로 해당 페이지를 호출할 때에는 페이지 -1를 해야함
-
-    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
-        th:classappend="${items.number eq page -1} ? 'active' : ''">
-        <a th:onclick="'javascript:page(' + ${page - 1} + ')'"
-           th:inline="text" class="page-link">[[${page}]]</a>
-    </li>
-
-    <li class="page-item" th:classappend="${items.last} ? 'disable'">
-        <a th:onclick="'javascript: page(' + ${items.number + 1} + ')'"
-           aria-label="Next" class="page-link">
-            <span aria-hidden="true">Next</span>
-        </a>
-    </li>
-</ul>
-</div>
--->
-    </div>
+</div><!-- content -->
 
 
 </body>

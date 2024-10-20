@@ -31,9 +31,10 @@ public class MegazineController {
 
   private final MegazineService megazineService;
   private final MegazineRepository megazineRepository;
-
+//  String searchKeyword,
   @GetMapping("/list")
-  public String megazineItem(@RequestParam("searchKeyword") String searchKeyword,
+  public String megazineItem(
+          @RequestParam(required = false) String searchKeyword,
                              @PageableDefault(page= 0, size=9, sort="mno", direction = Sort.Direction.DESC) Pageable pageable,
                              Model model) {
 
@@ -42,7 +43,6 @@ public class MegazineController {
     if (searchKeyword == null) {
       list = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
       model.addAttribute("list", list);
-
     }else{
       list = megazineService.megazineSearchList(searchKeyword, pageable); // 메인페이지 리스트 부분
       model.addAttribute("list", list);
@@ -54,7 +54,6 @@ public class MegazineController {
     model.addAttribute("nowPage", nowPage);
     model.addAttribute("startPage", startPage);
     model.addAttribute("endPage", endPage);
-
 
     long totalCnt = megazineService.countTotalMagazines();  //전체 매거진 개수
     model.addAttribute("totalCnt", totalCnt);
