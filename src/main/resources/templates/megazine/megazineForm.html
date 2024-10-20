@@ -17,6 +17,25 @@
       bindDomEvent();
     });
 
+    checkModal(result);
+
+    // 등록, 수정, 삭제 후 모달처리
+    function checkModal(result) {
+      //history.state는 웹 브라우저의 History API의 일부로, 현재 활성화된 히스토리 항목의 상태 객체를 반환합니다.
+      //이 객체는 pushState() 또는 replaceState() 메서드를 사용하여 설정한 데이터에 접근할 수 있게 해줍니다.
+      if (result === '' || history.state) {
+        return;
+      }
+
+      if (parseInt(result) > 0) {
+        $(".modal-body").html(
+                "게시글 " + parseInt(result) + " 번이 등록 되었습니다.");
+      }
+
+      $("#myModal").modal("show");
+    }
+
+
     //이미지가 바뀌었을때
     function bindDomEvent(){
       //이미지 변경이 일어나면 변경이 일어난 곳에 값을 가져와서 잘라 \\를 기준으로 , 꺼내 맨 뒤에 있는 것(fileName)
@@ -260,7 +279,7 @@
       <div th:if="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
         <!--여기로 처리 -->
         <button th:formaction="@{/megazines/user/write/new}" type="submit"
-                class="btn_register">
+                class="btn_register" onclick="checkModal()">
           발행신청
         </button>
       </div>
@@ -277,5 +296,27 @@
 
     </form>
   </div>
+
+
+  <!--Modal==================================================-->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+       aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal"
+                          aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+              </div>
+              <div class="modal-body">처리가 완료되었습니다.</div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default"
+                          data-dismiss="modal">Close</button>
+              </div>
+          </div>
+           <!--/.modal-content-->
+      </div>
+       <!--/.modal-dialog -->
 </div><!--wrap-->
+</div>
 </html>

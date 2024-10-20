@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec=xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 <head>
@@ -19,23 +20,7 @@
             });
             const result = [[${result}]];
             console.log("result ------> " + result);
-            checkModal(result);
 
-            // 등록, 수정, 삭제 후 모달처리
-            function checkModal(result) {
-                //history.state는 웹 브라우저의 History API의 일부로, 현재 활성화된 히스토리 항목의 상태 객체를 반환합니다.
-                //이 객체는 pushState() 또는 replaceState() 메서드를 사용하여 설정한 데이터에 접근할 수 있게 해줍니다.
-                if (result === '' || history.state) {
-                    return;
-                }
-
-                if (parseInt(result) > 0) {
-                    $(".modal-body").html(
-                        "게시글 " + parseInt(result) + " 번이 등록 되었습니다.");
-                }
-
-                $("#myModal").modal("show");
-            }
 
             $(".move").on("click", function(e){
                 e.preventDefault();	// 1. 링크의 기본 클릭 동작을 방지합니다.
@@ -80,6 +65,32 @@
                 }
             }
 
+
+
+
+
+
+            function searchCompany() {
+                const companyNameInput = document.getElementById("userSearch").value.trim();
+
+                // 업체명 필터링
+            const filteredResults = allCompanies.filter(company => {
+                const companyName = getValue(company, '업체명', '상호', '상호명');
+                return companyName.includes(companyNameInput);
+            });
+
+            // 결과 표시
+            if (filteredResults.length === 0) {
+                displayResults([]);                   // 빈 배열 전달
+                alert("해당 결과가 없습니다.");
+            } else {
+                displayResults(filteredResults);
+            }
+
+            .catch(error => {
+                    console.error('문제가 발생했습니다.', error);
+                });
+            }
         }
     </script>
 </th:block>
@@ -156,17 +167,6 @@
             width:80vw;
             height:100%;
             margin: 0 auto;
-        }
-        .mga_banner{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width:100%;
-            height:24vw;
-            text-align: center;
-            margin-bottom: 5vw;
-            color: rgb(255, 255, 255);
-            background-color: rgb(98, 98, 98);
         }
         .banner_title{
             position: absolute;
@@ -265,10 +265,14 @@
             width:5vw;
             height:3vw;
             padding:0.5vw 1vw;
-            background-color: #ff2f2f;
+            background-color: #2C2C2C;
             border-radius: 0.2vw;
             color:white;
             font-size: 1vw;
+        }
+        #regBtn:hover{
+            transition: all 1s ease;
+            background-color: #EF7828;
         }
         /*==카드 관련 css==*/
         .mega_wrap{
@@ -307,7 +311,14 @@
             height:5vw;
             background-color: #7f8c8d;
         }
+        .pageNation-wrap{
+            width:20vw;
+            height:3vw;
+            background-color: #28a745;
+        }
+        .register-btn{
 
+        }
     </style>
 </th:block>
 
@@ -347,32 +358,30 @@
                 </ul>
 
                 <h2 class="main_title2">매거진 검색</h2>
-                <ul class="mga_search">
-                    <li class="mga_search_li">등록순 ▼</li>
-                    <li class="mga_search_li">주거형태 ▼</li>
-                    <li class="mga_search_li">평수 ▼</li>
-                    <li class="mga_search_li">스타일 ▼</li>
-                    <li class="mga_search_li_btn"><button class="search_btn">적용</button></li>
-                </ul>
+                <form action="@{/megazines/list}" method="get">
+                    <input type="text" name="searchKeyword">
+                    <button type="submit" class="search-btn mga_search" onclick="checkModal()">검색</button>
+                </form>
 
                 <div class="count_and_btn">
                     <h3 class="total_cnt">전체 매거진 글 수 [[${totalCnt}]]</h3>
                     <button type="button" id="regBtn"
-                            class="btn btn-primary btn-xs pull-right display-right float-right register-btn">글쓰기</button>
+                            sec:authorize="isAuthenticated()"
+                            class="register-btn">글쓰기</button>
                 </div>
 
                 <!-- 카드 하나 -->
                 <!-- status: 반복의 상태 정보를 담는 변수 -->
                 <!--megazineItems에서 모든 콘텐츠들을 가져와-->
                 <div class="mega_wrap">
-                    <th:block th:each="megazineItem, status: ${megazineItems.getContent()}">
+                    <th:block th:each="lists, status: ${list.getContent()}">
 
-                        <a th:href="'/megazines/list/' + ${megazineItem.mno}" class="mega_card" >
-                            <img th:src="${megazineItem.imageUrl}" th:alt="${megazineItem.title}" class="mega_card_img" height="400">
+                        <a th:href="'/megazines/list/' + ${lists.mno}" class="mega_card">
+                            <img th:src="${lists.imageUrl}" th:alt="${lists.title}" class="mega_card_img" height="400">
                             <div class="card-body">
-                                <h4 class="card-title">[[${megazineItem.title}]]</h4>
-                                <p class="card-text">[[${megazineItem.user}]]</p>
-                                <p class="card-date text-danger" th:text="${#temporals.format(megazineItem.regTime, 'yyyy-mm-dd HH:mm')}"></p>
+                                <h4 class="card-title">[[${lists.title}]]</h4>
+                                <p class="card-text">[[${lists.user}]]</p>
+                                <p class="card-date text-danger" th:text="${#temporals.format(lists.regTime, 'yyyy-mm-dd HH:mm')}"></p>
                             </div>
                         </a>
                     </th:block>
@@ -382,10 +391,23 @@
         </div><!--wrap-->
     </div>
 
+    <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}" class="pageNation-wrap">
+        <a th:if="${page != nowPage}" th:href="@{/megazines/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
+        <strong th:if="${page == nowPage}" th:text="${page}" style="color: red"></strong>
+    </th:block>
+
+
+
+
+
+
+
+
+
 
     <!-- start: ( 현재페이지 번호 / 보여줄 페이지 수 ) * 보여줄 페이지 수 + 1 -->
     <!-- end : 현재 페이지에서 보여줄 마지막 페이지 번호 -->
-    <!--
+<!--
         <div th:with="start=${(items.number / maxPage) * maxPage + 1},
                           end=(${(items.totalPages == 0 ) ? 1 :
                           (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) :
@@ -397,9 +419,9 @@
                         <span aria-hidden="true">Previous</span>
                     </a>
                 </li>
-                Page 객체에서 number는 현재 페이지를 나타냄.
-                 "$(page)" : 타임리프에서 HTML 콘텐츠 영역 안에 직접 데이터를 출력할 때 사용 -->
-    <!-- Page 객체에서 시작 페이지는 0부터 이므로 해당 페이지를 호출할 때에는 페이지 -1를 해야함
+              Page 객체에서 number는 현재 페이지를 나타냄
+               "$(page)" : 타임리프에서 HTML 콘텐츠 영역 안에 직접 데이터를 출력할 때 사용
+     Page 객체에서 시작 페이지는 0부터 이므로 해당 페이지를 호출할 때에는 페이지 -1를 해야함
 
     <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
         th:classappend="${items.number eq page -1} ? 'active' : ''">
@@ -416,30 +438,8 @@
 </ul>
 </div>
 -->
-
-
-    <!--Modal==================================================-->
-    <!--
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                </div>
-                <div class="modal-body">처리가 완료되었습니다.</div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default"
-                            data-dismiss="modal">Close</button>
-                </div>
-            </div>
-             /.modal-content
-        </div>
-         /.modal-dialog -->
     </div>
 
-</div>
+
 </body>
 </html>

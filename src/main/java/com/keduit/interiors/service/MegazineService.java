@@ -72,7 +72,6 @@ public class MegazineService {
     @Transactional(readOnly = true)
     public Page<Megazine> getListItemPage(Pageable pageable) {
         return megazineRepository.findAll(pageable); //모든 아이템을 가져온다.
-        //.getListItemPage(pageable);
     }
 
     //검색 기능=====================================================================
@@ -245,6 +244,7 @@ public class MegazineService {
     }
 
   /*
+  //이미지가 여러개일 때
   //MultipartFile 화면에서 받아옴
   public Long updateItem(MegazineDTO megazineDTO,
                          List<MultipartFile> itemImgFileList) throws Exception{
@@ -267,15 +267,12 @@ public class MegazineService {
   }
   */
 
+    //검색 기능
+    public Page<Megazine> megazineSearchList(String searchKeyword, Pageable pageable){
+    return megazineRepository.findByTitleContaining(searchKeyword, pageable);
+    }
 
-    //-------------------------------------------------------------
-  /*
-  public MegazineService(MegazineRepository megazineRepository, FileService fileService) {
-    this.megazineRepository = megazineRepository;
-    this.fileService = fileService;
-  }
-   */
-
+    
     public List<Megazine> getList() {
         return megazineRepository.findAll();
     }

@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,25 +33,34 @@ public class MegazineController {
   private final MegazineRepository megazineRepository;
 
   @GetMapping("/list")
-  public String megazineItem(@RequestParam(value = "searchQuery", defaultValue = "") String searchQuery,
-                             @RequestParam(value = "page", defaultValue = "0") int page,
+  public String megazineItem(@RequestParam("searchKeyword") String searchKeyword,
+                             @PageableDefault(page= 0, size=9, sort="mno", direction = Sort.Direction.DESC) Pageable pageable,
                              Model model) {
 
-    Pageable pageable = PageRequest.of(page, 9); // 한 화면에 9개의 상품
+    Page<Megazine> list = null;
 
-    Page<Megazine> megazineItems = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
-    model.addAttribute("megazineItems", megazineItems);
+    if (searchKeyword == null) {
+      list = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
+      model.addAttribute("list", list);
 
-    List<Megazine> itemsList = megazineItems.getContent();
-    System.out.println("Magazines: " + itemsList);
+    }else{
+      list = megazineService.megazineSearchList(searchKeyword, pageable); // 메인페이지 리스트 부분
+      model.addAttribute("list", list);
+    }
+
+    int nowPage = list.getPageable().getPageNumber() + 1; //pageable에서 넘어온 현재 페이지를 반환/ 페이지 1부터 시작.
+    int startPage = Math.max(nowPage - 4 , 1);
+    int endPage = Math.min(nowPage + 5, list.getTotalPages());
+    model.addAttribute("nowPage", nowPage);
+    model.addAttribute("startPage", startPage);
+    model.addAttribute("endPage", endPage);
+
 
     long totalCnt = megazineService.countTotalMagazines();  //전체 매거진 개수
     model.addAttribute("totalCnt", totalCnt);
-    // 검색어에 따른 DTO 리스트 가져오기
-//    Page<MegazineDTO> items = megazineService.getMegazineBy(searchQuery, pageable);
-//    model.addAttribute("items", items);
 
-    model.addAttribute("searchQuery", searchQuery); // 검색어를 모델에 추가
+
+    model.addAttribute("searchKeyword", searchKeyword); // 검색어를 모델에 추가
     model.addAttribute("maxPage", 5); // 한 화면에 5개의 페이지네이션
     return "megazine/megazineMain";
   }
@@ -86,6 +97,7 @@ public class MegazineController {
 
     try {
       megazineService.saveItem(megazineDTO, itemImgFile);
+
     } catch (Exception e) {
       model.addAttribute("errorMessage", "매거진 등록 중 에러가 발생하였습니다.");
       System.out.println("====================================");
