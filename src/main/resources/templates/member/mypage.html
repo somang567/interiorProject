@@ -142,14 +142,14 @@
     </script>
 
 </th:block>
-<div layout:fragment="content">
+<div layout:fragment="content" th:object="${member}">
     <div class="container">
 
         <!-- 인사 및 버튼 -->
         <div class="greeting">
             <div>
-                <h2>OOO님 안녕하세요</h2>
-                <p>아이디</p>
+                <h2 th:text="${name != null ? name + '님 안녕하세요' : '방문자님 안녕하세요'}"></h2>
+                <p th:text="${email}"></p>
             </div>
             <div class="btn_div">
                 <button class="btn">정보 수정</button>
