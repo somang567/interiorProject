@@ -52,7 +52,7 @@ public class MainController {
       model.addAttribute("email", member.getEmail());
     }
 
-    return "mypage"; // mypage.html로 이동
+    return "/member/mypage"; // mypage.html로 이동
   }
 
 
