@@ -124,17 +124,19 @@
 }
 
 .productTitle{
-    font-size: 3vw;
+    margin-top: 1vw;
+    font-size: 1.8vw;
     font-weight: 800;
     text-align: center;
+    color: #806C61;
 }
 .enrollTitle_line{
-    width: 40vw;
+    width: 20vw;
     height: 0.2vw;
     border-radius: 5%;
     display: flex;
-    background: black;
-    color: black;
+    background-color: #806C61;
+    color:#806C61;
     margin-top: 1vh; /* 밑줄 위에 간격 */
     opacity: 1;
 }
@@ -188,14 +190,18 @@
     margin-top: 20px;
 }
 .addImageButton{
-    width: 12vw;
-    height: 4vw;
-    border: 2px solid #2c2c2c;
-    border-radius: 10px;
-    background-color: #000000;
-    color: #ffffff;
-    font-size: 1.2vw;
+    display: block;
+    width: 7vw;
+    height: 2.4vw;
+    color: white;
+    margin: 0 auto;
+    background-color: #806C61;
+    border: 0.5px solid #2c2c2c;
+    border-radius: 10%;
     cursor: pointer;
+}
+.addImageButton:hover{
+    background-color: #C6BAAA;
 }
 .ButtonItems{
     display: flex;
@@ -206,20 +212,22 @@
     justify-content: space-around;
 }
 .addItemButton {
-    width: 12vw;
-    height: 4vw;
-    border: 2px solid #2c2c2c;
-    border-radius: 10px;
-    background-color: #000000;
-    color: #ffffff;
-    font-size: 1.2vw;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 2vw;
+    width: 7vw;
+    height: 2.4vw;
+    color: white;
+    background-color: #806C61;
+    border: 0.5px solid #2c2c2c;
+    border-radius: 10%;
     cursor: pointer;
 }
 
+
 .addItemButton:hover {
-    background-color: #268bcc;
+    background-color: #C6BAAA;
     color: white;
-    border-color: #268bcc;
 }
 .DeleteFileButton{
     width: 12vw;

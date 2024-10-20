@@ -1,0 +1,52 @@
+/* 기본적인 스타일 설정 */
+.cs_container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 2vw;
+}
+
+.write_text {
+    font-size: 2em;
+    font-weight: bold;
+    color: #806C61;
+    margin-bottom: 1vw;
+}
+
+.cs_write, .cs_view {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group, .writeTitle, .writeContent {
+    margin-bottom: 1.5vw;
+}
+
+.writeTitle input, .writeContent textarea {
+    width: 100%;
+    padding: 1vw;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.button_group {
+    display: flex;
+    gap: 1vw;
+}
+
+.button_group button {
+    padding: 0.5vw 2vw;
+    border: none;
+    background-color: #806C61;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.button_group button:hover {
+    background-color: #654c46;
+}
+
+textarea {
+    resize: none;
+    overflow-y: auto;
+}

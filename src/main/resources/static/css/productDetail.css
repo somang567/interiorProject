@@ -61,7 +61,43 @@
     display: flex;
 }
 
-/* SNS Share Section */
+.EditButtons{
+    display: block;
+    margin-left: auto;
+    margin-right: 0.2vw;
+    width: 5vw;
+    height: 2vw;
+    color: white;
+    background-color: #806C61;
+    border: 0.5px solid #2c2c2c;
+    border-radius: 10%;
+    cursor: pointer;
+
+}
+
+.EditButtons:hover {
+    background-color: #C6BAAA;
+    color: white;
+}
+
+.deleteButtons{
+    display: block;
+    margin-left: auto;
+    width: 5vw;
+    height: 2vw;
+    color: white;
+    background-color: #806C61;
+    border: 0.5px solid #2c2c2c;
+    border-radius: 7%;
+    cursor: pointer;
+}
+
+.deleteButtons:hover {
+    background-color: #C6BAAA;
+    color: white;
+}
+
+/* SNS */
 .snsShare {
     margin-top: 3.5vw;
     text-align: center;

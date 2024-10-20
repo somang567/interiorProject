@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+
+<div id="CS_container" layout:fragment="content">
+    <div class="cs_list">
+        <div class="view_all_text-container">
+            <span class="view_all_text" style="color: #806C61;">전체 글 보기</span>
+        </div>
+        <!-- 글쓰기 버튼 -->
+        <button class="write_btn" th:onclick="|location.href='/cs/write'|">글쓰기</button>
+
+        <table>
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>접수상태</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <hr class="cs_list_line">
+            <tbody>
+            <!-- th:each로 CS 리스트 데이터를 반복해서 출력 -->
+            <tr th:each="cs : ${csList}">
+                <td th:text="${cs.id}">번호</td>
+                <td>
+                    <a th:href="@{'/cs/view/' + ${cs.id}}" th:text="${cs.title}">제목</a>
+                </td>
+                <td th:text="${cs.memberEmail}">작성자</td>
+                <td th:text="${cs.csStatus == 'ACCEPT' ? '접수중' : '문의완료'}"></td>
+                <td th:text="${#temporals.format(cs.regTime, 'yyyy-MM-dd HH:mm:ss')}">작성일</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- 페이지네이션 -->
+        <ul class="CS_pagination">
+            <!-- 이전 페이지로 이동 -->
+            <li th:if="${currentPage > 1}">
+                <a th:href="@{'/cs/list?page=' + (${currentPage - 1})}">&laquo; 이전</a>
+            </li>
+            <!-- 동적으로 페이지 번호 생성 -->
+            <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
+                th:class="${i == currentPage ? 'active' : ''}">
+                <a th:href="@{'/cs/list?page=' + ${i}}" th:text="${i}"></a>
+            </li>
+            <!-- 다음 페이지로 이동 -->
+            <li th:if="${currentPage < totalPages}">
+                <a th:href="@{'/cs/list?page=' + (${currentPage + 1})}">다음 &raquo;</a>
+            </li>
+        </ul>
+
+
+        <!-- 검색창 -->
+        <div class="CS_search_container">
+            <input type="text" placeholder="검색어를 입력하세요">
+            <button type="submit">검색</button>
+        </div>
+    </div>
+</div>
+
+</html>

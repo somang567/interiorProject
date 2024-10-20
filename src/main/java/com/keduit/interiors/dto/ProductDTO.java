@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,15 @@ public class ProductDTO {
 
 	private static ModelMapper modelMapper = new ModelMapper();
 
+	// BaseEntity에서 상속받는 필드 추가
+	private String createBy; // 생성자
+	private String modifyBy; // 수정자
+
+	// BaseTimeEntity에서 상속받는 필드 추가
+	private LocalDateTime regTime; // 생성 시간
+	private LocalDateTime updateTime; // 수정 시간
+
+	private Long memberId;
 	// DTO를 엔티티로 변환하는 메서드
 	public Product createProduct() {
 		return modelMapper.map(this, Product.class);

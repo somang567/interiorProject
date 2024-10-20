@@ -36,11 +36,14 @@ public class SecurityConfig {
         .logoutSuccessUrl("/");
 
     http.authorizeRequests()
-            .mvcMatchers("/", "/members/**", "/board/list/**", "/board/write/**", "/board/view/**", "/board/writedo/**", "board/modify/**", "board/delete/**", "/board/update/**",
-                    "/img/**", "/board/{boardId}/comment/**", "error", "favicon.ico", "/boards/list/**", "/files/**",
-                    "megazines/list/**"
-            ).permitAll()
-         .anyRequest().authenticated();  //이 메서드는 위에서 정의한 특정 URL 패턴 이외의 모든 요청에 대해 인증을 요구합니다. 즉, 사용자가 인증된 상태여야만 다른 모든 요청을 수행할 수 있습니다.
+            .mvcMatchers("/", "/members/**", "/board/list/**", "/board/write/**", "/board/view/**", "/board/writedo/**",
+                    "/board/modify/**", "/board/delete/**", "/board/update/**", "/img/**", "/board/{boardId}/comment/**",
+                    "error", "favicon.ico", "/boards/list/**", "/files/**",
+                    "megazines/list/**",
+                    "/item/productMain", "/item/tile/**", "/item/floor/**", "/item/furniture/**", "/item/stock/**", "/item/wall/**" , "/item/**" , "/uploads/**" ,
+                      "/cs/list/**" , "/cs/view/**").permitAll()
+            .mvcMatchers("/item/addItem/**", "/item/updateItem/**", "/item/deleteItem/**" , "/cs/write", "/cs/edit/**", "/cs/delete/**").hasRole("ADMIN")  // hasRole 사용
+            .anyRequest().authenticated();//이 메서드는 위에서 정의한 특정 URL 패턴 이외의 모든 요청에 대해 인증을 요구합니다. 즉, 사용자가 인증된 상태여야만 다른 모든 요청을 수행할 수 있습니다.
 
     //메서드는 인증 및 인가 관련 예외를 처리하기 위한 설정을 시작하는 메서드입니다. 이 메서드를 호출하면, 인증 실패나 인가 실패 시의 동작을 정의할 수 있는 체인으로 이동합니다.
     http.exceptionHandling()

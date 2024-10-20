@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<th:block layout:fragment="script">
+    <script>
+        const textarea = document.getElementById('autoTextarea');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto'; // 높이를 자동으로 설정하여 다시 계산
+            this.style.height = (this.scrollHeight) + 'px'; // 콘텐츠 크기에 맞게 높이 설정
+        });
+    </script>
+</th:block>
+<div id="CS_container" layout:fragment="content">
+    <form class="cs_write" th:action="@{/cs/write}" method="post" th:object="${csDTO}">
+
+        <div class="view_all_text-container">
+            <span class="write_text" style="color: #806C61;">문의 등록</span>
+        </div>
+        <hr class="cs_write_line">
+
+        <!-- 상품 타입 선택 -->
+        <div class="form-group">
+            <select id="csStatus" name="csStatus" th:field="*{csStatus}">
+                <option value="ACCEPT" th:selected="${csDTO.csStatus == 'ACCEPT'}">접수중</option>
+                <option value="SUCCESS" th:selected="${csDTO.csStatus == 'SUCCESS'}">문의완료</option>
+            </select>
+        </div>
+        <!-- 상품 타입 선택 -->
+        <div class="form-group">
+            <select id="productType" name="productType" th:field="*{productType}">
+                <option value="TILE" th:selected="${csDTO.productType == 'TILE'}">타일</option>
+                <option value="WALL" th:selected="${csDTO.productType == 'WALL'}">벽지</option>
+                <option value="STOCK" th:selected="${csDTO.productType == 'STOCK'}">수납</option>
+                <option value="FURNITURE" th:selected="${csDTO.productType == 'FURNITURE'}">가구</option>
+                <option value="FLOOR" th:selected="${csDTO.productType == 'FLOOR'}">바닥재</option>
+            </select>
+        </div>
+
+        <!-- 제목 입력 -->
+        <div class="writeTitle">
+            <input type="text" placeholder="제목을 입력해주세요." th:field="*{title}" required>
+        </div>
+
+        <!-- 내용 입력 -->
+        <div class="writeContent">
+            <textarea placeholder="문의 내용을 입력해주세요" th:field="*{content}" id="autoTextarea" required></textarea>
+        </div>
+
+
+        <!-- 저장 버튼 -->
+        <div>
+            <button type="submit" class="addBtn">저장</button>
+        </div>
+
+        <!-- CSRF Token -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    </form>
+</div>
+
+</html>

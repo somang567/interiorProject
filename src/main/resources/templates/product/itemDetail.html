@@ -10,7 +10,7 @@
     <!-- 숨겨진 필드로 상품 ID 저장 -->
     <input type="hidden" th:field="*{productDTOList.id}">
 
-    <div class="typeContainer" th:each="productDTOList : ${productDTOList}">
+    <div class="typeContainer" th:each="productDTOList : ${productDTO}">
         <!-- 상품 판매 상태 -->
         <div class="form-group">
             <select th:field="*{productDTOList.productSell}" id="productSell">
@@ -87,8 +87,10 @@
         </div>
     </div>
 
+    
+
     <!-- 수정 및 삭제 버튼 -->
-    <div class="item-buttons" style="margin-top: 2vw;">
+    <div class="item-buttons" style="margin-top: 2vw;" th:if="${isAdmin}">
         <!-- 수정 버튼 -->
         <button class="EditButtons"
                 th:onclick="|location.href='/item/updateItem/' + ${productDTOList.id}|">수정</button>
@@ -98,15 +100,6 @@
             <button type="submit" class="deleteButtons">삭제</button>
         </form>
     </div>
-
-<!--    &lt;!&ndash; 현재 로그인한 사용자가 작성자일 때만 수정/삭제 버튼을 보여줌 &ndash;&gt;-->
-<!--    <div th:if="${#authentication.name == productDTOList.member.email}">-->
-<!--        <button onclick="window.location.href='/item/updateItem/' + ${productDTOList.id}">수정</button>-->
-<!--        <form th:action="@{'/item/deleteItem/' + ${productDTOList.id}}" method="post" style="display:inline;">-->
-<!--            <button type="submit">삭제</button>-->
-<!--        </form>-->
-<!--    </div>-->
-
     <div class="snsShare">
         <p>SNS 공유하기</p>
     </div>
