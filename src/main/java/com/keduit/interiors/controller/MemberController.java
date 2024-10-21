@@ -5,6 +5,8 @@ import com.keduit.interiors.dto.MemberDTO;
 import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,6 +54,46 @@ public class MemberController {
     return "redirect:/";  //회원가입 완료 후 메인 페이지로 이동
   }
 
+  // 정보 수정 폼을 보여주는 GET 매핑
+  @GetMapping("/edit")
+  public String editForm(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+    String email = userDetails.getUsername();
+    Member member = memberService.findByEmail(email);
+
+    if (member == null) {
+      model.addAttribute("errorMessage", "회원 정보를 찾을 수 없습니다.");
+      return "member/memberForm";
+    }
+
+    MemberDTO memberDTO = MemberDTO.builder()
+        .name(member.getName())
+        .email(member.getEmail())
+        .address(member.getAddress())
+        .role(member.getRole().toString())
+        .build();
+
+    model.addAttribute("memberDTO", memberDTO);
+    return "member/edit";
+  }
+
+  // 정보 수정 처리하는 POST 매핑
+  @PostMapping("/edit")
+  public String edit(@Valid MemberDTO memberDTO, BindingResult bindingResult, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+
+    if (bindingResult.hasErrors()) {
+      return "member/edit";
+    }
+
+    try {
+      memberService.updateMember(userDetails.getUsername(), memberDTO, passwordEncoder);
+    } catch (IllegalStateException e) {
+      model.addAttribute("errorMessage", e.getMessage());
+      return "member/edit";
+    }
+
+    return "redirect:/";
+  }
+
   @GetMapping("/login")
   public String loginMember() {
     return "member/memberForm";
@@ -64,4 +106,5 @@ public class MemberController {
     return "member/memberForm";
 
   }
+
 }

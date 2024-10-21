@@ -152,8 +152,10 @@
                 <p th:text="${email}"></p>
             </div>
             <div class="btn_div">
-                <button class="btn">정보 수정</button>
-                <button class="btn">로그아웃</button>
+                <a th:href="@{/members/edit}" class="btn">정보 수정</a>
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn">로그아웃</button>
+                </form>
             </div>
         </div>
 

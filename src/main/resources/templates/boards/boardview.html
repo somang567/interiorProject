@@ -72,6 +72,8 @@
             .button-container {
                 text-align: right;
                 margin-top: 1.5rem;
+                display: flex;
+                justify-content: flex-end; /* 버튼을 오른쪽에 정렬 */
             }
 
             .button {
@@ -180,6 +182,8 @@
                 background-color: #f9f9f9;
                 border-radius: 0.4vw;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
             }
 
             .comment-form h3 {
@@ -188,7 +192,7 @@
             }
 
             .comment-form textarea {
-                width: 96%;
+                width: 100%;
                 height: 100px;
                 padding: 0.8rem;
                 border: 1px solid #ddd;
@@ -206,18 +210,15 @@
                 border-radius: 0.4vw;
                 cursor: pointer;
                 font-size: 0.9rem;
+                align-self: flex-start; /* 버튼을 좌측 정렬 */
             }
 
             .comment-form button:hover {
                 background-color: #218838;
             }
-
-            .comment_text {
-                line-height: 6vw;
-                padding-left: 1vw;
-            }
         </style>
     </th:block>
+
 
     <!-- 게시글 상세 내용 -->
     <div class="view-container">
@@ -244,7 +245,8 @@
                 <th>첨부 이미지</th>
                 <td class="image-cell">
                     <th:block th:if="${board.filename}">
-                        <img th:src="@{/files/}+${board.filename}" alt="첨부 이미지"/>
+                        <!-- 수정된 th:src 구문 -->
+                        <img th:src="@{'/files/' + ${board.filename}}" alt="첨부 이미지"/>
                     </th:block>
                     <th:block th:unless="${board.filename}">
                         이미지가 없습니다.
@@ -267,65 +269,63 @@
                         </div>
                         <div class="comment-actions" th:if="${comment.editable}">
                             <!-- 수정 및 삭제 버튼 -->
-                            <button type="button" onclick="toggleEditForm([[${comment.id}]])">수정</button>
-                            <a href="javascript:void(0);" onclick="deleteComment([[${comment.id}]])">삭제</a>
-                        </div>
-
-                        <!-- 댓글 수정 폼 -->
-                        <div class="edit-comment-form" th:id="'edit-form-' + ${comment.id}">
-                            <textarea id="editCommentContent-[[${comment.id}]]" name="content"
-                                      th:text="${comment.content}" required></textarea>
-                            <button type="button" onclick="updateComment([[${comment.id}]])">수정 완료</button>
+                            <button type="button" th:onclick="'toggleEditForm(' + ${comment.id} + ')'">수정</button>
+                            <a href="javascript:void(0);" th:onclick="'deleteComment(' + ${comment.id} + ')'">삭제</a>
                         </div>
                     </div>
-                </th:block>
-            </th:block>
-            <th:block th:unless="${!#lists.isEmpty(comments)}">
-                <p>댓글이 없습니다.</p>
-            </th:block>
+
+                    <!-- 댓글 수정 폼 -->
+                    <div class="edit-comment-form" th:id="'edit-form-' + ${comment.id}">
+                            <textarea id="editCommentContent-[[${comment.id}]]" name="content"
+                                      th:text="${comment.content}" required></textarea>
+                        <button type="button" th:onclick="updateComment([[${comment.id}]])">수정 완료</button>
+                    </div>
         </div>
-
-        <!-- 댓글 작성 폼 (로그인한 사용자만 보이도록 설정) -->
-        <th:block sec:authorize="isAuthenticated()">
-            <div class="comment-form">
-                <h3>댓글 작성</h3>
-                <form id="commentForm">
-                    <textarea id="commentContent" name="content" placeholder="댓글을 입력하세요" required></textarea>
-                    <button type="submit">댓글 작성</button>
-                </form>
-            </div>
         </th:block>
-
-        <!-- 로그인하지 않은 사용자에게는 로그인 유도 메시지 출력 -->
-        <th:block sec:authorize="!isAuthenticated()">
-            <p class="comment_text">댓글 작성은 로그인이 필요합니다. <a href="/members/login">로그인</a> 후 댓글을 작성해주세요.</p>
+        <th:block th:unless="${!#lists.isEmpty(comments)}">
+            <p>댓글이 없습니다.</p>
         </th:block>
+    </div>
 
-        <!-- 버튼 -->
-        <div class="button-container">
-            <a href="/board/list" class="button">목록으로</a>
-            <a th:href="@{/board/modify/{id}(id=${board.id})}" class="button" sec:authorize="isAuthenticated()">수정하기</a>
-            <a th:href="@{/board/delete/{id}(id=${board.id})}" class="button"
-               sec:authorize="isAuthenticated()" onclick="return confirm('정말 삭제하시겠습니까?');">삭제하기</a>
+    <!-- 댓글 작성 폼 (로그인한 사용자만 보이도록 설정) -->
+    <th:block sec:authorize="isAuthenticated()">
+        <div class="comment-form">
+            <h3>댓글 작성</h3>
+            <form id="commentForm">
+                <textarea id="commentContent" name="content" placeholder="댓글을 입력하세요" required></textarea>
+                <button type="submit">댓글 작성</button>
+            </form>
         </div>
+    </th:block>
+
+    <!-- 로그인하지 않은 사용자에게는 로그인 유도 메시지 출력 -->
+    <th:block sec:authorize="!isAuthenticated()">
+        <p class="comment_text">댓글 작성은 로그인이 필요합니다. <a href="/members/login">로그인</a> 후 댓글을 작성해주세요.</p>
+    </th:block>
+
+    <!-- 버튼 -->
+    <div class="button-container">
+        <a href="/board/list" class="button">목록으로</a>
+        <a th:href="@{/board/modify/{id}(id=${board.id})}" class="button" sec:authorize="isAuthenticated()">수정하기</a>
+        <a th:href="@{/board/delete/{id}(id=${board.id})}" class="button"
+           sec:authorize="isAuthenticated()" onclick="return confirm('정말 삭제하시겠습니까?');">삭제하기</a>
     </div>
 
     <!-- JavaScript 코드 -->
     <th:block layout:fragment="javascript">
         <script th:inline="javascript">
+            /*<![CDATA[*/
             document.addEventListener('DOMContentLoaded', function () {
-                const csrfToken = /*[[${_csrf.token}]]*/ "";
-                const csrfHeader = /*[[${_csrf.headerName}]]*/ "";
+                const csrfToken = /*[[${_csrf.token}]]*/ '';
+                const csrfHeader = /*[[${_csrf.headerName}]]*/ '';
+                const boardId = /*[[${board.id}]]*/ 0;
 
-                // 댓글 작성 이벤트
+                // 댓글 작성
                 const commentForm = document.getElementById('commentForm');
                 if (commentForm) {
                     commentForm.addEventListener('submit', function (event) {
                         event.preventDefault();
-
-                        const boardId = /*[[${board.id}]]*/ 0; // 게시글 ID를 Thymeleaf에서 받아옵니다
                         const content = document.getElementById('commentContent').value;
-
                         if (!content.trim()) {
                             alert('댓글을 입력하세요.');
                             return;
@@ -359,7 +359,7 @@
 
                 // 댓글 수정 폼 토글
                 window.toggleEditForm = function (commentId) {
-                    const editForm = document.getElementById('edit-form-' + commentId);
+                    const editForm = document.getElementById(`edit-form-${commentId}`);
                     if (editForm.style.display === 'none' || !editForm.style.display) {
                         editForm.style.display = 'block';
                     } else {
@@ -369,7 +369,7 @@
 
                 // 댓글 수정
                 window.updateComment = function (commentId) {
-                    const content = document.getElementById('editCommentContent-' + commentId).value;
+                    const content = document.getElementById(`editCommentContent-${commentId}`).value;
 
                     if (!content.trim()) {
                         alert('내용을 입력하세요.');
@@ -424,9 +424,8 @@
                         .catch(error => console.error('Error:', error));
                 };
             });
+            /*]]>*/
         </script>
     </th:block>
-
-
 </div>
 </html>

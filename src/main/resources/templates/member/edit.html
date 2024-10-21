@@ -2,14 +2,60 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
+<th:block layout:fragment="css">
+    <style>
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input {
+            width: 95%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 40%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: space-evenly;
+        }
+    </style>
+</th:block>
 <div layout:fragment="content">
     <div class="form-container">
-        <form id="profileForm" th:action="@{/profile/update}" th:object="${user}" method="post">
+        <form id="profileForm" th:action="@{/profile/update}" th:object="${memberDTO}" method="post">
             <label for="name">이름</label>
             <input type="text" id="name" name="name" placeholder="이름" th:value="*{name}" required>
 
-            <label for="phoneNumber">핸드폰 번호</label>
-            <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="01012345678" th:value="*{phoneNumber}"
+            <label for="phoneNumber">주소</label>
+            <input type="tel" id="phoneNumber" name="address" placeholder="주소" th:value="*{address}"
                    required>
 
             <label for="email">아이디</label>

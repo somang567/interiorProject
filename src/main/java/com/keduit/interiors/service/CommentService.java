@@ -7,11 +7,14 @@ import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.repository.BoardRepository;
 import com.keduit.interiors.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ public class CommentService {
 
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
+    private static final Logger logger = LoggerFactory.getLogger(CommentService.class);
 
     // 댓글 저장 메서드
     public void saveComment(CommentDTO commentDTO, Member member) {
@@ -75,12 +79,12 @@ public class CommentService {
             throw new IllegalAccessException("해당 댓글을 삭제할 권한이 없습니다.");
         }
 
-        commentRepository.delete(comment);
-
         // 댓글 수 감소 처리
         Board board = comment.getBoard();
         board.setCommentCount(board.getCommentCount() - 1);
         boardRepository.save(board);  // 댓글 수 업데이트
+
+        commentRepository.delete(comment);
     }
 
     // 작성자 또는 관리자 확인 메서드
@@ -90,7 +94,9 @@ public class CommentService {
 
     // 관리자인지 확인하는 메서드
     private boolean isAdmin(Member member) {
-        return member.getRole().equals("ROLE_ADMIN");
+        boolean admin = member.getRole().equals("ROLE_ADMIN");
+        logger.debug("isAdmin called for member: {}, isAdmin: {}", member.getEmail(), admin);
+        return admin;
     }
 
     // 댓글 엔티티를 DTO로 변환하는 메서드
