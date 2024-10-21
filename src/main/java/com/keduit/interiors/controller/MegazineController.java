@@ -114,16 +114,66 @@ public class MegazineController {
 
     MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
     model.addAttribute("megazineDTO", megazineDTO);
-    return "megazine/megazineUserDetail";
+    return "megazine/megazineDetail";
   }
 
+  //사용자 수정
   @GetMapping("/edit/{megazineId}")
   public String itemEdit(Model model, @PathVariable("megazineId") Long megazineId){
 
     MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
+    if (megazineDTO == null) {
+      System.out.println("megazineDTO is null!");
+    }
     model.addAttribute("megazineDTO", megazineDTO);
-    return "megazine/megazineForm";
+    return "megazine/megazineEdit";
   }
+
+
+  @PostMapping("/edit/{megazineId}")
+  public String itemEdited(@Valid MegazineDTO megazineDTO, BindingResult bindingResult,
+                           Model model, @PathVariable("megazineId") Long megazineId,
+                           @RequestParam("itemImgFile") MultipartFile itemImgFile) throws Exception {
+
+    //megazineService.updateItemImg(itemImgFile,megazineDTO);
+    megazineDTO = megazineService.getItemDtl(megazineId); //이미 있는 것을 읽어옴
+
+
+    //내용이 없으면 지 알아서 form으로 넘어감
+    megazineDTO.getTitle();
+    megazineDTO.getContent();
+    megazineDTO.getOriImgName();
+
+    megazineDTO.setTitle(megazineDTO.getTitle());
+    megazineDTO.setContent(megazineDTO.getContent());
+    megazineDTO.setOriImgName(megazineDTO.getOriImgName());
+
+    try {
+      megazineService.saveItem(megazineDTO, itemImgFile);
+
+    } catch (Exception e) {
+      model.addAttribute("errorMessage", "매거진 등록 중 에러가 발생하였습니다.");
+      System.out.println("====================================");
+      e.printStackTrace();
+      return "megazine/megazineEdit";
+    }
+    model.addAttribute("megazineDTO", megazineDTO);
+    return "redirect:/megazines/list";
+  }
+
+
+
+  //삭제
+  // 게시글 삭제 처리
+  @GetMapping("/delete/{megazineId}")
+  public String boardDelete(@PathVariable Long megazineId) {
+    megazineService.delete(megazineId);
+    return "redirect:/megazines/list";
+  }
+
+
+
+
 
   //Admin 매거진 상세보기 페이지
   //url path에 있는 것을 변수로 쓰겠어

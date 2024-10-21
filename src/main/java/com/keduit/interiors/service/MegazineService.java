@@ -1,9 +1,11 @@
 
 package com.keduit.interiors.service;
 
+import com.keduit.interiors.dto.BoardDTO;
 import com.keduit.interiors.dto.ItemImgDTO;
 import com.keduit.interiors.dto.ItemSearchDTO;
 import com.keduit.interiors.dto.MegazineDTO;
+import com.keduit.interiors.entity.Board;
 import com.keduit.interiors.entity.ItemImg;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.entity.Member;
@@ -243,6 +245,25 @@ public class MegazineService {
         return megazineDTO;
     }
 
+    public void update(MegazineDTO megazineDTO, MultipartFile itemImgFile) throws Exception {
+        // DTO를 엔티티로 변환
+        Megazine megazine = megazineDTO.createItem();
+        // 기존 게시글 조회
+        Megazine existingBoard = megazineRepository.findById(megazine.getMno())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid board Id:" + megazineDTO.getMno()));
+
+        // 새로운 파일이 업로드된 경우 처리
+        if (itemImgFile != null && !itemImgFile.isEmpty()) {
+            updateItemImg(itemImgFile, megazineDTO);
+        }
+
+        // 제목과 내용 업데이트
+        existingBoard.setTitle(megazine.getTitle());
+        existingBoard.setContent(megazine.getContent());
+
+        // 게시글 저장
+        megazineRepository.save(existingBoard);
+    }
   /*
   //이미지가 여러개일 때
   //MultipartFile 화면에서 받아옴
