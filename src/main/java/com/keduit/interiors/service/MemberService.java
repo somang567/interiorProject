@@ -73,4 +73,13 @@ public class MemberService implements UserDetailsService {
 
     memberRepository.save(member); // 변경 감지를 사용한다면 필요 없을 수 있음
   }
+
+  // 회원 삭제 메서드
+  public void deleteMember(String email) {
+    Member member = memberRepository.findByEmail(email);
+    if (member == null) {
+      throw new IllegalStateException("삭제할 회원을 찾을 수 없습니다.");
+    }
+    memberRepository.delete(member);
+  }
 }

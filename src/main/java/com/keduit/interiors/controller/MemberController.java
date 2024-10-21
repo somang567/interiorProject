@@ -14,7 +14,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 ////
@@ -105,6 +107,21 @@ public class MemberController {
 
     return "member/memberForm";
 
+  }
+
+  // 회원 탈퇴 처리 메서드
+  @PostMapping("/withdraw")
+  @ResponseBody
+  public String withdraw(@AuthenticationPrincipal UserDetails userDetails, HttpSession session) {
+    String email = userDetails.getUsername();
+    try {
+      memberService.deleteMember(email);
+      // 세션 무효화
+      session.invalidate();
+      return "success";
+    } catch (Exception e) {
+      return "fail";
+    }
   }
 
 }
