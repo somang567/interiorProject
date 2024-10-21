@@ -342,18 +342,16 @@
                       삭제
                     </button>
                   </div>
-
             -->
         </form>
 
         <form role="form" action="/megazines" th:object="${megazineDTO}"  method="get">
 
             <div  style="text-align: center">
-                여기로 처리
-                <button th:formaction="@{/megazines/list}" type="submit"
+                <a th:href="@{/megazines/list}" type="submit"
                         class="btn_register btn btn-info">
                     목록으로
-                </button>
+                </a>
             </div>
 
 

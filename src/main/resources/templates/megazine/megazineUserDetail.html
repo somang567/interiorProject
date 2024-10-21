@@ -208,18 +208,10 @@
             <!--<form role="form" action="/megazines" th:object="${megazineDTO}"  method="get">-->
             <div class="btn-wrap">
                 <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
-<!--                    <button th:formaction="@{'/megazines/list' + ${megazineDTO.mno}}" type="submit"-->
-<!--                            class="btn_edit">-->
-<!--                        수정-->
-<!--                    </button>-->
-                    <button th:onclick="|location.href='/megazines/edit' + ${megazineDTO.mno}|">수정</button>
-
+                    <a th:href="@{'/megazines/edit/'+ ${megazineId}}" class="btn_edit">수정</a>
                 </div>
                 <div th:unless="${#strings.isEmpty(megazineDTO.mno)}" style="text-align: center">
-                    <button th:formaction="@{'/megazines/delete'}" type="submit"
-                            class="btn_delete">
-                        삭제
-                    </button>
+                    <a th:href="@{'/megazines/delete/'+ ${megazineId}}" type="submit" class="btn_delete">삭제</a>
                 </div>
             </div>
             <!--</form>-->

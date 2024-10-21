@@ -1,5 +1,5 @@
 package com.keduit.interiors.config;
-
+//
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,26 +19,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        // 로그인 설정
-        http.formLogin()
-                .loginPage("/members/login")
-                .defaultSuccessUrl("/")
-                .usernameParameter("email")
-                .failureUrl("/members/login/error")
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
-                .logoutSuccessUrl("/");
+    //로그인은 따로 페이지를 띄우지 않음.
+    System.out.println("------------SecurityFilterChain 이랑께");
+    http.formLogin()
+        .loginPage("/members/login")
+        .defaultSuccessUrl("/")
+        .usernameParameter("email")
+        .failureUrl("/members/login/error")
+        .and()
+        .logout()
+        .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+        .logoutSuccessUrl("/");
 
-        // 권한 설정
-        http.authorizeRequests()
-                .mvcMatchers("/", "/members/**", "/board/list/**", "/board/view/**", "/img/**", "/files/**", "/megazines/list/**")
-                .permitAll() // 비로그인 사용자 접근 가능 경로
-
-                // 로그인한 사용자만 접근 가능 경로로 설정
-                .mvcMatchers("/board/write/**", "/board/writedo/**", "/board/modify/**", "/board/delete/**", "/board/update/**", "/board/{boardId}/comment/**")
-                .hasRole("USER") // 로그인한 사용자만 접근 가능 경로
-
+    http.authorizeRequests()
+            .mvcMatchers("/", "/members/**", "/board/list/**", "/board/write/**", "/board/view/**", "/board/writedo/**",
+                    "/board/modify/**", "/board/delete/**", "/board/update/**", "/img/**", "/board/{boardId}/comment/**",
+                    "error", "favicon.ico", "/boards/list/**", "/files/**",
+                    "megazines/list/**",
+                    "/item/productMain", "/item/tile/**", "/item/floor/**", "/item/furniture/**", "/item/stock/**", "/item/wall/**" , "/item/**" , "/uploads/**" ,
+                      "/cs/list/**" , "/cs/view/**").permitAll()
+            .mvcMatchers("/megazines/edit/**","/megacomment/save/**").hasRole("USER")  // hasRole 사용
+            .mvcMatchers("/item/addItem/**", "/item/updateItem/**", "/item/deleteItem/**" , "/cs/write", "/cs/edit/**", "/cs/delete/**").hasRole("ADMIN")  // hasRole 사용
                 .mvcMatchers("/item/addItem/**", "/item/updateItem/**", "/item/deleteItem/**", "/cs/write", "/cs/edit/**", "/cs/delete/**")
                 .hasRole("ADMIN") // 관리자만 접근 가능 경로
                 .anyRequest().authenticated();  // 그 외의 모든 요청은 인증 필요
@@ -50,19 +51,21 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-    }
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return (web) -> web.ignoring()
+        .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+  }
 
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return null;
-    }
+  @Bean
+  public AuthenticationSuccessHandler authenticationSuccessHandler() {
+    return null;
+  }
+
 }
+
