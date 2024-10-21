@@ -22,7 +22,6 @@
             const result = [[${result}]];
             console.log("result ------> " + result);
 
-
             $(".move").on("click", function(e){
                 e.preventDefault();	// 1. 링크의 기본 클릭 동작을 방지합니다.
                 $("input[name='mno']").remove();	// 2. 기존에 있는 mno 입력 필드를 제거합니다.
@@ -313,7 +312,6 @@
 <div layout:fragment="content">
     <div class="row">
 
-
             <div class="kind_wrap">
                 <h2 class="banner_title">Tip & Megazine</h2>
                 <div class="kind_slider">
@@ -365,8 +363,8 @@
                         <a th:href="'/megazines/list/' + ${lists.mno}" class="mega_card">
                             <img th:src="${lists.imageUrl}" th:alt="${lists.title}" class="mega_card_img" height="400">
                             <div class="card-body">
-                                <h4 class="card-title">[[${lists.title}]]</h4>
-                                <p class="card-text">[[${lists.user}]]</p>
+                                <h4 class="card-title" th:text="${lists.title}">[[${lists.title}]]</h4>
+                                <p class="card-date" th:text="${authorName}" readonly></p>
                                 <p class="card-date text-danger" th:text="${#temporals.format(lists.regTime, 'yyyy-mm-dd HH:mm')}"></p>
                             </div>
                         </a>

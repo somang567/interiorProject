@@ -1,6 +1,7 @@
 
 package com.keduit.interiors.entity;
 
+import com.keduit.interiors.dto.MegazineCommentDTO;
 import com.keduit.interiors.dto.MegazineDTO;
 import com.keduit.interiors.entity.BaseEntity;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -50,6 +52,9 @@ public class Megazine extends BaseEntity {
   @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "member_id")
   private Member member;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "megazine", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  private List<MegazineComment> megazineCommentsList = new ArrayList<>();
 
 
 //  @OneToMany(mappedBy = "magazine", cascade = CascadeType.REMOVE)

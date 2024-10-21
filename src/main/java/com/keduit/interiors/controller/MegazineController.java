@@ -4,8 +4,10 @@ package com.keduit.interiors.controller;
 import com.keduit.interiors.dto.ItemSearchDTO;
 import com.keduit.interiors.dto.MegazineDTO;
 import com.keduit.interiors.entity.Megazine;
+import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.repository.MegazineRepository;
 import com.keduit.interiors.service.MegazineService;
+import com.keduit.interiors.service.MemberService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,13 +33,20 @@ import java.util.Optional;
 public class MegazineController {
 
   private final MegazineService megazineService;
+  private final MemberService memberService;
   private final MegazineRepository megazineRepository;
 //  String searchKeyword,
   @GetMapping("/list")
   public String megazineItem(
           @RequestParam(required = false) String searchKeyword,
-                             @PageableDefault(page= 0, size=9, sort="mno", direction = Sort.Direction.DESC) Pageable pageable,
-                             Model model) {
+          @PageableDefault(page= 0, size=9, sort="mno", direction = Sort.Direction.DESC) Pageable pageable,
+          Model model, Principal principal) {
+
+    if (principal != null) {
+      String username = principal.getName();
+      Member member = memberService.findByEmail(username);
+      model.addAttribute("authorName", member.getName());
+    }
 
     Page<Megazine> list = null;
 
@@ -57,7 +67,6 @@ public class MegazineController {
 
     long totalCnt = megazineService.countTotalMagazines();  //전체 매거진 개수
     model.addAttribute("totalCnt", totalCnt);
-
 
     model.addAttribute("searchKeyword", searchKeyword); // 검색어를 모델에 추가
     model.addAttribute("maxPage", 5); // 한 화면에 5개의 페이지네이션
@@ -111,6 +120,7 @@ public class MegazineController {
   //User 매거진 상세보기 페이지
   @GetMapping("/list/{megazineId}")
   public String itemDtl(Model model, @PathVariable("megazineId") Long megazineId){
+
 
     MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
     model.addAttribute("megazineDTO", megazineDTO);
