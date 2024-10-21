@@ -17,11 +17,12 @@ public class BoardDTO {
 
     private String content; // 내용
 
-    private String author; // 작성자
+    private Long authorId;  // 작성자의 ID
+    private String authorName; // 작성자의 이름
 
     private String imageFilename;  // 이미지 파일명
 
-    private String imagePath;      // 이미지 저장 경로
+    private String imagePath;   // 이미지 저장 경로
 
     private String filename;  // 파일명 필드
 
@@ -38,14 +39,15 @@ public class BoardDTO {
     public BoardDTO() {
     }
 
-    public BoardDTO(Long id, String title, String content, String author,
+    public BoardDTO(Long id, String title, String content, Long authorId, String authorName,
                     String imageFilename, String imagePath, String filename,
                     String filepath, int commentCount, int viewCount,
                     LocalDateTime regTime, LocalDateTime updateTime) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.authorId = authorId;
+        this.authorName = authorName;
         this.imageFilename = imageFilename;
         this.imagePath = imagePath;
         this.filename = filename;

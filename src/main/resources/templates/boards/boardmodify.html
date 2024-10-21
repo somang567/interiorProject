@@ -124,10 +124,11 @@
                        th:value="${board.title}" placeholder="제목을 입력하세요" required>
             </div>
 
+            <!-- 작성자 필드에 로그인한 사용자의 이름을 자동으로 표시 -->
             <div class="form-group">
                 <label for="author">작성자</label>
                 <input type="text" class="form-control" id="author" name="author"
-                       th:value="${board.author}" readonly>
+                       th:value="${#authentication.principal.name}" readonly>
             </div>
 
             <div class="form-group">

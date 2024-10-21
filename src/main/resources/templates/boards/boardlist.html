@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
+
 <div layout:fragment="content">
     <th:block layout:fragment="css">
         <style>
@@ -31,7 +33,7 @@
                 text-align: center;
             }
 
-            /* 각 컬럼의 간격 설정부분(20%남음) */
+            /* 각 컬럼의 간격 설정부분 */
             th:nth-child(1), td:nth-child(1) { /* 글 번호 */
                 width: 8%;
             }
@@ -148,8 +150,11 @@
     </th:block>
 
     <div class="list_text">
-        <a href="/board/write" class="write-button">글쓰기</a>
 
+        <!-- 로그인한 사용자에게만 글쓰기 버튼이 보이게 설정 -->
+        <th:block sec:authorize="isAuthenticated()">
+            <a href="/board/write" class="write-button">글쓰기</a>
+        </th:block>
         <table>
             <thead>
             <tr>
@@ -167,7 +172,7 @@
                 <td class="title-column">
                     <a th:text="${board.title}" th:href="@{/board/view(id=${board.id})}">제목입니다.</a>
                 </td>
-                <td th:text="${board.author}">작성자</td>
+                <td th:text="${board.authorName}">작성자</td>
                 <td th:text="${#temporals.format(board.regTime, 'yyyy-MM-dd HH:mm')}"></td>
                 <td th:text="${board.viewCount}">0</td>
                 <td th:text="${board.commentCount}">0</td>
@@ -178,15 +183,17 @@
         <div class="pagination-container">
             <div class="pagination">
                 <a th:if="${nowPage > 1}"
-                   th:href="@{/board/list(page=${(nowPage - 2)}, searchKeyword=${param.searchKeyword})}">이전 페이지</a>
+                   th:href="@{/board/list(page=${(nowPage - 2)}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">이전
+                    페이지</a>
                 <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
                     <a th:if="${page != nowPage}"
-                       th:href="@{/board/list(page=${(page - 1)}, searchKeyword=${param.searchKeyword})}"
+                       th:href="@{/board/list(page=${(page - 1)}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}"
                        th:text="${page}"></a>
                     <strong th:if="${page == nowPage}" th:text="${page}"></strong>
                 </th:block>
                 <a th:if="${nowPage < endPage}"
-                   th:href="@{/board/list(page=${nowPage}, searchKeyword=${param.searchKeyword})}">다음 페이지</a>
+                   th:href="@{/board/list(page=${nowPage}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">다음
+                    페이지</a>
             </div>
         </div>
 
