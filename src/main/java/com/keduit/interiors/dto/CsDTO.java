@@ -49,7 +49,7 @@ public class CsDTO {
 	public static CsDTO of(CSEntity cs) {
 		CsDTO csDTO = modelMapper.map(cs, CsDTO.class);
 
-		// member가 null인지 확인하고 안전하게 처리
+		// member가 null인지 확인
 		if (cs.getMember() != null) {
 			csDTO.setMemberId(cs.getMember().getId()); // Member 객체에서 ID 추출
 			csDTO.setMemberEmail(cs.getMember().getEmail()); // Member 객체에서 이름 추출

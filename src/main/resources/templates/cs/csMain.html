@@ -32,7 +32,7 @@
                 </td>
                 <td th:text="${cs.memberEmail}">작성자</td>
                 <td th:text="${cs.csStatus == 'ACCEPT' ? '접수중' : '문의완료'}"></td>
-                <td th:text="${#temporals.format(cs.regTime, 'yyyy-MM-dd HH:mm:ss')}">작성일</td>
+                <td th:text="${#temporals.format(cs.regTime, 'yyyy-MM-dd')}">작성일</td>
             </tr>
             </tbody>
         </table>

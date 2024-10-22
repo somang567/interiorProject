@@ -25,9 +25,13 @@ public class CsService {
 				.orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다. ID: " + csDTO.getMemberId()));
 
 		CSEntity csEntity = csDTO.createCS();
+		// CsWriteType 확인
+		System.out.println("CsWriteType in entity: " + csEntity.getCsWriteType());
+
 		csEntity.setMember(member);
 
 		return csRepository.save(csEntity);
+
 	}
 
 	// 페이지네이션 적용한 CS 목록 전체 조회

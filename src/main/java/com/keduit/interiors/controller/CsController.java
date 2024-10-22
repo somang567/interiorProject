@@ -1,5 +1,8 @@
 package com.keduit.interiors.controller;
 
+import com.keduit.interiors.constant.CS;
+import com.keduit.interiors.constant.CsWriteType;
+import com.keduit.interiors.constant.Role;
 import com.keduit.interiors.dto.CsDTO;
 import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.service.CsService;
@@ -52,10 +55,16 @@ public class CsController {
 
 	// CS 등록 페이지로 이동
 	@GetMapping("/cs/write")
-	public String writeCsForm(Model model) {
+	public String writeCsForm(Model model, Principal principal) {
 		model.addAttribute("csDTO", new CsDTO());
+
+		// 로그인한 사용자의 역할을 전달
+		String role = String.valueOf(memberService.findByEmail(principal.getName()).getRole());
+		model.addAttribute("userRole", role);
+
 		return "cs/csWriteForm";
 	}
+
 
 	// CS 등록 처리
 	@PostMapping("/cs/write")
@@ -63,6 +72,21 @@ public class CsController {
 		String email = principal.getName();
 		Member member = memberService.findByEmail(email);
 		csDTO.setMemberId(member.getId());
+
+		// 관리자이면 접수 상태를 설정하지 않고, 유저이면 'ACCEPT'로 설정
+		if (member.getRole() == Role.USER) {
+			csDTO.setCsStatus(CS.ACCEPT);
+		}
+
+		// 관리자이면 NOTICE로, 유저이면 COMMON으로 설정
+		if (member.getRole() == Role.ADMIN) {
+			csDTO.setCsWriteType(CsWriteType.NOTICE);
+		} else {
+			csDTO.setCsWriteType(CsWriteType.COMMON);
+		}
+
+		System.out.println("Role: " + member.getRole());
+		System.out.println("CsWriteType set to: " + csDTO.getCsWriteType());
 
 		csService.saveCs(csDTO);
 		return "redirect:/cs/list";

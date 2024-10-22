@@ -27,6 +27,7 @@
 
 /* 상품명과 가격을 오른쪽에 배치 */
 .product-info {
+    display: flex;
     margin-left: 1vw; /* 버튼과 텍스트 사이의 간격 */
 }
 

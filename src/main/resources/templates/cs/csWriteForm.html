@@ -10,23 +10,26 @@
             this.style.height = 'auto'; // 높이를 자동으로 설정하여 다시 계산
             this.style.height = (this.scrollHeight) + 'px'; // 콘텐츠 크기에 맞게 높이 설정
         });
+
+        // 사용자의 역할에 따라 접수 상태를 자동 설정
+        const role = /*[[${userRole}]]*/ ''; // 서버에서 제공하는 사용자 역할
+        const csStatusField = document.getElementById('csStatus');
+
+        if (role === 'ROLE_USER') {
+            csStatusField.value = 'ACCEPT'; // 사용자는 무조건 'ACCEPT'
+        } else {
+            csStatusField.value = ''; // 관리자는 상태 설정 없음
+        }
     </script>
 </th:block>
+
 <div id="CS_container" layout:fragment="content">
     <form class="cs_write" th:action="@{/cs/write}" method="post" th:object="${csDTO}">
-
         <div class="view_all_text-container">
             <span class="write_text" style="color: #806C61;">문의 등록</span>
         </div>
         <hr class="cs_write_line">
 
-        <!-- 상품 타입 선택 -->
-        <div class="form-group">
-            <select id="csStatus" name="csStatus" th:field="*{csStatus}">
-                <option value="ACCEPT" th:selected="${csDTO.csStatus == 'ACCEPT'}">접수중</option>
-                <option value="SUCCESS" th:selected="${csDTO.csStatus == 'SUCCESS'}">문의완료</option>
-            </select>
-        </div>
         <!-- 상품 타입 선택 -->
         <div class="form-group">
             <select id="productType" name="productType" th:field="*{productType}">
@@ -48,6 +51,8 @@
             <textarea placeholder="문의 내용을 입력해주세요" th:field="*{content}" id="autoTextarea" required></textarea>
         </div>
 
+        <!-- 접수 상태 필드 (hidden) -->
+        <input type="hidden" id="csStatus" name="csStatus" th:field="*{csStatus}">
 
         <!-- 저장 버튼 -->
         <div>

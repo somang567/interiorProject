@@ -8,98 +8,80 @@
     <hr class="detailTitle_line">
 
     <!-- 숨겨진 필드로 상품 ID 저장 -->
-    <input type="hidden" th:field="*{productDTOList.id}">
+    <input type="hidden" th:value="${productDTO.id}" name="productId">
 
-    <div class="typeContainer" th:each="productDTOList : ${productDTO}">
+    <div class="typeContainer">
         <!-- 상품 판매 상태 -->
         <div class="form-group">
-            <select th:field="*{productDTOList.productSell}" id="productSell">
-                <option value="SELL">판매중</option>
-                <option value="SOLD_OUT">품절</option>
+            <label for="productSell">상품 판매 상태</label>
+            <select th:field="*{productDTO.productSell}" id="productSell" disabled>
+                <option value="SELL" th:selected="${productDTO.productSell == 'SELL'}">판매중</option>
+                <option value="SOLD_OUT" th:selected="${productDTO.productSell == 'SOLD_OUT'}">품절</option>
             </select>
         </div>
 
         <!-- 상품 타입 선택 -->
         <div class="form-group">
-            <select th:field="*{productDTOList.productType}" id="productType">
-                <option value="TILE">타일</option>
-                <option value="WALL">벽지</option>
-                <option value="STOCK">수납</option>
-                <option value="FURNITURE">가구</option>
-                <option value="FLOOR">바닥재</option>
+            <label for="productType">상품 타입</label>
+            <select th:field="*{productDTO.productType}" id="productType" disabled>
+                <option value="TILE" th:selected="${productDTO.productType == 'TILE'}">타일</option>
+                <option value="WALL" th:selected="${productDTO.productType == 'WALL'}">벽지</option>
+                <option value="STOCK" th:selected="${productDTO.productType == 'STOCK'}">수납</option>
+                <option value="FURNITURE" th:selected="${productDTO.productType == 'FURNITURE'}">가구</option>
+                <option value="FLOOR" th:selected="${productDTO.productType == 'FLOOR'}">바닥재</option>
             </select>
         </div>
     </div>
 
-
     <div class="categori_container">
         <p class="itemExplain" style="font-size:2vw; font-weight: 700">상품 카테고리</p>
-        <button class="item_categorize">마루</button>
-        <p style="font-size: 1vw; font-weight: 800;">> 우드톤</p>
+        <button class="item_categorize" >카테고리</button>
+        <p style="font-size: 1vw; font-weight: 800;"> 카테고리</p>
     </div>
 
-    <!-- 반반 나눠진 영역 시작 -->
+    <!-- 상품 이미지와 상세 정보 -->
     <div class="item-detail-wrapper">
         <div id="imageSlideIndicator" class="carousel slide">
-            <div class="imageSlider" style="background-color: black">
-                <button type="button" data-bs-target="#imageSlideIndicator" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#imageSlideIndicator" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#imageSlideIndicator" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
             <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="..." class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="..." class="d-block w-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                    <img src="..." class="d-block w-100" alt="...">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#imageSlideIndicator" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#imageSlideIndicator" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
 
+        <!-- 상품 상세 정보 -->
         <div class="product-detail">
-            - 상품명 : <p th:text="${productDTOList.productName}"></p>
-            - 상품 가격 : <p th:text="${productDTOList.price} + '원'"></p>
+            <p>- 상품명: <span th:text="${productDTO.productName}"></span></p>
+            <p>- 상품 가격: <span th:text="${productDTO.price} + '원'"></span></p>
+
             <p style="font-size: 2vw; color: black; font-weight: 800;margin-top: 1vw;">상품사이즈</p>
             <div class="ItemSizeBox">
-                <button class="itemSize1">
-                    <p>137mm x 133mm</p>
-                </button>
-                <button class="itemSize2">
-                    <p>137mm x 133mm</p>
-                </button>
-                <button class="itemSize3">
-                    <p>137mm x 133mm</p>
-                </button>
+                <button class="itemSize1"><p>137mm x 133mm</p></button>
+                <button class="itemSize2"><p>137mm x 133mm</p></button>
+                <button class="itemSize3"><p>137mm x 133mm</p></button>
             </div>
-            - 현재 재고수량 <p style="font-size: 2vw; font-weight: 600" th:text="${productDTOList.stockNumber}"></p>
-            - 상품 상세설명  <p th:text="${productDTOList.productDetail}"></p>
+
+            <p>- 현재 재고수량: <span style="font-size: 2vw; font-weight: 600" th:text="${productDTO.stockNumber}"></span></p>
+            <p>- 상품 상세설명: <span th:text="${productDTO.productDetail}"></span></p>
         </div>
     </div>
 
-    
-
-    <!-- 수정 및 삭제 버튼 -->
+    <!-- 수정 및 삭제 버튼 (관리자만 보임) -->
     <div class="item-buttons" style="margin-top: 2vw;" th:if="${isAdmin}">
         <!-- 수정 버튼 -->
         <button class="EditButtons"
-                th:onclick="|location.href='/item/updateItem/' + ${productDTOList.id}|">수정</button>
+                th:onclick="|location.href='/item/updateItem/' + ${productDTO.id}|">수정</button>
 
         <!-- 삭제 버튼 -->
-        <form th:action="@{'/item/deleteItem/' + ${productDTOList.id}}" method="post" style="display:inline;">
+        <form th:action="@{'/item/deleteItem/' + ${productDTO.id}}" method="post" style="display:inline;">
             <button type="submit" class="deleteButtons">삭제</button>
         </form>
     </div>
+
     <div class="snsShare">
         <p>SNS 공유하기</p>
     </div>
