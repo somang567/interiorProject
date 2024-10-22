@@ -1,11 +1,12 @@
 
 package com.keduit.interiors.controller;
 
-import com.keduit.interiors.dto.ItemSearchDTO;
-import com.keduit.interiors.dto.MegazineDTO;
+import com.keduit.interiors.dto.*;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.repository.MegazineRepository;
+import com.keduit.interiors.service.MegazineCommentService;
+import com.keduit.interiors.service.MegazineCommentServiceImpl;
 import com.keduit.interiors.service.MegazineService;
 import com.keduit.interiors.service.MemberService;
 import lombok.Getter;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -35,7 +40,10 @@ public class MegazineController {
   private final MegazineService megazineService;
   private final MemberService memberService;
   private final MegazineRepository megazineRepository;
-//  String searchKeyword,
+  private final MegazineCommentService megazineCommentService;
+  private final MegazineCommentServiceImpl megazineCommentServiceImpl;
+
+  //  String searchKeyword,
   @GetMapping("/list")
   public String megazineItem(
           @RequestParam(required = false) String searchKeyword,
@@ -45,7 +53,7 @@ public class MegazineController {
     if (principal != null) {
       String username = principal.getName();
       Member member = memberService.findByEmail(username);
-      model.addAttribute("authorName", member.getName());
+      //model.addAttribute("authorName", member.getName()); //이거 주석처리하니까 됨
     }
 
     Page<Megazine> list = null;
@@ -227,6 +235,127 @@ public class MegazineController {
     //수정 후 메인으로 감
     return "redirect:/megazines/list";
   }
+
+  // 댓글 추가 처리 (AJAX 요청)
+  @PostMapping("/{megazineId}/comment")
+  @ResponseBody
+  public ResponseEntity<?> addComment(@PathVariable("megazineId") Long megazineId,
+                                      @RequestBody Map<String, String> payload,
+                                      Principal principal) {
+    if (principal == null) {
+      Map<String, String> errorResponse = new HashMap<>();
+      errorResponse.put("error", "로그인이 필요합니다.");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    try {
+      String content = payload.get("content");
+      if (content == null || content.trim().isEmpty()) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "댓글 내용을 입력하세요.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+      }
+
+      MegazineCommentDTO megazineCommentDTO = new MegazineCommentDTO();
+      megazineCommentDTO.setMegazineId(megazineId);
+      megazineCommentDTO.setContent(content);
+
+      Member member = memberService.findByEmail(principal.getName());
+      MegazineCommentDTO savedMegazineCommentDTO = megazineCommentService.saveComment(megazineCommentDTO, member);
+
+      // 댓글이 제대로 저장된 경우 반환
+      return ResponseEntity.ok(savedMegazineCommentDTO);
+    } catch (Exception e) {
+      Map<String, String> errorResponse = new HashMap<>();
+      errorResponse.put("error", "댓글 추가 중 오류가 발생했습니다: " + e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+  }
+
+  // 댓글 수정 처리 (AJAX 요청)
+  @PostMapping("/comment/update/{id}")
+  @ResponseBody
+  public ResponseEntity<?> updateComment(@PathVariable("id") Long id,
+                                         @RequestBody Map<String, String> payload,
+                                         Principal principal) {
+    if (!hasPermissionToModifyOrDeleteComment(id, principal)) {
+      Map<String, String> errorResponse = new HashMap<>();
+      errorResponse.put("error", "권한이 없습니다. 댓글을 수정할 수 없습니다.");
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+    }
+
+    try {
+      String content = payload.get("content");
+      if (content == null || content.trim().isEmpty()) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "댓글 내용을 입력하세요.");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+      }
+
+      MegazineCommentDTO megazineCommentDTO = megazineCommentServiceImpl.getCommentById(id);
+      megazineCommentDTO.setContent(content);
+
+      Member member = memberService.findByEmail(principal.getName());
+      megazineCommentServiceImpl.updateComment(megazineCommentDTO, member);
+
+      return ResponseEntity.ok(megazineCommentDTO);
+    } catch (Exception e) {
+      Map<String, String> errorResponse = new HashMap<>();
+      errorResponse.put("error", "댓글 수정 중 오류가 발생했습니다: " + e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+  }
+
+  // 권한 확인 메서드 (댓글)
+  private boolean hasPermissionToModifyOrDeleteComment(Long commentId, Principal principal) {
+    if (principal == null) {
+      return false;
+    }
+    MegazineCommentDTO megazineCommentDTO = megazineCommentServiceImpl.getCommentById(commentId);
+    if (megazineCommentDTO == null) {
+      return false;
+    }
+    Member member = memberService.findByEmail(principal.getName());
+    return megazineCommentDTO.getAuthorId().equals(member.getId()) || "ROLE_ADMIN".equals(member.getRole());
+  }
+
+  // 권한 확인 메서드 (매거진)
+  private boolean hasPermissionToModifyOrDeleteMegazine(Long megazineId, Principal principal) {
+    if (principal == null) {
+      return false;
+    }
+    MegazineDTO megazineDTO = megazineService.megazineView(megazineId);
+    if (megazineDTO == null) {
+      return false;
+    }
+    Member member = memberService.findByEmail(principal.getName());
+    return megazineDTO.getUser().equals(member.getId()) || "ROLE_ADMIN".equals(member.getRole());
+  }
+
+
+
+  // 댓글 삭제 처리 (AJAX 요청)
+  @DeleteMapping("/comment/delete/{id}")
+  @ResponseBody
+  public ResponseEntity<?> deleteComment(@PathVariable("id") Long id, Principal principal) {
+    if (!hasPermissionToModifyOrDeleteComment(id, principal)) {
+      Map<String, String> errorResponse = new HashMap<>();
+      errorResponse.put("error", "권한이 없습니다. 댓글을 삭제할 수 없습니다.");
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+    }
+
+    try {
+      megazineCommentServiceImpl.deleteComment(id, memberService.findByEmail(principal.getName()));
+      Map<String, String> successResponse = new HashMap<>();
+      successResponse.put("message", "댓글이 성공적으로 삭제되었습니다.");
+      return ResponseEntity.ok(successResponse);
+    } catch (Exception e) {
+      Map<String, String> errorResponse = new HashMap<>();
+      errorResponse.put("error", "댓글 삭제 중 오류가 발생했습니다: " + e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+  }
+
 
 
 

@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,8 @@ public class MegazineDTO {
 
   private int viewCount;  //조회수
 
+  private int commentCount; // 댓글 수
+
   private int scrapCount; //스크랩 수
 
   private String oriImgName;  //원본 이미지 이름 사용자가 올린 원본 파일 이미지 이름
@@ -34,6 +37,29 @@ public class MegazineDTO {
   //
   private String imageUrl;  //이미지 Url 경로 어플리케이션 프로퍼티스 + fileName 둘 다 들어가는거
 
+  private LocalDateTime regTime; // 등록 시간
+  private LocalDateTime updateTime; //수정 시간
+
+  public MegazineDTO() {
+
+  }
+
+  public MegazineDTO(Long mno, String title, String user, String content, int viewCount, int commentCount, int scrapCount, String oriImgName, String imgName, String imageUrl, LocalDateTime regTime, LocalDateTime updateTime, List<ItemImgDTO> itemImgDTOList, List<Long> itemImgIds) {
+    this.mno = mno;
+    this.title = title;
+    this.user = user;
+    this.content = content;
+    this.viewCount = viewCount;
+    this.commentCount = commentCount;
+    this.scrapCount = scrapCount;
+    this.oriImgName = oriImgName;
+    this.imgName = imgName;
+    this.imageUrl = imageUrl;
+    this.regTime = regTime; // 추가된 부분
+    this.updateTime = updateTime; // 추가된 부분
+    this.itemImgDTOList = itemImgDTOList;
+    this.itemImgIds = itemImgIds;
+  }
 
   //이거 쓰려면 조건: 의존성 추가. 모델명과 같아야 함
   //데이터 전송 객체(DTO)와 데이터베이스 엔티티 간의 변환을 매핑

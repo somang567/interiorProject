@@ -15,22 +15,22 @@ import java.time.LocalDateTime;
 public class MegazineComment extends BaseEntity {
 
     @Id
-    @Column(name = "megacomment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true, length = 200)
-    private String commentWriter;
-
-    @Column(nullable = true, length = 5000)
-    private String commentContents;
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "megazine_id") //외래키 설정
+    @JoinColumn(name = "member_id")
+    private Member author; // 작성자 (Member와 관계 설정)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "megazine_id")
     private Megazine megazine;
 
-    //private LocalDateTime commentCreatedTime;
+    private LocalDateTime createdDate;
 
+/*
     public static MegazineComment toSaveEntity(MegazineCommentDTO megazineCommentDTO, Megazine megazine) {
         MegazineComment megazineComment = new MegazineComment();
         megazineComment.setCommentWriter(megazineCommentDTO.getCommentWriter());
@@ -39,5 +39,7 @@ public class MegazineComment extends BaseEntity {
 
         return megazineComment;
     }
+
+ */
 
 }

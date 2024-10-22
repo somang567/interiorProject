@@ -311,4 +311,58 @@ public class MegazineService {
     }
 
 
+    // 게시글 조회 메서드 (megazineView)
+    public MegazineDTO megazineView(Long mno) {
+        Optional<Megazine> megazineOpt = megazineRepository.findById(mno);
+
+        if (megazineOpt.isPresent()) {
+            Megazine megazine = megazineOpt.get();
+            megazine.setViewCount(megazine.getViewCount() + 1); // 조회수 증가
+            megazineRepository.save(megazine); // 변경사항 저장
+            return entityToDto(megazine); // DTO로 변환하여 반환
+        }
+        return null;
+    }
+
+    // 엔티티 -> DTO 변환 메서드
+    public MegazineDTO entityToDto(Megazine megazine) {
+        return new MegazineDTO(
+                megazine.getMno(),
+                megazine.getTitle(),
+                megazine.getUser(),
+                megazine.getContent(),
+                megazine.getViewCount(),
+                megazine.getCommentCount(),
+                megazine.getScrapCount(),
+                megazine.getOriImgName(),
+                megazine.getImgName(),
+                megazine.getImageUrl(),
+                megazine.getRegTime(), // 등록 시간
+                megazine.getUpdateTime(), // 수정 시간
+                new ArrayList<>(), // ItemImgDTO 리스트 (초기화)
+                new ArrayList<>()  // itemImgIds 리스트 (초기화)
+        );
+
+    }
+
+    // DTO -> 엔티티 변환 메서드
+    public Megazine dtoToEntity(MegazineDTO dto) {
+        Megazine megazine = new Megazine();
+        megazine.setMno(dto.getMno());
+        megazine.setTitle(dto.getTitle());
+        megazine.setUser(dto.getUser());
+        megazine.setContent(dto.getContent());
+        megazine.setViewCount(dto.getViewCount());
+        megazine.setCommentCount(dto.getCommentCount());
+        megazine.setScrapCount(dto.getScrapCount());
+        megazine.setOriImgName(dto.getOriImgName());
+        megazine.setImgName(dto.getImgName());
+        megazine.setImageUrl(dto.getImageUrl());
+        megazine.setRegTime(dto.getRegTime());
+        megazine.setUpdateTime(dto.getUpdateTime());
+        return megazine; // 여기에서 오류가 발생할 수 있음
+    }
+
+
+
 }
