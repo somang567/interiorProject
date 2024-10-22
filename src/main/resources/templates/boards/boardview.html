@@ -16,7 +16,7 @@
     <th:block layout:fragment="css">
         <style>
             .view-container {
-                width: 70vw;
+                width: 80vw;
                 margin: 0 auto;
                 margin-top: 3vw;
                 padding: 2vw;
@@ -25,6 +25,11 @@
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
                 font-size: 1rem;
                 margin-bottom: 2vw;
+            }
+
+            p {
+                line-height: 3vw;
+                padding-left: 1vw;
             }
 
             table {
@@ -73,7 +78,8 @@
                 text-align: right;
                 margin-top: 1.5rem;
                 display: flex;
-                justify-content: flex-end; /* 버튼을 오른쪽에 정렬 */
+                justify-content: flex-end;
+                gap: 1rem;
             }
 
             .button {
@@ -84,7 +90,6 @@
                 border-radius: 0.4vw;
                 cursor: pointer;
                 font-size: 0.9rem;
-                margin-left: 1rem;
                 text-decoration: none;
             }
 
@@ -94,6 +99,7 @@
 
             .comments-container {
                 margin-top: 2vw;
+                display: block;
             }
 
             .comments-container h3 {
@@ -107,6 +113,8 @@
                 padding: 1rem;
                 border-bottom: 1px solid #ddd;
                 position: relative;
+                display: block;
+                margin-bottom: 1rem;
             }
 
             .comment-author {
@@ -129,6 +137,8 @@
                 position: absolute;
                 top: 1rem;
                 right: 1rem;
+                display: flex;
+                gap: 0.5rem;
             }
 
             .comment-actions button {
@@ -137,7 +147,6 @@
                 color: #007bff;
                 cursor: pointer;
                 font-size: 0.9rem;
-                margin-left: 0.5rem;
             }
 
             .comment-actions button:hover {
@@ -151,7 +160,7 @@
             }
 
             .edit-comment-form textarea {
-                width: 100%;
+                width: 97%;
                 height: 80px;
                 padding: 0.8rem;
                 border: 1px solid #ddd;
@@ -182,8 +191,7 @@
                 background-color: #f9f9f9;
                 border-radius: 0.4vw;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                display: flex;
-                flex-direction: column;
+                display: block;
             }
 
             .comment-form h3 {
@@ -192,7 +200,7 @@
             }
 
             .comment-form textarea {
-                width: 100%;
+                width: 97%;
                 height: 100px;
                 padding: 0.8rem;
                 border: 1px solid #ddd;
@@ -210,7 +218,6 @@
                 border-radius: 0.4vw;
                 cursor: pointer;
                 font-size: 0.9rem;
-                align-self: flex-start; /* 버튼을 좌측 정렬 */
             }
 
             .comment-form button:hover {
@@ -218,7 +225,6 @@
             }
         </style>
     </th:block>
-
 
     <!-- 게시글 상세 내용 -->
     <div class="view-container">
@@ -245,7 +251,6 @@
                 <th>첨부 이미지</th>
                 <td class="image-cell">
                     <th:block th:if="${board.filename}">
-                        <!-- 수정된 th:src 구문 -->
                         <img th:src="@{'/files/' + ${board.filename}}" alt="첨부 이미지"/>
                     </th:block>
                     <th:block th:unless="${board.filename}">
@@ -268,47 +273,46 @@
                                  th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}"></div>
                         </div>
                         <div class="comment-actions" th:if="${comment.editable}">
-                            <!-- 수정 및 삭제 버튼 -->
                             <button type="button" th:onclick="'toggleEditForm(' + ${comment.id} + ')'">수정</button>
-                            <a href="javascript:void(0);" th:onclick="'deleteComment(' + ${comment.id} + ')'">삭제</a>
+                            <button type="button" th:onclick="'deleteComment(' + ${comment.id} + ')'">삭제</button>
                         </div>
                     </div>
 
                     <!-- 댓글 수정 폼 -->
-                    <div class="edit-comment-form" th:id="'edit-form-' + ${comment.id}">
-                            <textarea id="editCommentContent-[[${comment.id}]]" name="content"
-                                      th:text="${comment.content}" required></textarea>
-                        <button type="button" th:onclick="updateComment([[${comment.id}]])">수정 완료</button>
+                    <div class="edit-comment-form" th:id="'edit-form-' + ${comment.id}" style="display: none;">
+                        <textarea th:id="'editCommentContent-' + ${comment.id}" name="content"
+                                  th:text="${comment.content}" required></textarea>
+                        <button type="button" th:onclick="'updateComment(' + ${comment.id} + ')'">수정 완료</button>
                     </div>
+                </th:block>
+            </th:block>
+            <th:block th:unless="${!#lists.isEmpty(comments)}">
+                <p>댓글이 없습니다.</p>
+            </th:block>
         </div>
-        </th:block>
-        <th:block th:unless="${!#lists.isEmpty(comments)}">
-            <p>댓글이 없습니다.</p>
-        </th:block>
-    </div>
 
-    <!-- 댓글 작성 폼 (로그인한 사용자만 보이도록 설정) -->
-    <th:block sec:authorize="isAuthenticated()">
-        <div class="comment-form">
-            <h3>댓글 작성</h3>
-            <form id="commentForm">
-                <textarea id="commentContent" name="content" placeholder="댓글을 입력하세요" required></textarea>
-                <button type="submit">댓글 작성</button>
-            </form>
+        <!-- 댓글 작성 폼 (로그인한 사용자만 보이도록 설정) -->
+        <th:block sec:authorize="isAuthenticated()">
+            <div class="comment-form">
+                <h3>댓글 작성</h3>
+                <form id="commentForm">
+                    <textarea id="commentContent" name="content" placeholder="댓글을 입력하세요." required></textarea>
+                    <button type="submit">댓글 작성</button>
+                </form>
+            </div>
+        </th:block>
+
+        <!-- 로그인하지 않은 사용자에게는 로그인 유도 메시지 출력 -->
+        <th:block sec:authorize="!isAuthenticated()">
+            <p class="comment_text">댓글 작성은 로그인이 필요합니다. <a href="/members/login">로그인</a> 후 댓글을 작성해주세요.</p>
+        </th:block>
+
+        <!-- 버튼 -->
+        <div class="button-container">
+            <a href="/board/list" class="button">목록으로</a>
+            <a th:href="@{/board/modify/{id}(id=${board.id})}" class="button" sec:authorize="isAuthenticated()">수정하기</a>
+            <a href="#" class="button" sec:authorize="isAuthenticated()" onclick="deleteBoard([[${board.id}]])">삭제하기</a>
         </div>
-    </th:block>
-
-    <!-- 로그인하지 않은 사용자에게는 로그인 유도 메시지 출력 -->
-    <th:block sec:authorize="!isAuthenticated()">
-        <p class="comment_text">댓글 작성은 로그인이 필요합니다. <a href="/members/login">로그인</a> 후 댓글을 작성해주세요.</p>
-    </th:block>
-
-    <!-- 버튼 -->
-    <div class="button-container">
-        <a href="/board/list" class="button">목록으로</a>
-        <a th:href="@{/board/modify/{id}(id=${board.id})}" class="button" sec:authorize="isAuthenticated()">수정하기</a>
-        <a th:href="@{/board/delete/{id}(id=${board.id})}" class="button"
-           sec:authorize="isAuthenticated()" onclick="return confirm('정말 삭제하시겠습니까?');">삭제하기</a>
     </div>
 
     <!-- JavaScript 코드 -->
@@ -316,8 +320,8 @@
         <script th:inline="javascript">
             /*<![CDATA[*/
             document.addEventListener('DOMContentLoaded', function () {
-                const csrfToken = /*[[${_csrf.token}]]*/ '';
-                const csrfHeader = /*[[${_csrf.headerName}]]*/ '';
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
                 const boardId = /*[[${board.id}]]*/ 0;
 
                 // 댓글 작성
@@ -345,12 +349,11 @@
                         })
                             .then(response => response.json())
                             .then(data => {
-                                if (data.success) {
+                                if (data.id) { // 댓글이 성공적으로 추가되면 ID가 포함됩니다.
                                     alert('댓글이 작성되었습니다.');
-                                    document.getElementById('commentContent').value = '';
-                                    location.reload();
+                                    location.reload(); // 댓글 목록을 새로고침
                                 } else {
-                                    alert('댓글 작성에 실패했습니다.');
+                                    alert(data.error || '댓글 작성에 실패했습니다.');
                                 }
                             })
                             .catch(error => console.error('Error:', error));
@@ -369,18 +372,32 @@
 
                 // 댓글 수정
                 window.updateComment = function (commentId) {
-                    const content = document.getElementById(`editCommentContent-${commentId}`).value;
+                    console.log(`수정하려는 댓글 ID: ${commentId}`);
+                    // 특정 commentId에 해당하는 textarea 요소 찾기
+                    const textarea = document.getElementById(`editCommentContent-${commentId}`);
 
+                    // 해당 textarea를 찾지 못한 경우 오류 메시지 출력
+                    if (!textarea) {
+                        console.error(`댓글 ID ${commentId}에 해당하는 textarea를 찾을 수 없습니다.`);
+                        alert('댓글 수정에 실패했습니다.');
+                        return;
+                    }
+
+                    const content = textarea.value;
+
+                    // 입력된 내용이 없는 경우 알림
                     if (!content.trim()) {
                         alert('내용을 입력하세요.');
                         return;
                     }
 
+                    // 서버로 요청을 보낼 데이터 구성
                     const requestData = {
                         content: content
                     };
 
-                    fetch(`/comment/update/${commentId}`, {
+                    // 서버로 수정 요청 보내기
+                    fetch(`/board/comment/update/${commentId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -390,14 +407,14 @@
                     })
                         .then(response => response.json())
                         .then(data => {
-                            if (data.success) {
+                            if (data.id) { // 댓글이 성공적으로 수정되면 ID가 포함됩니다.
                                 alert('댓글이 수정되었습니다.');
                                 location.reload();
                             } else {
-                                alert('댓글 수정에 실패했습니다.');
+                                alert(data.error || '댓글 수정에 실패했습니다.');
                             }
                         })
-                        .catch(error => console.error('Error:', error));
+                        .catch(error => console.error('에러:', error));
                 };
 
                 // 댓글 삭제
@@ -406,7 +423,7 @@
                         return;
                     }
 
-                    fetch(`/comment/delete/${commentId}`, {
+                    fetch(`/board/comment/delete/${commentId}`, {
                         method: 'DELETE',
                         headers: {
                             [csrfHeader]: csrfToken
@@ -414,11 +431,35 @@
                     })
                         .then(response => response.json())
                         .then(data => {
-                            if (data.success) {
-                                alert('댓글이 삭제되었습니다.');
+                            if (data.message) {
+                                alert(data.message);
                                 location.reload();
                             } else {
-                                alert('댓글 삭제에 실패했습니다.');
+                                alert(data.error || '댓글 삭제에 실패했습니다.');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                };
+
+                // 게시글 삭제
+                window.deleteBoard = function (boardId) {
+                    if (!confirm('게시글을 삭제하시겠습니까?')) {
+                        return;
+                    }
+
+                    fetch(`/board/delete/${boardId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            [csrfHeader]: csrfToken
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message) {
+                                alert(data.message);
+                                window.location.href = '/board/list';
+                            } else {
+                                alert(data.error || '게시글 삭제에 실패했습니다.');
                             }
                         })
                         .catch(error => console.error('Error:', error));

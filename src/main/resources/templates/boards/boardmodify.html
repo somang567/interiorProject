@@ -128,7 +128,7 @@
             <div class="form-group">
                 <label for="author">작성자</label>
                 <input type="text" class="form-control" id="author" name="author"
-                       th:value="${#authentication.principal.name}" readonly>
+                       th:value="${#authentication?.name}" readonly>
             </div>
 
             <div class="form-group">
@@ -162,55 +162,42 @@
 
         <!-- 버튼 영역 -->
         <div class="button-container">
-            <!-- 목록으로 버튼 추가 -->
             <a href="/board/list" class="button btn-secondary"
                onclick="return confirmAction('정말 목록으로 돌아가시겠습니까?')">목록으로</a>
-            <!-- 취소 버튼: 게시글 상세보기로 이동 -->
             <a th:href="@{/board/view(id=${board.id})}" class="button btn-secondary"
                onclick="return confirmAction('게시글 수정을 취소하시겠습니까?')">취소</a>
-            <!-- 수정 버튼 -->
             <button type="submit" class="button btn-primary">수정</button>
         </div>
     </form>
 
-    <!-- JavaScript 추가 -->
     <th:block layout:fragment="script">
         <script>
-            // 게시글 수정 완료 시 경고(alert) 메시지를 표시하는 함수
             function showAlert() {
-                alert('수정이 완료되었습니다.');
-                return true; // 계속해서 폼 제출을 진행함
+                // alert('수정이 완료되었습니다.');
+                return true;
             }
 
-            // 취소 또는 목록으로 돌아갈 때 확인(confirm) 메시지를 표시하는 함수
-            // 사용자가 확인 버튼을 클릭해야 동작이 실행됨
             function confirmAction(message) {
-                return confirm(message); // 확인 창을 띄우고 결과에 따라 true/false 반환
+                return confirm(message);
             }
 
-            // 새로운 이미지를 업로드할 때 이미지 미리보기를 업데이트하는 함수
-            // 파일이 선택되면, FileReader를 사용해 이미지 미리보기를 표시
             function previewNewImage(event) {
-                const file = event.target.files[0]; // 선택된 파일 가져오기
-                const newImagePreview = document.getElementById('new-image-preview'); // 미리보기 요소 가져오기
+                const file = event.target.files[0];
+                const newImagePreview = document.getElementById('new-image-preview');
 
-                // 파일이 있을 경우, FileReader를 사용해 미리보기를 생성
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        // 미리보기 요소의 src 속성을 파일의 데이터 URL로 설정
                         newImagePreview.src = e.target.result;
-                        newImagePreview.style.display = 'block'; // 미리보기 표시
+                        newImagePreview.style.display = 'block';
                     };
-                    reader.readAsDataURL(file); // 파일을 읽고 데이터 URL을 생성
+                    reader.readAsDataURL(file);
                 } else {
-                    // 파일이 없으면 미리보기를 숨기고 src를 초기화
                     newImagePreview.style.display = 'none';
                     newImagePreview.src = '';
                 }
             }
         </script>
     </th:block>
-
 </div>
 </html>
