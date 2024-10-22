@@ -41,7 +41,6 @@ public class BoardController {
     @Autowired
     private CommentService commentService;
 
-
     // 게시글 작성 폼
     @GetMapping("/write")
     public String boardWriteForm(Model model, Principal principal) {
@@ -183,7 +182,6 @@ public class BoardController {
         }
     }
 
-
     // 댓글 수정 처리 (AJAX 요청)
     @PostMapping("/comment/update/{id}")
     @ResponseBody
@@ -244,22 +242,19 @@ public class BoardController {
     @PostMapping("/delete/{id}")
     public String boardDelete(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
         if (!hasPermissionToModifyOrDeleteBoard(id, principal)) {
-            // 권한이 없을 때 에러 메시지와 함께 리다이렉트
-            redirectAttributes.addFlashAttribute("errorMessage", "권한이 없습니다. 게시글을 삭제할 수 없습니다.");
-            return "redirect:/board/list";
+            redirectAttributes.addFlashAttribute("error", "권한이 없습니다. 게시글을 삭제할 수 없습니다.");
+            return "redirect:/board/list"; // 권한이 없을 경우 목록으로 리다이렉트
         }
 
         try {
-            // 게시글 삭제 처리
             boardService.boardDelete(id);
             redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 삭제되었습니다.");
-            return "redirect:/board/list"; // 삭제 후 게시글 목록으로 리다이렉트
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "게시글 삭제 중 오류가 발생했습니다: " + e.getMessage());
-            return "redirect:/board/list"; // 에러 발생 시에도 목록 페이지로 리다이렉트
+            redirectAttributes.addFlashAttribute("error", "게시글 삭제 중 오류가 발생했습니다: " + e.getMessage());
         }
-    }
 
+        return "redirect:/board/list"; // 삭제 성공 후 목록으로 리다이렉트
+    }
 
     // 게시글 수정 처리 (폼 제출)
     @PostMapping("/update/{id}")

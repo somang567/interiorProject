@@ -146,11 +146,19 @@
                 text-align: left;
                 display: block;
             }
+
+            .qa_boardtext {
+                text-align: center;
+                font-weight: bold;
+                line-height: 5vw;
+                font-size: 2vw;
+            }
+
         </style>
     </th:block>
 
+    <h1 class="qa_boardtext">묻고 답하기 게시판</h1>
     <div class="list_text">
-
         <!-- 로그인한 사용자에게만 글쓰기 버튼이 보이게 설정 -->
         <th:block sec:authorize="isAuthenticated()">
             <a href="/board/write" class="write-button">글쓰기</a>

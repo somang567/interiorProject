@@ -128,7 +128,6 @@ public class BoardService {
         board.setId(dto.getId());
         board.setTitle(dto.getTitle());
         board.setContent(dto.getContent());
-        // 작성자는 따로 설정
         board.setImageFilename(dto.getImageFilename());
         board.setImagePath(dto.getImagePath());
         board.setFilename(dto.getFilename());

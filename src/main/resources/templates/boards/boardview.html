@@ -311,8 +311,15 @@
         <div class="button-container">
             <a href="/board/list" class="button">목록으로</a>
             <a th:href="@{/board/modify/{id}(id=${board.id})}" class="button" sec:authorize="isAuthenticated()">수정하기</a>
-            <a href="#" class="button" sec:authorize="isAuthenticated()" onclick="deleteBoard([[${board.id}]])">삭제하기</a>
+
+            <form th:action="@{/board/delete/{id}(id=${board.id})}" method="post" sec:authorize="isAuthenticated()"
+                  onsubmit="return confirm('정말로 게시글을 삭제하시겠습니까?');">
+                <input type="hidden" name="_method" value="DELETE"/>
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <button type="submit" class="button">삭제하기</button>
+            </form>
         </div>
+
     </div>
 
     <!-- JavaScript 코드 -->
@@ -441,29 +448,6 @@
                         .catch(error => console.error('Error:', error));
                 };
 
-                // 게시글 삭제
-                window.deleteBoard = function (boardId) {
-                    if (!confirm('게시글을 삭제하시겠습니까?')) {
-                        return;
-                    }
-
-                    fetch(`/board/delete/${boardId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            [csrfHeader]: csrfToken
-                        }
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.message) {
-                                alert(data.message);
-                                window.location.href = '/board/list';
-                            } else {
-                                alert(data.error || '게시글 삭제에 실패했습니다.');
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-                };
             });
             /*]]>*/
         </script>
