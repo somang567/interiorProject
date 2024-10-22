@@ -1,5 +1,5 @@
 package com.keduit.interiors.config;
-
+//
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,60 +12,55 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+
+//passwordEncoder에서 걸려서 만들어줌..
+//@Configuration: 이 클래스가 스프링의 설정 클래스를 나타내며, 스프링 컨테이너에 의해 관리되는 빈(Bean)을 정의합니다.
 @Configuration
+//@EnableWebSecurity: 웹 애플리케이션에 대한 보안 기능을 활성화합니다. 이 어노테이션이 있으면 스프링 시큐리티가 웹 보안을 설정할 수 있도록 합니다.
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        // 로그인 설정
-        http.formLogin()
-                .loginPage("/members/login")  // 사용자 정의 로그인 페이지
-                .defaultSuccessUrl("/")  // 로그인 성공 시 이동할 URL
-                .usernameParameter("email")  // 로그인 시 이메일을 아이디로 사용
-                .failureUrl("/members/login/error")  // 로그인 실패 시 이동할 URL
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))  // 로그아웃 URL
-                .logoutSuccessUrl("/");  // 로그아웃 성공 시 이동할 URL
+    //로그인은 따로 페이지를 띄우지 않음.
+    System.out.println("------------SecurityFilterChain 이랑께");
+    http.formLogin()
+        .loginPage("/members/login")
+        .defaultSuccessUrl("/")
+        .usernameParameter("email")
+        .failureUrl("/members/login/error")
+        .and()
+        .logout()
+        .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+        .logoutSuccessUrl("/");
 
-        // 권한 설정
-        http.authorizeRequests()
-                .mvcMatchers("/", "/members/**", "/board/list/**", "/board/view/**", "/img/**", "/files/**", "/megazines/list/**")
-                .permitAll()  // 비로그인 사용자도 접근 가능 경로
+    http.authorizeRequests()
+        .mvcMatchers("/", "/members/**",
+            "/img/**", "error", "favicon.ico", "/boards/list/**", "/search/**").permitAll()
+        .anyRequest().authenticated();  //이 메서드는 위에서 정의한 특정 URL 패턴 이외의 모든 요청에 대해 인증을 요구합니다. 즉, 사용자가 인증된 상태여야만 다른 모든 요청을 수행할 수 있습니다.
 
-                // 로그인한 사용자와 관리자 모두 접근 가능한 경로
-                .mvcMatchers("/board/write/**", "/board/writedo/**", "/board/modify/**", "/board/delete/**", "/board/update/**", "/board/{boardId}/comment/**",
-                        "/comment/update/**", "/comment/delete/**")
-                .hasAnyRole("USER", "ADMIN")  // USER와 ADMIN 모두 접근 가능
+    //메서드는 인증 및 인가 관련 예외를 처리하기 위한 설정을 시작하는 메서드입니다. 이 메서드를 호출하면, 인증 실패나 인가 실패 시의 동작을 정의할 수 있는 체인으로 이동합니다.
+    http.exceptionHandling()
+        .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+    return http.build();
+  }
 
-                // 관리자만 접근 가능한 경로
-                .mvcMatchers("/item/addItem/**", "/item/updateItem/**", "/item/deleteItem/**", "/cs/write", "/cs/edit/**", "/cs/delete/**")
-                .hasRole("ADMIN")  // 관리자만 접근 가능 경로
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-                .anyRequest().authenticated();  // 그 외의 모든 요청은 인증 필요
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return (web) -> web.ignoring()
+        .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+  }
 
-        // 예외 처리 설정: 인증되지 않은 사용자가 접근할 경우 처리할 페이지 설정
-        http.exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+  @Bean
+  public AuthenticationSuccessHandler authenticationSuccessHandler() {
+    return null;
+  }
 
-        return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
-    }
-
-    @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return null;
-    }
 }
+
