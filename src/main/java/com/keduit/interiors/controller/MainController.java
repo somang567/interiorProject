@@ -52,26 +52,6 @@ public class MainController {
     return "main";  // main.html로 이동
   }
 
-//  @GetMapping("/mypage")
-//  public String mypage(
-//          Model model, @AuthenticationPrincipal UserDetails userDetails,
-//            @PageableDefault(page = 0, size = 9, sort = "mno", direction = Sort.Direction.DESC) Pageable pageable
-//          ) {
-//    String email = userDetails.getUsername(); // 로그인된 사용자의 이메일 가져오기
-//    Member member = memberService.findByEmail(email); // 이메일로 회원 조회
-//
-//    if (member != null) {
-//      model.addAttribute("name", member.getName());
-//      model.addAttribute("email", member.getEmail());
-//    }
-//
-//    //민영 스크랩
-//    Page<Megazine> list = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
-//    model.addAttribute("list", list);
-//
-//    return "/member/mypage"; // mypage.html로 이동
-//  }
-
   @GetMapping("/mypage")
   public String mypage(
           Principal principal,
@@ -97,7 +77,7 @@ public class MainController {
     //사용자 이름을 가져오기 위한 메서드
     if (principal != null) {
       String username = principal.getName();
-      model.addAttribute("authorName", member.getName()); //이거 주석처리하니까 됨
+      model.addAttribute("UserName", member.getName()); //이거 주석처리하니까 됨
     }
     //민영 스크랩 끝
 

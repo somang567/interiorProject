@@ -182,7 +182,6 @@
                 <div th:each="scrap : ${scrappedMegazines}">
                     <!-- 링크와 이미지 -->
                     <a th:href="@{'/megazines/list/' + ${scrap.mno}}">
-
                         <img th:src="@{${scrap.imageUrl}}" alt="매거진 스크랩">
                         <h2 th:text="${scrap.title}"></h2>
                         <p class="card-date" th:text="${UserName}" readonly></p>
