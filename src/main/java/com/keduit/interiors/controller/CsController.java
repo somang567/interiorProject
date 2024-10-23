@@ -1,3 +1,4 @@
+// 댓글 조회 및 목록 처리 수정
 package com.keduit.interiors.controller;
 
 import com.keduit.interiors.constant.CS;
@@ -98,7 +99,7 @@ public class CsController {
 		CsDTO csDTO = csService.getCsById(id);
 		model.addAttribute("csDTO", csDTO);
 
-		// 해당 CS 게시물에 달린 댓글 목록 조회
+		// 해당 CS 게시물에 달린 댓글 목록 조회 (형 변환 불필요)
 		List<CsCommentDTO> CsComments = csCommentService.getCommentsByCsId(id);
 		model.addAttribute("CsComments", CsComments);
 

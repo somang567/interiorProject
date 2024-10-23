@@ -28,11 +28,12 @@
             <tr th:each="cs : ${csList}">
                 <td th:text="${cs.id}">번호</td>
                 <td>
-                    <a th:href="@{'/cs/view/' + ${cs.id}}" th:text="${cs.title}">제목</a>
+                    <a th:href="@{/view/{id}(id=${cs.id})}" th:text="${cs.title}">제목</a>
                 </td>
                 <td th:text="${cs.memberEmail}">작성자</td>
                 <td th:text="${cs.csStatus == 'ACCEPT' ? '접수중' : '문의완료'}"></td>
                 <td th:text="${#temporals.format(cs.regTime, 'yyyy-MM-dd')}">작성일</td>
+
             </tr>
             </tbody>
         </table>
