@@ -24,10 +24,19 @@ public class CsCommentService {
 	private final MemberRepository memberRepository;
 
 	public void addComment(CsCommentDTO commentDTO, String memberEmail) {
-		CSEntity csEntity = csRepository.findById(commentDTO.getCsId())
-				.orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+		// 댓글을 작성하려는 회원 정보 가져오기
 		Member member = memberRepository.findByEmail(memberEmail);
 
+		// 관리자인지 확인
+		if (!member.getRole().equals("ROLE_ADMIN")) {
+			throw new IllegalArgumentException("관리자만 댓글을 작성할 수 있습니다.");
+		}
+
+		// 해당 CS 게시물 찾기
+		CSEntity csEntity = csRepository.findById(commentDTO.getCsId())
+				.orElseThrow(() -> new IllegalArgumentException("해당 게시물이 없습니다."));
+
+		// 댓글 작성
 		CsComment comment = new CsComment();
 		comment.setContent(commentDTO.getContent());
 		comment.setCsEntity(csEntity);
@@ -36,6 +45,8 @@ public class CsCommentService {
 
 		csCommentRepository.save(comment);
 	}
+
+
 
 	public List<CsCommentDTO> getCommentsByCsId(Long csId) {
 		List<CsComment> comments = csCommentRepository.findByCsEntityId(csId);

@@ -4,42 +4,124 @@
       layout:decorate="~{layout/layout}"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<th:block layout:fragment="script">
+    <script>
+        $(document).ready(function () {
+            const csrfToken = $('meta[name="_csrf"]').attr('content');
+            const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+            // 스크랩 상태 업데이트 함수
+            function updateScrapStatus(element, isScraped) {
+                if (isScraped) {
+                    $(element).attr('src', '/img/instaheart.png');  // 스크랩된 상태
+                } else {
+                    $(element).attr('src', '/img/instaheartnone.png');  // 스크랩되지 않은 상태
+                }
+            }
+
+            // 스크랩 추가/삭제 처리
+            function toggleScrap(element) {
+                const productId = $(element).data('product-id');
+                const isScraped = $(element).attr('src').includes('instaheart.png');  // 현재 스크랩 상태 확인
+
+                if (isScraped) {
+                    removeScrap(productId, element);
+                } else {
+                    addScrap(productId, element);
+                }
+            }
+
+            // 스크랩 추가 요청
+            function addScrap(productId, element) {
+                $.ajax({
+                    url: '/scrap/add',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrfHeader, csrfToken);  // CSRF 토큰 추가
+                    },
+                    data: JSON.stringify({ productId: productId }),
+                    success: function () {
+                        updateScrapStatus(element, true);  // 스크랩된 상태로 업데이트
+                        alert("즐겨찾기에 추가되었습니다.");
+                    },
+                    error: function (xhr, status, error) {
+                        alert("스크랩 추가 중 오류가 발생했습니다.");
+                    }
+                });
+            }
+
+            // 스크랩 삭제 요청
+            function removeScrap(productId, element) {
+                $.ajax({
+                    url: '/scrap/remove',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrfHeader, csrfToken);  // CSRF 토큰 추가
+                    },
+                    data: JSON.stringify({ productId: productId }),
+                    success: function () {
+                        updateScrapStatus(element, false);  // 스크랩되지 않은 상태로 업데이트
+                        alert("즐겨찾기에서 삭제되었습니다.");
+                    },
+                    error: function (xhr, status, error) {
+                        alert("스크랩 삭제 중 오류가 발생했습니다.");
+                    }
+                });
+            }
+
+            // 스크랩 아이콘 클릭 이벤트 설정
+            // 중복 이벤트 방지
+            $('.scrap-icon img').off('click').on('click', function () {
+                toggleScrap(this);  // 스크랩 상태 토글
+            });
+        });
+    </script>
+
+</th:block>
+
+<!-- 컨텐츠 블록 -->
 <div id="container" layout:fragment="content">
-    <!-- 상품 리스트 그리드 -->
     <div class="product-grid">
         <div class="product-item-container" th:each="productDTO : ${productList}">
-            <!-- 버튼과 상품명, 가격을 가로로 배치할 컨테이너 -->
-            <div class="product-content">
-                <!-- 버튼 부분 -->
-                <button class="product-item"
-                        th:style="|background-image: url(${productDTO.firstImageUrl}); background-size: cover;|"
-                        th:onclick="|location.href='/item/product/' + ${productDTO.id}|">
-                </button>
-                <!-- 상품명과 가격 부분 -->
-                <div class="product-info">
-                    <p class="product-name" th:text="${productDTO.productName}">상품명</p>
-                    <p class="product-price" th:text="${productDTO.price} + '원'">가격</p>
+            <button class="product-item"
+                    type="button"
+                    th:style="|background-image: url(${productDTO.firstImageUrl});|"
+                    th:onclick="|location.href='/item/product/' + ${productDTO.id}|">
+            </button>
+
+            <!-- 상품명, 가격, 스크랩 아이콘 -->
+            <div class="product-info">
+                <div class="product-details" style="flex: 1;">
+                    <p class="product-name" th:text="${productDTO.productName}" >상품명</p>
+                    <p class="product-stockNum"style="display: inline-flex; font-weight: 600">재고: </p>
+                    <p class="product-stockNum" th:text="${productDTO.stockNumber} + '개'" style="display: inline-flex; color: #268bcc"></p>
+                    <p class="product-price" th:text="${productDTO.price} + '원'"></p>
+                </div>
+
+                <!-- 스크랩 아이콘 (스크랩 상태에 따라 이미지 변경) -->
+                <div class="scrap-icon">
+                    <img id="scrapIcon_${productDTO.id}"
+                         th:src="@{/img/{image}(image=${#lists.contains(scrapProductIds, productDTO.id) ? 'instaheart.png' : 'instaheartnone.png'})}"
+                         alt="스크랩 상태"
+                         style="cursor: pointer; width: 2vw; height: 2vw; margin-right: 2vw;"
+                         th:data-product-id="${productDTO.id}">
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 관리자만 보이는 상품 등록하기 버튼 -->
+    <!-- 관리자만 보이는 상품 등록 버튼 -->
     <div class="crudButtonContainer" th:if="${isAdmin}">
         <button type="button" class="addItemButton" id="addButton"
                 onclick="window.location.href='/item/addItem'">상품 등록하기</button>
-    </div>
-
-    <!-- 검색창 -->
-    <div class="CS_search_container">
-        <select>
-            <option value="productName">제목</option>
-            <option value="member.username">작성자</option>
-            <option value="productDetail">내용</option>
-        </select>
-        <input type="text" placeholder="검색어를 입력하세요">
-        <button type="submit">검색</button>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </div>
 </div>
 </html>

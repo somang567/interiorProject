@@ -25,7 +25,7 @@ public class ProductScrapController {
 	public ResponseEntity<String> addScrap(Principal principal, @RequestBody ProductScrapDTO scrapDTO) {
 		Long memberId = getMemberIdFromPrincipal(principal);
 		productScrapService.addScrap(memberId, scrapDTO.getProductId());
-		return ResponseEntity.ok("스크랩이 추가되었습니다.");
+		return ResponseEntity.ok("즐겨찾기가 등록되었습니다.");
 	}
 
 	// 스크랩 삭제
@@ -34,14 +34,6 @@ public class ProductScrapController {
 		Long memberId = getMemberIdFromPrincipal(principal);
 		productScrapService.removeScrap(memberId, scrapDTO.getProductId());
 		return ResponseEntity.ok("스크랩이 삭제되었습니다.");
-	}
-
-	// 특정 사용자가 스크랩한 상품 목록 반환
-	@GetMapping("/scrap-list")
-	public ResponseEntity<List<Long>> getScrapListForUser(Principal principal) {
-		Long memberId = getMemberIdFromPrincipal(principal);
-		List<Long> scrapProductIds = productScrapService.getScrapProductIdsForUser(memberId);
-		return ResponseEntity.ok(scrapProductIds);
 	}
 
 	// Principal에서 memberId를 가져오는 로직
