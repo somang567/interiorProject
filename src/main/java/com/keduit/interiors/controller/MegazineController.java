@@ -1,14 +1,11 @@
-
 package com.keduit.interiors.controller;
 
+import com.keduit.interiors.constant.ProductType;
 import com.keduit.interiors.dto.*;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.repository.MegazineRepository;
-import com.keduit.interiors.service.MegazineCommentService;
-import com.keduit.interiors.service.MegazineCommentServiceImpl;
-import com.keduit.interiors.service.MegazineService;
-import com.keduit.interiors.service.MemberService;
+import com.keduit.interiors.service.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,10 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/megazines")
@@ -42,32 +37,42 @@ public class MegazineController {
   private final MegazineRepository megazineRepository;
   private final MegazineCommentService megazineCommentService;
   private final MegazineCommentServiceImpl megazineCommentServiceImpl;
+  private final MegazineScrapService megazineScrapService;
 
   //  String searchKeyword,
   @GetMapping("/list")
   public String megazineItem(
           @RequestParam(required = false) String searchKeyword,
-          @PageableDefault(page= 0, size=9, sort="mno", direction = Sort.Direction.DESC) Pageable pageable,
+          @PageableDefault(page = 0, size = 9, sort = "mno", direction = Sort.Direction.DESC) Pageable pageable,
           Model model, Principal principal) {
 
+    List<MegazineDTO> megazineProducts = megazineService.getMegazineList();
+    model.addAttribute("megazineList", megazineProducts);
     if (principal != null) {
       String username = principal.getName();
       Member member = memberService.findByEmail(username);
-      //model.addAttribute("authorName", member.getName()); //이거 주석처리하니까 됨
+      model.addAttribute("authorName", member.getName()); //이거 주석처리하니까 됨
     }
+
+    String memberId = principal.getName();
+    // 또는 사용자 ID가 필요하다면, UserDetailsService를 사용하여 사용자 정보를 가져올 수 있습니다.
+    Member userDetails = memberService.findByEmail(memberId);
+    Long userId = userDetails.getId(); // 사용자 ID를 가져오는 예 (UserDetails 구현에 따라 다를 수 있음)
+    model.addAttribute("scrapList", megazineScrapService.getScrapMegazineIdsForUser(userId));
+
 
     Page<Megazine> list = null;
 
     if (searchKeyword == null) {
       list = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
       model.addAttribute("list", list);
-    }else{
+    } else {
       list = megazineService.megazineSearchList(searchKeyword, pageable); // 메인페이지 리스트 부분
       model.addAttribute("list", list);
     }
 
     int nowPage = list.getPageable().getPageNumber() + 1; //pageable에서 넘어온 현재 페이지를 반환/ 페이지 1부터 시작.
-    int startPage = Math.max(nowPage - 4 , 1);
+    int startPage = Math.max(nowPage - 4, 1);
     int endPage = Math.min(nowPage + 5, list.getTotalPages());
     model.addAttribute("nowPage", nowPage);
     model.addAttribute("startPage", startPage);
@@ -84,7 +89,7 @@ public class MegazineController {
 
   //상품 등록========================================================
   @GetMapping("/user/write/new")
-  public String megazineNew(Model model){
+  public String megazineNew(Model model) {
     model.addAttribute("megazineDTO", new MegazineDTO());
     return "megazine/megazineForm";
   }
@@ -97,7 +102,7 @@ public class MegazineController {
   //itemImgFileList: 사용자가 업로드한 이미지 파일 리스트를 나타냅니다.
   public String itemNew(@Valid MegazineDTO megazineDTO, BindingResult bindingResult, Model model,
                         @RequestParam("itemImgFile") MultipartFile itemImgFile) {
-           
+
     //유효성 검사에서 에러가 발생한 경우, 사용자에게 폼을 다시 보여줍니다. 이때 itemForm.html이 반환됩니다.
     if (bindingResult.hasErrors()) {
       return "megazine/megazineForm"; //item에 있는 itemForm.html
@@ -124,10 +129,10 @@ public class MegazineController {
   }
 
 
-// 상세보기 관련 Url --------
+  // 상세보기 관련 Url --------
   //User 매거진 상세보기 페이지
   @GetMapping("/list/{megazineId}")
-  public String itemDtl(Model model, @PathVariable("megazineId") Long megazineId){
+  public String itemDtl(Model model, @PathVariable("megazineId") Long megazineId) {
 
 
     MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
@@ -137,7 +142,7 @@ public class MegazineController {
 
   //사용자 수정
   @GetMapping("/edit/{megazineId}")
-  public String itemEdit(Model model, @PathVariable("megazineId") Long megazineId){
+  public String itemEdit(Model model, @PathVariable("megazineId") Long megazineId) {
 
     MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
     if (megazineDTO == null) {
@@ -180,7 +185,6 @@ public class MegazineController {
   }
 
 
-
   //삭제
   // 게시글 삭제 처리
   @GetMapping("/delete/{megazineId}")
@@ -188,9 +192,6 @@ public class MegazineController {
     megazineService.delete(megazineId);
     return "redirect:/megazines/list";
   }
-
-
-
 
 
   //Admin 매거진 상세보기 페이지
@@ -220,13 +221,13 @@ public class MegazineController {
     //비어 있으면
     if (itemImgFileList.isEmpty() && megazineDTO.getMno() == null) {
       model.addAttribute("errorMessage", "첫번재 상품 이미지는 필수입력입니다.");
-      return  "megazine/megazineDetail";
+      return "megazine/megazineDetail";
     }
 
 
     try {
-      megazineService.updateItemImg(itemImgFileList,megazineDTO);
-    } catch (Exception e){
+      megazineService.updateItemImg(itemImgFileList, megazineDTO);
+    } catch (Exception e) {
       System.out.println(e.getMessage()); //에러 메시지 확인
       model.addAttribute("errorMessage", "상품 수정 중 에러가 발생했습니다.");
       return "megazine/megazineForm";
@@ -236,12 +237,20 @@ public class MegazineController {
     return "redirect:/megazines/list";
   }
 
+//  @PostMapping("/submitForm") // 실제 폼의 action URL과 일치해야 함
+//  public String handleSubmit(@ModelAttribute MegazineDTO megazineDTO) {
+//    // 폼 처리 로직
+//    return "redirect:/successPage"; // 성공 시 리다이렉트
+//  }
+
   // 댓글 추가 처리 (AJAX 요청)
   @PostMapping("/{megazineId}/comment")
   @ResponseBody
   public ResponseEntity<?> addComment(@PathVariable("megazineId") Long megazineId,
                                       @RequestBody Map<String, String> payload,
                                       Principal principal) {
+
+    System.out.println("댓글 Post 매핑 여기로 넘어옴-=============================");
     if (principal == null) {
       Map<String, String> errorResponse = new HashMap<>();
       errorResponse.put("error", "로그인이 필요합니다.");
@@ -255,6 +264,7 @@ public class MegazineController {
         errorResponse.put("error", "댓글 내용을 입력하세요.");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
       }
+
 
       MegazineCommentDTO megazineCommentDTO = new MegazineCommentDTO();
       megazineCommentDTO.setMegazineId(megazineId);
@@ -333,7 +343,6 @@ public class MegazineController {
   }
 
 
-
   // 댓글 삭제 처리 (AJAX 요청)
   @DeleteMapping("/comment/delete/{id}")
   @ResponseBody
@@ -355,26 +364,4 @@ public class MegazineController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-

@@ -1,4 +1,3 @@
-
 package com.keduit.interiors.service;
 
 import com.keduit.interiors.dto.BoardDTO;
@@ -46,7 +45,7 @@ public class MegazineService {
     //CartDetailDTO 응? 여기서 리스트를 뽑아온다? 얘가 몬데 씌벌?
     //아니 얘가 사용자를 이메일로 인식을 하면
     // 게시글을 가져올 때도 Member와 조인을 맺어서 그 멤버 아이디로 가져와야 하는 것 아닌가?
-    public List<MegazineDTO> getBoardList() {
+    public List<MegazineDTO> getMegazineList() {
         //findByMemberId 얘가 지금 findByMemberId(Long member_id)라는데
 
         List<MegazineDTO> boardDTOList = new ArrayList<>();
@@ -290,10 +289,10 @@ public class MegazineService {
 
     //검색 기능
     public Page<Megazine> megazineSearchList(String searchKeyword, Pageable pageable){
-    return megazineRepository.findByTitleContaining(searchKeyword, pageable);
+        return megazineRepository.findByTitleContaining(searchKeyword, pageable);
     }
 
-    
+
     public List<Megazine> getList() {
         return megazineRepository.findAll();
     }

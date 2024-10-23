@@ -3,9 +3,10 @@
       xmlns:sec=xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>MegazineMain</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 
 <th:block layout:fragment="script">
@@ -22,13 +23,103 @@
             const result = [[${result}]];
             console.log("result ------> " + result);
 
-            $(".move").on("click", function(e){
-                e.preventDefault();	// 1. 링크의 기본 클릭 동작을 방지합니다.
-                $("input[name='mno']").remove();	// 2. 기존에 있는 mno 입력 필드를 제거합니다.
-                actionForm.append("<input type='hidden' name='mno' value='"+$(this).attr("href")+"'>"); // 3. 클릭한 링크의 href 값을 가진 숨겨진 입력 필드를 추가합니다.
-                actionForm.attr("action","/megazines/get");	// 4. actionForm의 제출 URL을 설정합니다.
-                actionForm.submit(); // 5. actionForm을 제출합니다.
+            //이게 무슨 메서드였는지 기억해내긔
+            // $(".move").on("click", function(e){
+            //     e.preventDefault();	// 1. 링크의 기본 클릭 동작을 방지합니다.
+            //     $("input[name='mno']").remove();	// 2. 기존에 있는 mno 입력 필드를 제거합니다.
+            //     actionForm.append("<input type='hidden' name='mno' value='"+$(this).attr("href")+"'>"); // 3. 클릭한 링크의 href 값을 가진 숨겨진 입력 필드를 추가합니다.
+            //     actionForm.attr("action","/megazines/get");	// 4. actionForm의 제출 URL을 설정합니다.
+            //     actionForm.submit(); // 5. actionForm을 제출합니다.
+            // });
+
+
+            //스크랩 관련 제이쿼리
+            const csrfToken = $('meta[name="_csrf"]').attr('content');
+            const csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+            console.log("CSRF Header:", csrfHeader);
+            console.log("CSRF Token:", csrfToken);
+            // 스크랩 상태 업데이트 함수
+            function updateScrapStatus(element, isScraped) {
+                if (isScraped) {
+                    $(element).attr('src', '/img/instaheart.png');  // 스크랩된 상태
+                } else {
+                    $(element).attr('src', '/img/instaheartnone.png');  // 스크랩되지 않은 상태
+                }
+            }
+
+            // 스크랩 추가/삭제 처리
+            function toggleScrap(element) {
+                const megazineId = $(element).data('megazine-id');
+                console.log("Megazine ID:", megazineId);  // 로그 출력
+                const isScraped = $(element).attr('src').includes('instaheart.png');  // 현재 스크랩 상태 확인
+
+                if (isScraped) {
+                    removeScrap(megazineId, element);
+                } else {
+                    addScrap(megazineId, element);
+                }
+            }
+
+
+            // 스크랩 추가 요청
+            function addScrap(megazineId, element) {
+
+                //megazineId = $(element).data('megazine-id');
+                console.log("addScrap 안에서의 Megazine ID:", megazineId);  // 로그 출력
+
+                // if (megazineId == null) {
+                //     throw new IllegalArgumentException("Megazine ID must not be null");
+                // }
+                if (megazineId == null) {
+                    throw new Error("Megazine ID must not be null");
+                }
+
+                $.ajax({
+                    url: '/megascrap/add',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrfHeader, csrfToken);  // CSRF 토큰 추가
+                    },
+                    data: JSON.stringify({ megazineId: megazineId }),
+                    success: function () {
+                        updateScrapStatus(element, true);  // 스크랩된 상태로 업데이트
+                        alert("즐겨찾기에 추가되었습니다.");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error details:", xhr.responseText); // 서버에서 반환된 오류 메시지 확인
+                        alert("스크랩 추가 중 오류가 발생했습니다: " + xhr.responseText);
+                    }
+                });
+            }
+
+            // 스크랩 삭제 요청
+            function removeScrap(megazineId, element) {
+                $.ajax({
+                    url: '/megascrap/remove',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(csrfHeader, csrfToken);  // CSRF 토큰 추가
+                    },
+                    data: JSON.stringify({ megazineId: megazineId }),
+                    success: function () {
+                        updateScrapStatus(element, false);  // 스크랩되지 않은 상태로 업데이트
+                        alert("즐겨찾기에서 삭제되었습니다.");
+                    },
+                    error: function (xhr, status, error) {
+                        alert("스크랩 삭제 중 오류가 발생했습니다.");
+                    }
+                });
+            }
+
+            // 스크랩 아이콘 클릭 이벤트 설정
+            // 중복 이벤트 방지
+            $('.scrap-icon img').off('click').on('click', function () {
+                toggleScrap(this);  // 스크랩 상태 토글
             });
+
         });
 
         /*자바스크립트*/
@@ -252,6 +343,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 2.25vw;
+            background-color: #007bff;
         }
         .mega_card{
             width:25vw;
@@ -304,6 +396,14 @@
             margin: 0.2vw;
             background-color: #efefef;
         }
+        .scrap-icon{
+            position: relative;
+        }
+        .scrap-icon-g{
+            position: absolute;
+            top:17.5vw;
+            left:-5.2vw;
+        }
     </style>
 </th:block>
 
@@ -312,23 +412,23 @@
 <div layout:fragment="content">
     <div class="row">
 
-            <div class="kind_wrap">
-                <h2 class="banner_title">Tip & Megazine</h2>
-                <div class="kind_slider">
-                    <ul class="slider">
-                        <li><img th:src="@{/img/main.jpg}" alt=""></li>
-                        <li><img th:src="@{/img/main1.jpg}" alt=""></li>
-                        <li><img th:src="@{/img/main2.jpg}" alt=""></li>
-                        <li><img th:src="@{/img/main.jpg}" alt=""></li>
-                        <li><img th:src="@{/img/main1.jpg}" alt=""></li>
-                        <li><img th:src="@{/img/main2.jpg}" alt=""></li>
-                    </ul>
-                </div>
-                <div class="arrow">
-                    <a href="" class="prev"><img class="next-img" th:src="@{/img/back.png}" alt=""></a>
-                    <a href="" class="next"><img class="next-img" th:src="@{/img/next2.png}" alt=""></a>
-                </div>
-            </div><!--end of banner -->
+        <div class="kind_wrap">
+            <h2 class="banner_title">Tip & Megazine</h2>
+            <div class="kind_slider">
+                <ul class="slider">
+                    <li><img th:src="@{/img/main.jpg}" alt=""></li>
+                    <li><img th:src="@{/img/main1.jpg}" alt=""></li>
+                    <li><img th:src="@{/img/main2.jpg}" alt=""></li>
+                    <li><img th:src="@{/img/main.jpg}" alt=""></li>
+                    <li><img th:src="@{/img/main1.jpg}" alt=""></li>
+                    <li><img th:src="@{/img/main2.jpg}" alt=""></li>
+                </ul>
+            </div>
+            <div class="arrow">
+                <a href="" class="prev"><img class="next-img" th:src="@{/img/back.png}" alt=""></a>
+                <a href="" class="next"><img class="next-img" th:src="@{/img/next2.png}" alt=""></a>
+            </div>
+        </div><!--end of banner -->
 
         <div class="wrap">
             <div class="wrap_layout">
@@ -343,6 +443,7 @@
 
                 <h2 class="main_title2">매거진 검색</h2>
                 <form th:action="@{/megazines/list}" method="get">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <input type="text" name="searchKeyword">
                     <button type="submit" class="search-btn mga_search">검색</button>
                 </form>
@@ -358,6 +459,7 @@
                 <!-- status: 반복의 상태 정보를 담는 변수 -->
                 <!--megazineItems에서 모든 콘텐츠들을 가져와-->
                 <div class="mega_wrap">
+
                     <th:block th:each="lists, status: ${list.getContent()}">
 
                         <a th:href="'/megazines/list/' + ${lists.mno}" class="mega_card">
@@ -368,16 +470,40 @@
                                 <p class="card-date text-danger" th:text="${#temporals.format(lists.regTime, 'yyyy-mm-dd HH:mm')}"></p>
                             </div>
                         </a>
+                        <!-- 스크랩 아이콘 (스크랩 상태에 따라 이미지 변경) -->
+                        <div class="scrap-icon">
+                            <img
+                                    id="scrapIcon_${lists.mno}"
+                                    th:src="@{/img/{image}(image=${#lists.contains(scrapList, lists.mno) ? 'instaheart.png' : 'instaheartnone.png'})}"
+                                    alt="스크랩 상태"
+                                    style="cursor: pointer; width: 2vw; height: 2vw; position: absolute; top:17vw; right:3.3vw;"
+                                    th:data-megazine-id="${lists.mno}">
+                        </div>
                     </th:block>
+
+                    <!-- 스크랩 아이콘 (스크랩 상태에 따라 이미지 변경) -->
+                    <!--                    <th:block th:each="megazineDTO : ${megazineList}">-->
+                    <!--                        <div class="scrap-icon">-->
+                    <!--                            <img-->
+                    <!--                                    id="scrapIcon_${megazineDTO.mno}"-->
+                    <!--                                    th:src="@{/img/{image}(image=${#lists.contains(scrapList, megazineDTO.mno) ? 'instaheart.png' : 'instaheartnone.png'})}"-->
+                    <!--                                    alt="스크랩 상태"-->
+                    <!--                                    style="cursor: pointer; width: 2vw; height: 2vw; position: absolute; top:17.2vw; left:0vw;"-->
+                    <!--                                    th:data-megazine-id="${megazineDTO.mno}">-->
+                    <!--                        </div>-->
+                    <!--                    </th:block>-->
+
+
                 </div>
-            <div class="pageNation-wrap">
-                <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}" >
+
+                <div class="pageNation-wrap">
+                    <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}" >
 
                         <a th:if="${page != nowPage}" th:href="@{/megazines/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
                         <strong th:if="${page == nowPage}" th:text="${page}" style="color: red" ></strong>
 
-                </th:block>
-            </div>
+                    </th:block>
+                </div>
             </div><!--wrap-->
         </div><!--wrap-->
     </div>
