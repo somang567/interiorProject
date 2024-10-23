@@ -1,5 +1,6 @@
 package com.keduit.interiors.service;
 
+import com.keduit.interiors.dto.MegazineDTO;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.entity.MegazineScrap;
 import com.keduit.interiors.entity.Member;
@@ -59,4 +60,17 @@ public class MegazineScrapService {
         // memberId를 기반으로 스크랩된 상품 ID 목록 반환
         return megazineScrapRepository.findMegazineMnosByMemberId(memberId);
     }
+
+
+    //서버에서 메거진 자체를
+    public List<Megazine> getScrapMegazinesForUser(Long memberId) {
+        return megazineScrapRepository.findScrapMegazinesByMemberId(memberId);
+    }
+
+    //새로 추가한 칭긔
+    @Transactional(readOnly = true)
+    public List<Megazine> getScrappedMegazines(Long memberId) {
+        return megazineScrapRepository.findScrapMegazinesByMemberId(memberId);
+    }
+
 }

@@ -32,6 +32,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MegazineController {
 
+  //private final Megazine megazine;
   private final MegazineService megazineService;
   private final MemberService memberService;
   private final MegazineRepository megazineRepository;
@@ -84,6 +85,8 @@ public class MegazineController {
     model.addAttribute("searchKeyword", searchKeyword); // 검색어를 모델에 추가
     model.addAttribute("maxPage", 5); // 한 화면에 5개의 페이지네이션
     return "megazine/megazineMain";
+
+
   }
 
 

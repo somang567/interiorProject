@@ -176,13 +176,19 @@
             </div>
         </div>
 
-        <div class="content-area" id="content-megazine">
+        <div class="content-area" id="content-megazine" th:if="${scrappedMegazines != null and scrappedMegazines.size() > 0}">
             <div class="carousel">
                 <button class="btn" id="prev-megazine">◀</button>
-                <img src="https://via.placeholder.com/100" alt="매거진 1">
-                <img src="https://via.placeholder.com/100" alt="매거진 2">
-                <img src="https://via.placeholder.com/100" alt="매거진 3">
-                <img src="https://via.placeholder.com/100" alt="매거진 4">
+                <div th:each="scrap : ${scrappedMegazines}">
+                    <!-- 링크와 이미지 -->
+                    <a th:href="@{'/megazines/list/' + ${scrap.mno}}">
+
+                        <img th:src="@{${scrap.imageUrl}}" alt="매거진 스크랩">
+                        <h2 th:text="${scrap.title}"></h2>
+                        <p class="card-date" th:text="${UserName}" readonly></p>
+                        <h2 th:text="${#temporals.format(scrap.regTime, 'yyyy-mm-dd HH:mm')}"></h2>
+                    </a>
+                </div>
                 <button class="btn" id="next-megazine">▶</button>
             </div>
         </div>
