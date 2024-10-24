@@ -23,6 +23,7 @@ public class ProductService {
 	private final ProductRepository productRepository;
 	private final ProductImgService productImgService;
 
+
 	// 상품과 여러 이미지를 저장하는 메서드
 	@Transactional(rollbackFor = Exception.class)
 	public Long addProduct(ProductDTO productDTO, List<MultipartFile> files) {
@@ -74,12 +75,25 @@ public class ProductService {
 				.orElse(null); // 썸네일이 없는 경우 null 반환
 	}
 
-	// 상품 ID로 상품 정보를 조회
 	public ProductDTO getProductById(Long productId) {
-		return productRepository.findById(productId)
-				.map(ProductDTO::of) // Product 엔티티를 DTO로 변환
+		// 상품 조회
+		Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new EntityNotFoundException("상품을 찾을 수 없습니다. ID: " + productId));
+
+		// 상품을 DTO로 변환
+		ProductDTO productDTO = ProductDTO.of(product);
+
+		// 상품 이미지 리스트에서 URL을 추출하여 DTO에 설정
+		List<String> imgUrls = product.getProductImgList().stream() // product 엔티티에서 이미지 리스트를 직접 가져옴
+				.map(ProductImg::getFileUrl) // 이미지 URL만 추출
+				.collect(Collectors.toList());
+
+		// 이미지 URL 리스트를 DTO에 설정
+		productDTO.setProductImgUrls(imgUrls);
+
+		return productDTO;
 	}
+
 
 	// 상품 타입에 따라 상품 목록 조회 (썸네일 이미지를 포함하여 반환)
 	public List<ProductDTO> getProductByType(ProductType productType) {

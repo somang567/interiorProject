@@ -12,8 +12,8 @@
 }
 
 #imageSlideIndicator {
-    width: 50%;
-    height: 35vw;
+    width: 100%;
+    height: 40vw;
     background-color: #c9c9c9;
     position: relative; /* 슬라이더 내부를 위치시키기 위한 상대 위치 */
 }
@@ -132,6 +132,7 @@
     transform: translate(-50%, -50%);
     width: 100%; /* 슬라이더 영역의 너비를 imageSlideIndicator에 맞춤 */
     height: 100%; /* 슬라이더 영역의 높이를 imageSlideIndicator에 맞춤 */
+
     box-shadow: 0 50px 100px rgba(0, 0, 0, 0.2);
 }
 
@@ -144,11 +145,9 @@
 
 .slider__img img {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* 이미지를 박스에 맞추고, 초과된 부분은 잘라냅니다. */
     opacity: 0;
-    transform: scale(1.2);
+    transform: scale(0.6);
     transition: all 600ms ease-in-out;
 }
 
@@ -156,25 +155,10 @@
     opacity: 1;
     transform: scale(1);
 }
-
-.slider__thumnail {
-    position: absolute;
-    left: 50%;
-    top: 100%;
-    transform: translate(-50%, -50%);
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.slider__thumnail img {
-    cursor: pointer;
-    border: 3px solid transparent;
-}
-
-.slider__thumnail img.active {
-    border: 3px solid #fff;
+.active.imgList{
+    width: 100%;
+    height: 100%;
+    background-size: cover;
 }
 
 .slider__btn a {
@@ -196,11 +180,17 @@
 }
 
 .slider__btn a.next {
+    top:50%;
+    width: 3vw;
+    height: 3vw;
     font-size: 3vw;
     right: 0;
 }
 
 .slider__btn a.previous {
+    width: 3vw;
+    height: 3vw;
     font-size: 3vw;
+    top: 50%;
     left: 0;
 }

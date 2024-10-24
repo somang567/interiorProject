@@ -3,6 +3,53 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
+<!-- 사용자 JS 추가 -->
+<th:block layout:fragment="script">
+    <script>
+        $(document).ready(function () {
+            let currentIndex = 0;
+            const images = $('.slider__img img');  // 모든 이미지를 가져옴
+            const totalImages = images.length;     // 이미지의 총 개수
+
+            console.log("이미지 개수: " + totalImages);  // 콘솔에 이미지 개수 출력
+
+            if (totalImages === 0) {
+                console.error("이미지를 불러오지 못했습니다.");
+                return;
+            }
+
+            // 첫 번째 이미지를 활성화하는 함수
+            function initializeFirstImage() {
+                images.eq(0).addClass('active');  // 첫 번째 이미지를 활성화
+            }
+
+            // 이미지를 표시하는 함수
+            function showImage(index) {
+                images.removeClass('active');     // 모든 이미지의 active 클래스를 제거
+                images.eq(index).addClass('active'); // 현재 인덱스에 해당하는 이미지에 active 클래스 추가
+                console.log("현재 인덱스: " + index);  // 콘솔에 현재 인덱스 출력
+            }
+
+            // 다음 버튼 클릭 시
+            $('.next').click(function (e) {
+                e.preventDefault();
+                currentIndex = (currentIndex + 1) % totalImages; // 다음 이미지로 전환
+                showImage(currentIndex);
+            });
+
+            // 이전 버튼 클릭 시
+            $('.previous').click(function (e) {
+                e.preventDefault();
+                currentIndex = (currentIndex - 1 + totalImages) % totalImages; // 이전 이미지로 전환
+                showImage(currentIndex);
+            });
+
+            // 페이지가 로드되면 첫 번째 이미지를 활성화
+            initializeFirstImage();
+        });
+    </script>
+
+</th:block>
 <div class="item_detailContainer" layout:fragment="content">
     <h1 class="productTitle">상품 상세정보</h1>
 
@@ -15,21 +62,24 @@
 
     <!-- 상품 이미지와 상세 정보 -->
     <div class="item-detail-wrapper">
-            <div id="imageSlideIndicator" class="carousel slide">
-                <div class="slider__wrap">
-                    <div class="slider__img"></div>
-                    <div class="slider__thumnail"></div>
-                    <div class="slider__btn">
-                        <a href="#" class="previous"><</a>
-                        <a href="#" class="next">></a>
-                    </div>
+        <div id="imageSlideIndicator" class="carousel slide">
+            <div class="slider__wrap">
+                <!-- 상품 이미지 리스트 반복 -->
+                <div class="slider__img">
+                    <img th:each="imgUrl : ${productDTO.productImgUrls}" th:src="@{${imgUrl}}" class="active imgList"/>
+                </div>
+
+                <div class="slider__btn">
+                    <a href="#" class="previous"><</a>
+                    <a href="#" class="next">></a>
                 </div>
             </div>
+        </div>
 
 
-            <!-- 상품 상세 정보 -->
-            <div class="product-detail">
-                <p style="font-size: 1.4vw; font-weight: bold">- 상품명</p>
+        <!-- 상품 상세 정보 -->
+        <div class="product-detail">
+            <p style="font-size: 1.4vw; font-weight: bold">- 상품명</p>
                 <p><span th:text="${productDTO.productName}" style="font-size: 3vw; font-weight: 600"></span></p>
                 <p>- 가격: <span th:text="${productDTO.price} + '원'"></span></p>
 
@@ -51,7 +101,7 @@
             </div>
     </div>
     <!-- 수정 및 삭제 버튼 (관리자만 보임) -->
-    <div class="item-buttons" style="margin-top: 2vw;" th:if="${isAdmin}">
+    <div class="item-buttons" style="margin-top: 0.7vw;" th:if="${isAdmin}">
         <!-- 수정 버튼 -->
         <button class="EditButtons"
                 th:onclick="|location.href='/item/updateItem/' + ${productDTO.id}|">수정</button>
