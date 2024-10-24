@@ -69,7 +69,7 @@ public class CompanypromotionController {
     // 게시글 목록 조회 (뷰 반환)
     @GetMapping("/list")
     public String list(Model model,
-                       @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                       @PageableDefault(page = 0, size = 6, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                        @RequestParam(required = false) String searchType,
                        @RequestParam(required = false) String searchKeyword) {
         try {

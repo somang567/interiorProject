@@ -21,10 +21,8 @@ public class CompanypromotionDTO {
     private LocalDateTime regTime;
     private LocalDateTime updateTime;
 
-    // 기본 생성자
     public CompanypromotionDTO() {}
 
-    // 모든 필드를 받는 생성자
     public CompanypromotionDTO(Long id, String title, String content, Long authorId, String authorName,
                                String filename, String filepath, int commentCount, int viewCount,
                                LocalDateTime regTime, LocalDateTime updateTime) {

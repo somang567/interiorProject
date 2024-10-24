@@ -14,15 +14,20 @@
             }
 
             .write-button {
-                display: block;
-                margin-bottom: 2vw;
-                padding: 0.8vw 1.6vw;
+                display: inline-block;
+                padding: 0.6vw 1.2vw;
                 background-color: #3498db;
                 color: white;
                 text-decoration: none;
                 border-radius: 0.5vw;
-                text-align: right;
+                text-align: center;
             }
+
+            .button-container {
+                text-align: right;
+                margin-bottom: 2vw;
+            }
+
 
             .write-button:hover {
                 background-color: #2980b9;
@@ -166,7 +171,8 @@
             <div class="pagination">
                 <!-- 이전 페이지 링크 -->
                 <a th:if="${nowPage > 1}"
-                   th:href="@{/companypromotion/list(page=${(nowPage - 2)}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">이전 페이지</a>
+                   th:href="@{/companypromotion/list(page=${(nowPage - 2)}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">이전
+                    페이지</a>
 
                 <!-- 페이지 번호 반복 -->
                 <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
@@ -178,7 +184,8 @@
 
                 <!-- 다음 페이지 링크 -->
                 <a th:if="${nowPage < totalPages}"
-                   th:href="@{/companypromotion/list(page=${nowPage}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">다음 페이지</a>
+                   th:href="@{/companypromotion/list(page=${nowPage}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">다음
+                    페이지</a>
             </div>
         </div>
 
