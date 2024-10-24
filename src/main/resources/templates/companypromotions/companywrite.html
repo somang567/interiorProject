@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content">
+  <th:block layout:fragment="css">
+    <style>
+      /* 폼 컨테이너 스타일 */
+      .form-container {
+        max-width: 70vw;
+        margin: 4vw auto;
+        padding: 2vw;
+        background-color: #f4f4f4;
+        border-radius: 0.8vw;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        font-size: 1rem;
+        margin-bottom: 2vw;
+      }
+
+      h1 {
+        margin-bottom: 2vw;
+        text-align: center;
+        color: #3498db;
+      }
+
+      /* 폼 그룹 스타일 */
+      .form-group {
+        margin-bottom: 1.5vw;
+        text-align: left;
+      }
+
+      .form-group label {
+        font-weight: bold;
+        color: #333;
+      }
+
+      .form-control, .form-control-file {
+        width: 98%;
+        padding: 0.8vw;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin: auto;
+      }
+
+      /* 버튼 스타일 */
+      .button-container {
+        text-align: center;
+        margin-top: 2vw;
+      }
+
+      .button {
+        padding: 0.8vw 1.6vw;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 0.4vw;
+        cursor: pointer;
+        font-size: 1rem;
+        margin: 0.5vw;
+        text-decoration: none;
+      }
+
+      .button:hover {
+        background-color: #2980b9;
+      }
+
+      .btn-secondary {
+        background-color: #95a5a6;
+      }
+
+      .btn-secondary:hover {
+        background-color: #7f8c8d;
+      }
+
+      /* 이미지 미리보기 스타일 */
+      .img-preview {
+        margin-top: 1.5vw;
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 0.5vw;
+        display: none;
+      }
+
+      small {
+        display: block;
+        margin-top: 0.5vw;
+        color: #777;
+        font-size: 0.9rem;
+      }
+    </style>
+  </th:block>
+
+  <form th:action="@{/companypromotion/writedo}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+    <div class="form-container">
+      <h1>홍보 게시글 등록</h1>
+
+      <!-- 제목 입력 -->
+      <div class="form-group">
+        <label for="title">제목</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요" required>
+      </div>
+
+      <!-- 작성자 입력 (자동으로 로그인한 사용자 이름으로 입력, readonly 처리) -->
+      <div class="form-group">
+        <label for="author">작성자</label>
+        <input type="text" class="form-control" id="author" name="author" th:value="${authorName}" readonly>
+      </div>
+
+      <!-- 내용 입력 -->
+      <div class="form-group">
+        <label for="content">내용</label>
+        <textarea class="form-control" id="content" name="content" placeholder="내용을 입력하세요" rows="5"
+                  required></textarea>
+      </div>
+
+      <!-- 이미지 파일 업로드 -->
+      <div class="form-group">
+        <label for="file">첨부 이미지</label>
+        <input type="file" class="form-control-file" id="file" name="file" accept="image/*"
+               onchange="previewImage(event)">
+        <small>이미지 파일만 업로드 가능합니다 (JPG, PNG, GIF).</small>
+        <!-- 이미지 미리보기 -->
+        <img id="img-preview" class="img-preview" alt="미리보기 이미지">
+      </div>
+
+      <!-- 버튼 영역 -->
+      <div class="button-container">
+        <a href="/companypromotion/list" role="button" class="button btn-secondary" onclick="alert('작성이 취소되었습니다.')">취소</a>
+        <button type="submit" class="button btn-primary">등록</button>
+      </div>
+    </div>
+  </form>
+
+  <th:block layout:fragment="javascript">
+    <script>
+      // 이미지 미리보기 함수
+      function previewImage(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('img-preview');
+
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        } else {
+          preview.style.display = 'none';
+          preview.src = '';
+        }
+      }
+
+      // 간단한 폼 유효성 검사 함수
+      function validateForm() {
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+
+        // 제목과 내용이 비어 있는지 확인
+        if (!title || !content) {
+          alert('모든 필수 항목을 입력해주세요.');
+          return false;
+        }
+        return true;
+      }
+    </script>
+  </th:block>
+</div>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content">
+
+    <!-- CSRF 토큰 메타 태그 (로그인한 사용자만 보이도록 설정) -->
+    <th:block sec:authorize="isAuthenticated()">
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    </th:block>
+
+    <!-- CSS 스타일 -->
+    <th:block layout:fragment="css">
+        <style>
+            .view-container {
+                width: 80vw;
+                margin: 0 auto;
+                margin-top: 3vw;
+                padding: 2vw;
+                background-color: #f4f4f4;
+                border-radius: 0.8vw;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                font-size: 1rem;
+                margin-bottom: 2vw;
+            }
+
+            p {
+                line-height: 3vw;
+                padding-left: 1vw;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 2vw;
+                border: 1px solid #ddd;
+            }
+
+            th, td {
+                padding: 1rem;
+                border: 1px solid #ddd;
+                text-align: left;
+            }
+
+            th {
+                text-align: center;
+                background-color: #f9f9f9;
+                font-weight: bold;
+                width: 15%;
+                color: #333;
+            }
+
+            td {
+                background-color: #fff;
+                color: #333;
+            }
+
+            .content-cell {
+                background-color: #fdfdfd;
+                padding: 1.5rem;
+                white-space: pre-line;
+            }
+
+            .image-cell {
+                text-align: center;
+            }
+
+            /* 이미지 크기 제한 */
+            .image-cell img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .button-container {
+                text-align: right;
+                margin-top: 1.5rem;
+                display: flex;
+                justify-content: flex-end;
+                gap: 1rem;
+            }
+
+            .button {
+                padding: 0.8vw 1.6vw;
+                background-color: #555;
+                color: white;
+                border: none;
+                border-radius: 0.4vw;
+                cursor: pointer;
+                font-size: 0.9rem;
+                text-decoration: none;
+            }
+
+            .button:hover {
+                background-color: #333;
+            }
+        </style>
+    </th:block>
+
+    <!-- 게시글 상세 내용 -->
+    <div class="view-container">
+        <table>
+            <tr>
+                <th>제목</th>
+                <td th:text="${companypromotion.title}"></td>
+            </tr>
+            <tr>
+                <th>작성자</th>
+                <td th:text="${companypromotion.authorName}"></td>
+            </tr>
+            <tr>
+                <th>첨부 이미지</th>
+                <td class="image-cell">
+                    <th:block th:if="${companypromotion.filename}">
+                        <img th:src="@{'/files/' + ${companypromotion.filename}}" alt="첨부 이미지"/>
+                    </th:block>
+                    <th:block th:unless="${companypromotion.filename}">
+                        이미지가 없습니다.
+                    </th:block>
+                </td>
+            </tr>
+            <tr>
+                <th>수정일</th>
+                <td th:text="${#temporals.format(companypromotion.updateTime, 'yyyy-MM-dd HH:mm')}">수정일</td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td class="content-cell">
+                    <span th:text="${companypromotion.content}"></span>
+                </td>
+            </tr>
+        </table>
+
+        <!-- 버튼 -->
+        <div class="button-container">
+            <a href="/companypromotion/list" class="button">목록으로</a>
+            <a th:href="@{/companypromotion/modify/{id}(id=${companypromotion.id})}" class="button"
+               sec:authorize="isAuthenticated()">수정하기</a>
+
+            <form th:action="@{/companypromotion/delete/{id}(id=${companypromotion.id})}" method="post"
+                  sec:authorize="isAuthenticated()"
+                  onsubmit="return confirm('정말로 게시글을 삭제하시겠습니까?');">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <button type="submit" class="button">삭제하기</button>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+</html>

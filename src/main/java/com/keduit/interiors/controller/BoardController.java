@@ -117,7 +117,7 @@ public class BoardController {
             BoardDTO boardDTO = boardService.boardView(id);
             if (boardDTO == null) {
                 model.addAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
-                return "error/404"; // 게시글 없음 페이지
+                return "40411"; // 게시글 없음 페이지
             }
             model.addAttribute("board", boardDTO);
 
@@ -292,7 +292,7 @@ public class BoardController {
             BoardDTO boardDTO = boardService.boardView(id);
             if (boardDTO == null) {
                 model.addAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
-                return "error/404"; // 게시글 없음 페이지
+                return "40411"; // 게시글 없음 페이지
             }
             model.addAttribute("board", boardDTO);
             return "boards/boardmodify";
