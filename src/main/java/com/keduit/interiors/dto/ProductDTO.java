@@ -46,6 +46,8 @@ public class ProductDTO {
 
 	private ProductImgDTO fileUrl;
 
+	private List<String> productImgUrls = new ArrayList<>();
+
 	// 수정: List<MultipartFile> 필드의 이름을 HTML의 파일 필드 이름과 일치하게 유지합니다.
 	private List<MultipartFile> multipartFileList;
 
