@@ -34,17 +34,23 @@ public class CSEntity extends BaseEntity {
 	private CS csStatus;
 
 	// 문의글 작성자 (회원)
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id")
 	private Member member;
 
 
+	@OneToMany(mappedBy = "csEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CsComment> csComments = new ArrayList<>();
+
 	// 문의글 업데이트 메서드
-	public void updateCs(String title, String content, ProductType productType, CsWriteType csWriteType, com.keduit.interiors.constant.CS csStatus) {
+	public void updateCs(String title, String content, ProductType productType, CsWriteType csWriteType, CS csStatus, List<CsComment> csComments) {
 		this.title = title;
 		this.content = content;
 		this.productType = productType;
 		this.csWriteType = csWriteType;
 		this.csStatus = csStatus;
+		this.csComments.clear();  // 기존 댓글을 모두 지우고
+		this.csComments.addAll(csComments);  // 새로운 댓글 리스트로 대체
 	}
+
 }

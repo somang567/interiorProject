@@ -1,4 +1,3 @@
-
 package com.keduit.interiors.service;
 
 import com.keduit.interiors.dto.BoardDTO;
@@ -46,7 +45,7 @@ public class MegazineService {
     //CartDetailDTO 응? 여기서 리스트를 뽑아온다? 얘가 몬데 씌벌?
     //아니 얘가 사용자를 이메일로 인식을 하면
     // 게시글을 가져올 때도 Member와 조인을 맺어서 그 멤버 아이디로 가져와야 하는 것 아닌가?
-    public List<MegazineDTO> getBoardList() {
+    public List<MegazineDTO> getMegazineList() {
         //findByMemberId 얘가 지금 findByMemberId(Long member_id)라는데
 
         List<MegazineDTO> boardDTOList = new ArrayList<>();
@@ -290,10 +289,10 @@ public class MegazineService {
 
     //검색 기능
     public Page<Megazine> megazineSearchList(String searchKeyword, Pageable pageable){
-    return megazineRepository.findByTitleContaining(searchKeyword, pageable);
+        return megazineRepository.findByTitleContaining(searchKeyword, pageable);
     }
 
-    
+
     public List<Megazine> getList() {
         return megazineRepository.findAll();
     }
@@ -309,6 +308,60 @@ public class MegazineService {
     public void delete(Long mno) {
         megazineRepository.deleteById(mno);
     }
+
+
+    // 게시글 조회 메서드 (megazineView)
+    public MegazineDTO megazineView(Long mno) {
+        Optional<Megazine> megazineOpt = megazineRepository.findById(mno);
+
+        if (megazineOpt.isPresent()) {
+            Megazine megazine = megazineOpt.get();
+            megazine.setViewCount(megazine.getViewCount() + 1); // 조회수 증가
+            megazineRepository.save(megazine); // 변경사항 저장
+            return entityToDto(megazine); // DTO로 변환하여 반환
+        }
+        return null;
+    }
+
+    // 엔티티 -> DTO 변환 메서드
+    public MegazineDTO entityToDto(Megazine megazine) {
+        return new MegazineDTO(
+                megazine.getMno(),
+                megazine.getTitle(),
+                megazine.getUser(),
+                megazine.getContent(),
+                megazine.getViewCount(),
+                megazine.getCommentCount(),
+                megazine.getScrapCount(),
+                megazine.getOriImgName(),
+                megazine.getImgName(),
+                megazine.getImageUrl(),
+                megazine.getRegTime(), // 등록 시간
+                megazine.getUpdateTime(), // 수정 시간
+                new ArrayList<>(), // ItemImgDTO 리스트 (초기화)
+                new ArrayList<>()  // itemImgIds 리스트 (초기화)
+        );
+
+    }
+
+    // DTO -> 엔티티 변환 메서드
+    public Megazine dtoToEntity(MegazineDTO dto) {
+        Megazine megazine = new Megazine();
+        megazine.setMno(dto.getMno());
+        megazine.setTitle(dto.getTitle());
+        megazine.setUser(dto.getUser());
+        megazine.setContent(dto.getContent());
+        megazine.setViewCount(dto.getViewCount());
+        megazine.setCommentCount(dto.getCommentCount());
+        megazine.setScrapCount(dto.getScrapCount());
+        megazine.setOriImgName(dto.getOriImgName());
+        megazine.setImgName(dto.getImgName());
+        megazine.setImageUrl(dto.getImageUrl());
+        megazine.setRegTime(dto.getRegTime());
+        megazine.setUpdateTime(dto.getUpdateTime());
+        return megazine; // 여기에서 오류가 발생할 수 있음
+    }
+
 
 
 }

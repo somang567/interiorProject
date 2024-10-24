@@ -34,14 +34,57 @@
 .product-name {
     font-weight: bold;
     color: #000000;
+    font-size: 1vw;
 }
 
 .product-price {
     margin-top: 5px;
-    color: #268bcc;
+    color: rgba(173, 59, 1, 0.95);
+    font-size: 1vw;
+    font-weight: 600;
+}
+.product-stockNum{
+    margin-top: 5px;
+    color: black;
+    font-size: 1vw;
 }
 
 /* 버튼이 클릭되었을 때 스타일 */
 .product-item:hover {
     background-color: #f0f0f0;
+}
+/* 검색창 스타일 */
+.CS_search_container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.CS_search_container input[type="text"] {
+    width: 30%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1vw;
+}
+
+.CS_search_container button {
+    padding: 10px 15px;
+    background-color: #C6BAAA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1vw;
+    cursor: pointer;
+}
+
+.CS_search_container button:hover {
+    background-color: #C6BAAA;
+}
+
+
+/* 이제부터 문의 등록 폼 CSS */
+
+.write-text-container{
+    text-align: center;
+    margin-bottom: 10px;
 }

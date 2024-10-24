@@ -100,8 +100,10 @@
             <!-- 상품명, 가격, 스크랩 아이콘 -->
             <div class="product-info">
                 <div class="product-details" style="flex: 1;">
-                    <p class="product-name" th:text="${productDTO.productName}">상품명</p>
-                    <p class="product-price" th:text="${productDTO.price} + '원'">가격</p>
+                    <p class="product-name" th:text="${productDTO.productName}" >상품명</p>
+                    <p class="product-stockNum"style="display: inline-flex; font-weight: 600">재고: </p>
+                    <p class="product-stockNum" th:text="${productDTO.stockNumber} + '개'" style="display: inline-flex; color: #268bcc"></p>
+                    <p class="product-price" th:text="${productDTO.price} + '원'"></p>
                 </div>
 
                 <!-- 스크랩 아이콘 (스크랩 상태에 따라 이미지 변경) -->
@@ -120,6 +122,20 @@
     <div class="crudButtonContainer" th:if="${isAdmin}">
         <button type="button" class="addItemButton" id="addButton"
                 onclick="window.location.href='/item/addItem'">상품 등록하기</button>
+    </div>
+
+
+    <!-- 검색창 -->
+    <div class="CS_search_container">
+        <form th:action="@{/item/product/search}" method="get">
+            <select name="category" style="width: 5vw; height: 2vw; font-size: 1.2vw; font-weight: 400; text-align: center">
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+                <option value="writer">작성자</option>
+            </select>
+            <input type="text" name="keyword" placeholder="검색어를 입력하세요">
+            <button type="submit">검색</button>
+        </form>
     </div>
 </div>
 </html>

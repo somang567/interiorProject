@@ -1,10 +1,13 @@
+// 댓글 조회 및 목록 처리 수정
 package com.keduit.interiors.controller;
 
 import com.keduit.interiors.constant.CS;
 import com.keduit.interiors.constant.CsWriteType;
 import com.keduit.interiors.constant.Role;
+import com.keduit.interiors.dto.CsCommentDTO;
 import com.keduit.interiors.dto.CsDTO;
 import com.keduit.interiors.entity.Member;
+import com.keduit.interiors.service.CsCommentService;
 import com.keduit.interiors.service.CsService;
 import com.keduit.interiors.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +22,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class CsController {
 
 	private final CsService csService;
+	private final CsCommentService csCommentService;
 	private final MemberService memberService;
 
 	@GetMapping("/cs/list")
@@ -52,7 +57,6 @@ public class CsController {
 		return "cs/csMain";
 	}
 
-
 	// CS 등록 페이지로 이동
 	@GetMapping("/cs/write")
 	public String writeCsForm(Model model, Principal principal) {
@@ -64,7 +68,6 @@ public class CsController {
 
 		return "cs/csWriteForm";
 	}
-
 
 	// CS 등록 처리
 	@PostMapping("/cs/write")
@@ -85,26 +88,26 @@ public class CsController {
 			csDTO.setCsWriteType(CsWriteType.COMMON);
 		}
 
-		System.out.println("Role: " + member.getRole());
-		System.out.println("CsWriteType set to: " + csDTO.getCsWriteType());
-
 		csService.saveCs(csDTO);
 		return "redirect:/cs/list";
 	}
 
-	// CS 상세보기 페이지
-	@GetMapping("/cs/view/{id}")
-	public String viewCsDetail(@PathVariable Long id, Model model, Principal principal) {
+	// CS 상세 페이지 (댓글 포함)
+	@GetMapping("/view/{id}")
+	public String viewCs(@PathVariable Long id, Model model, Principal principal) {
+		// CS 게시물 정보 조회
 		CsDTO csDTO = csService.getCsById(id);
 		model.addAttribute("csDTO", csDTO);
-		model.addAttribute("principal", principal);
 
-		// 로그인한 사용자가 작성자인지 확인 (email로 비교)
-		String email = principal.getName();
-		boolean isWriter = email.equals(csDTO.getMemberEmail());  // email로 비교
+		// 해당 CS 게시물에 달린 댓글 목록 조회 (형 변환 불필요)
+		List<CsCommentDTO> CsComments = csCommentService.getCommentsByCsId(id);
+		model.addAttribute("CsComments", CsComments);
+
+		// 로그인한 사용자가 해당 게시물의 작성자인지 여부 확인
+		boolean isWriter = principal != null && csDTO.getMemberEmail().equals(principal.getName());
 		model.addAttribute("isWriter", isWriter);
 
-		return "cs/csDetailForm";
+		return "cs/csDetailForm";  // 해당 뷰 페이지로 이동
 	}
 
 	// CS 수정 페이지로 이동

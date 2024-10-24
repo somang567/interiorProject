@@ -23,7 +23,6 @@ public class Megazine extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long mno;
 
-
   @Column(nullable = false, length = 500)
   private String title;
 
@@ -52,6 +51,14 @@ public class Megazine extends BaseEntity {
   @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "member_id")
   private Member member;
+
+  @Column(nullable = false)
+  private int commentCount = 0;
+
+  // 댓글 목록 관리
+  @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<Comment> comments;
+
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "megazine", cascade = CascadeType.REMOVE, orphanRemoval = true)
   private List<MegazineComment> megazineCommentsList = new ArrayList<>();

@@ -1,11 +1,21 @@
-/* Flexbox 레이아웃으로 반반 나눔 */
+.item_detailContainer {
+    width: 100%;
+    height: 100%;
+}
+
 .item-detail-wrapper {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    width: 100%;
     gap: 2vw; /* 두 영역 사이의 간격 */
-    padding: 2vw 0;
     border: 1px solid #2C2C2C;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+#imageSlideIndicator {
+    width: 50%;
+    height: 35vw;
+    background-color: #c9c9c9;
+    position: relative; /* 슬라이더 내부를 위치시키기 위한 상대 위치 */
 }
 
 .detailTitle_line {
@@ -18,21 +28,18 @@
     margin-top: 1vh; /* 밑줄 위에 간격 */
     opacity: 1;
 }
-.editTitle_line{
-    width: 60vw;
-    height: 0.2vw;
-    border-radius: 5%;
-    display: flex;
-    background: black;
-    color: black;
-    margin-top: 1vh; /* 밑줄 위에 간격 */
-    opacity: 1;
+
+/* 왼쪽 영역: 이미지 슬라이드 */
+.carousel {
+    flex: 1;
+    max-width: 50%; /* 왼쪽 영역이 50%를 차지 */
 }
 
 /* 오른쪽 영역: Product Detail */
 .product-detail {
     flex: 1;
-    max-width: 48%; /* 전체 너비의 48% 차지 */
+    max-width: 50%; /* 오른쪽 영역이 50%를 차지 */
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -57,11 +64,20 @@
     margin-top: 1vw;
     margin-bottom: 1vw;
 }
-.item-buttons{
+
+.itemCS {
+    width: 85%;
+    height: 3vw;
+    color: white;
+    background-color: black;
+    text-align: center;
+}
+
+.item-buttons {
     display: flex;
 }
 
-.EditButtons{
+.EditButtons {
     display: block;
     margin-left: auto;
     margin-right: 0.2vw;
@@ -72,7 +88,6 @@
     border: 0.5px solid #2c2c2c;
     border-radius: 10%;
     cursor: pointer;
-
 }
 
 .EditButtons:hover {
@@ -80,7 +95,7 @@
     color: white;
 }
 
-.deleteButtons{
+.deleteButtons {
     display: block;
     margin-left: auto;
     width: 5vw;
@@ -99,8 +114,93 @@
 
 /* SNS */
 .snsShare {
-    margin-top: 3.5vw;
+    width: 20vw;
+    height: 5vw;
+    padding-top: 2vw;
+    margin: 0 auto;
     text-align: center;
     font-size: 2vw;
     font-weight: 800;
+    background-color: #ffffff;
+}
+
+/* 이미지 슬라이더 */
+.slider__wrap {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%; /* 슬라이더 영역의 너비를 imageSlideIndicator에 맞춤 */
+    height: 100%; /* 슬라이더 영역의 높이를 imageSlideIndicator에 맞춤 */
+    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.2);
+}
+
+.slider__img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.slider__img img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.2);
+    transition: all 600ms ease-in-out;
+}
+
+.slider__img img.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.slider__thumnail {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.slider__thumnail img {
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+.slider__thumnail img.active {
+    border: 3px solid #fff;
+}
+
+.slider__btn a {
+    position: absolute;
+    top: 25%;
+    width: 100px;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    transition: all 400ms ease-in-out;
+}
+
+.slider__btn a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.slider__btn a.next {
+    font-size: 3vw;
+    right: 0;
+}
+
+.slider__btn a.previous {
+    font-size: 3vw;
+    left: 0;
 }

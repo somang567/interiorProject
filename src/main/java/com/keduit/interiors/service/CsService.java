@@ -74,9 +74,12 @@ public class CsService {
 
 		// 작성자 확인 (이메일 비교)
 		if (!csEntity.getMember().getEmail().equals(email)) {
-			throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
+			// 관리자도 삭제 가능하도록 추가
+			Member member = memberRepository.findByEmail(email);
+			if (!member.getRole().equals("ROLE_ADMIN") && member.getRole().equals("ROLE_USER")) {
+				throw new IllegalArgumentException("작성자 또는 관리자만 삭제할 수 있습니다.");
+			}
 		}
-
-		csRepository.deleteById(id);  // 게시물 삭제
+		csRepository.deleteById(id);
 	}
 }
