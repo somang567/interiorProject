@@ -255,7 +255,6 @@
             height:15vw;
             margin-top: 2vw;
             margin-bottom: 5vw;
-            /*background-color: antiquewhite;*/
         }
         .fmgabox_list{
             width:25vw;
@@ -271,30 +270,35 @@
             margin-top: 3vw;
         }
         .mga_search{
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            width:100%;
-            height:6vw;
+            width:5vw;
+            height:3vw;
+            font-size: 1vw;
             border: 0.1vw solid rgb(206, 206, 206);
-            border-radius: 1vw;
-            margin-top: 2vw;
+            border-radius: 0.2vw;
         }
-        .mga_search_li{
-            list-style-type:none;
-            width:8vw;
-            height:2.2vw;
-            font-size: 1.2vw;
-            font-weight: bold;
-            /*background-color: aqua;*/
-            border-bottom: 0.1vw solid gray ;
+        .mga_search:hover{
+            background-color: #EF7828;
+            transition: all 1s ease;
         }
-        .mga_search_li_btn{
-            list-style-type:none;
-            width:8vw;
-            height:2.2vw;
-            /*background-color: aqua;*/
-            text-align: center;
+        .search-box{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width:78vw;
+            height:1vw;
+            margin: 0 auto;
+        }
+        .mega-search-bar{
+            width:65vw;
+            height:1vw;
+            padding: 1.3vw 1vw;
+            border-radius: 0.2vw;
+            border: 0.17vw solid rgba(44, 44, 44, 0.26);
+            font-size: 1vw;
+        }
+        .search-icon{
+            width:4vw;
+            height:4vw;
         }
         .search_btn{
             width:5vw;
@@ -340,42 +344,72 @@
         /*}*/
         /*==카드 관련 css==*/
         .mega_wrap{
+            width:fit-content;
+            height:100%;
             display: flex;
             flex-wrap: wrap;
-            gap: 2.25vw;
-            background-color: #007bff;
+            margin:0;
         }
         .mega_card{
-            width:25vw;
-            height:28vw;
+            width:18vw;
+            height:24vw;
             background-color: #ffffff;
             border-radius: 0.5vw;
             border: 0.1vw solid #d6d6d6;
-            text-align: center;
             box-shadow: 0.1vw 0.1vw 0.4vw #939393;
+            margin:1vw;
+        }
+        .img_wrap{
+            width:100%;
+            height:12vw;
+            overflow: hidden;
         }
         .mega_card_img{
             width:100%;
-            height:20vw;
+            height:12vw;
             margin: 0 auto;
+        }
+        .mega_card_img:hover{
+            transform: scale(1.2);
+            transition: all 1s ease;
         }
         .card-title{
             font-size: 1.2vw;
             font-weight: bold;
             color:black;
-            margin:1vw;
+            width: 100%; /* 원하는 너비 설정 */
+            overflow: hidden; /* 넘치는 내용 숨기기 */
+            white-space: nowrap; /* 줄 바꿈 금지 */
+            text-overflow: ellipsis; /* 잘린 부분에 ... 표시 */
+        }
+        .card-content{
+            width: 100%;
+            height:3vw;
+            overflow: hidden; /* 넘치는 내용 숨기기 */
+            white-space: nowrap; /* 줄 바꿈 금지 */
+            text-overflow: ellipsis; /* 잘린 부분에 ... 표시 */
+            font-size: 1vw;
+            color:black;
+            margin: 1vw 0;
+        }
+        .card_user{
+            width: 100%;
+            font-size: 0.8vw;
+            color:black;
+            border-top:0.1vw solid rgba(209, 209, 209, 0.58);
+            padding: 0.5vw 0;
         }
         .card-date{
-            font-size: 1vw;
-            font-weight: bold;
+            font-size: 0.8vw;
             color:black;
-            margin:1vw;
+            margin:0.5vw 0;
         }
-        .pagination{
-            width:20vw;
-            height:5vw;
-            background-color: #7f8c8d;
+        .card-body{
+            width:16vw;
+            height:9vw;
+            margin:1.5vw auto;
         }
+        /*페이지네이션 CSS*/
         .pageNation-wrap{
             display: flex;
             justify-content: center;
@@ -399,11 +433,7 @@
         .scrap-icon{
             position: relative;
         }
-        .scrap-icon-g{
-            position: absolute;
-            top:17.5vw;
-            left:-5.2vw;
-        }
+
     </style>
 </th:block>
 
@@ -441,10 +471,12 @@
                     <li class="fmgabox_list"><img class="fmgabox_list" th:src="@{/img/main2.jpg}" alt=""></li>
                 </ul>
 
-                <h2 class="main_title2">매거진 검색</h2>
-                <form th:action="@{/megazines/list}" method="get">
+                <h2 hidden class="main_title2">매거진 검색</h2>
+
+                <form th:action="@{/megazines/list}" method="get" class="search-box">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <input type="text" name="searchKeyword">
+                    <img th:src="@{/img/search.png}" alt="" class="search-icon">
+                    <input type="text" name="searchKeyword" placeholder="매거진을 검색해보세요." class="mega-search-bar">
                     <button type="submit" class="search-btn mga_search">검색</button>
                 </form>
 
@@ -463,11 +495,14 @@
                     <th:block th:each="lists, status: ${list.getContent()}">
 
                         <a th:href="'/megazines/list/' + ${lists.mno}" class="mega_card">
-                            <img th:src="${lists.imageUrl}" th:alt="${lists.title}" class="mega_card_img" height="400">
+                            <div class="img_wrap">
+                                <img th:src="${lists.imageUrl}" th:alt="${lists.title}" class="mega_card_img" height="400">
+                            </div>
                             <div class="card-body">
                                 <h4 class="card-title" th:text="${lists.title}">[[${lists.title}]]</h4>
-                                <p class="card-date" th:text="${authorName}" readonly></p>
-                                <p class="card-date text-danger" th:text="${#temporals.format(lists.regTime, 'yyyy-mm-dd HH:mm')}"></p>
+                                <h4 class="card-content" th:text="${lists.content}">[[${lists.content}]]</h4>
+                                <p class="card-date text-danger" th:text="${#temporals.format(lists.regTime, 'yyyy-MM-dd')}"></p>
+                                <p class="card_user" th:text="${authorName}" readonly></p>
                             </div>
                         </a>
                         <!-- 스크랩 아이콘 (스크랩 상태에 따라 이미지 변경) -->
@@ -476,7 +511,7 @@
                                     id="scrapIcon_${lists.mno}"
                                     th:src="@{/img/{image}(image=${#lists.contains(scrapList, lists.mno) ? 'instaheart.png' : 'instaheartnone.png'})}"
                                     alt="스크랩 상태"
-                                    style="cursor: pointer; width: 2vw; height: 2vw; position: absolute; top:17vw; right:3.3vw;"
+                                    style="cursor: pointer; width: 2vw; height: 2vw; position: absolute; top:10.5vw; right:2vw;"
                                     th:data-megazine-id="${lists.mno}">
                         </div>
                     </th:block>
