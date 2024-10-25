@@ -513,42 +513,24 @@
             <h3>업체 홍보</h3>
             <div class="slider_container">
                 <div class="slider_wrapper">
-                    <div class="promotion_img">
-                        <img th:src="@{img/promotion1.jpg}" alt="업체 홍보 1">
-                        <p style="font-size: 18px">~~ 시공 사례 1</p>
-                    </div>
-                    <div class="promotion_img">
-                        <img th:src="@{img/promotion2.jpg}" alt="업체 홍보 2">
-                        <p style="font-size: 18px">~~ 시공 사례 2</p>
-                    </div>
-                    <div class="promotion_img">
-                        <img th:src="@{img/promotion3.jpg}" alt="업체 홍보 3">
-                        <p style="font-size: 18px">~~ 시공 사례 3</p>
-                    </div>
-                    <div class="promotion_img">
-                        <img th:src="@{img/promotion4.jpg}" alt="업체 홍보 4">
-                        <p style="font-size: 18px">~~ 시공 사례 4</p>
-                    </div>
+                    <th:block th:each="promotion : ${promotions}">
+                        <div class="promotion_img">
+                            <img th:src="@{|/files/${promotion.filename}|}" th:alt="${promotion.title}">
+                            <p style="font-size: 18px" th:text="${promotion.title}"></p>
+                        </div>
+                    </th:block>
+
                     <!-- 슬라이더 무한 반복을 위한 클론 -->
-                    <div class="promotion_img">
-                        <img th:src="@{img/promotion1.jpg}" alt="업체 홍보 1">
-                        <p style="font-size: 18px">~~ 시공 사례 1</p>
-                    </div>
-                    <div class="promotion_img">
-                        <img th:src="@{img/promotion2.jpg}" alt="업체 홍보 2">
-                        <p style="font-size: 18px">~~ 시공 사례 2</p>
-                    </div>
-                    <div class="promotion_img">
-                        <img th:src="@{img/promotion3.jpg}" alt="업체 홍보 3">
-                        <p style="font-size: 18px">~~ 시공 사례 3</p>
-                    </div>
-                    <div class="promotion_img">
-                        <img th:src="@{img/promotion4.jpg}" alt="업체 홍보 4">
-                        <p style="font-size: 18px">~~ 시공 사례 4</p>
-                    </div>
+                    <th:block th:each="promotion : ${promotions}">
+                        <div class="promotion_img">
+                            <img th:src="@{|/files/${promotion.filename}|}" th:alt="${promotion.title}">
+                            <p style="font-size: 18px" th:text="${promotion.title}"></p>
+                        </div>
+                    </th:block>
                 </div>
             </div>
         </div>
+
 
 
         <div class="main_board_sub">

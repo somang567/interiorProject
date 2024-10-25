@@ -1,6 +1,7 @@
 package com.keduit.interiors.controller;
 
 import com.keduit.interiors.dto.BoardDTO;
+import com.keduit.interiors.dto.CompanypromotionDTO;
 import com.keduit.interiors.dto.MemberDTO;
 import com.keduit.interiors.dto.ProductDTO;
 import com.keduit.interiors.entity.Megazine;
@@ -32,6 +33,7 @@ public class MainController {
   private final MemberService memberService;
   private final MegazineScrapService megazineScrapService;
   private final ProductService productService;
+  private final CompanypromotionService companypromotionService;
 
 
   @GetMapping("/")
@@ -50,6 +52,12 @@ public class MainController {
     // 상품 찾기 부분 (랜덤으로 상품 가져오기)
     List<ProductDTO> randomProducts = productService.getRandomProducts(4); // 원하는 개수 설정 (예: 2개)
     model.addAttribute("randomProducts", randomProducts);
+
+    // 업체 홍보 부분 (최대 4개의 홍보 항목 가져오기)
+    int maxPromotionCount = 4; // 최대 항목 수 설정
+    Pageable promotionPageable = PageRequest.of(0, maxPromotionCount, Sort.by(Sort.Direction.DESC, "id"));
+    Page<CompanypromotionDTO> promotions = companypromotionService.list(promotionPageable);
+    model.addAttribute("promotions", promotions.getContent());
 
     return "main";  // main.html로 이동
   }
