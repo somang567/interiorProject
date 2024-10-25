@@ -5,6 +5,8 @@
 .selection{
     display: block;
     background-color: #2c2c2c;
+    background-image: uri("/img/");
+    background-size: cover;
 }
 .carousel_slide {
     width: 100vw;
@@ -42,15 +44,15 @@
 .select_categori_button{
     width: 10vw;
     height: 10vw;
-    border-radius: 50%;
+    border-radius: 10%;
 }
 .categori_image_box {
     width: 10vw;
-    height: 10vw;
+    height: 8vw;
     padding: 3vw;
     margin-bottom: 1vw;
-    border-radius: 50%; /* 둥근 형태 유지 */
-    background-image: url("../img/wall.jpg");
+    border-radius: 10%; /* 둥근 형태 유지 */
+    background-image: url("../img/wallpaper.png");
     background-size: cover;
     display: flex;
     flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
@@ -58,43 +60,56 @@
     justify-content: center; /* 중앙 정렬 */
     border: 1px solid #2C2C2C;
 }
+.categori_image_box:hover{
+    transform: scale(1.1);
+    transition: 0.2s ease;
+}
 .categori_image_box2 {
     width: 10vw;
-    height: 10vw;
+    height: 8vw;
     padding: 3vw;
     margin-bottom: 1vw;
-    border-radius: 50%; /* 둥근 형태 유지 */
-    background-image: url("../img/tail.jpg");
+    border-radius: 10%; /* 둥근 형태 유지 */
+    background-image: url("../img/tile.png");
     background-size: cover;
     display: flex;
     flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
     align-items: center; /* 중앙 정렬 */
     justify-content: center; /* 중앙 정렬 */
     border: 1px solid #2C2C2C;
+}
+.categori_image_box2:hover{
+    transform: scale(1.1);
+    transition: 0.2s ease;
 }
 
 .categori_image_box3 {
     width: 10vw;
-    height: 10vw;
+    height: 8vw;
     padding: 3vw;
     margin-bottom: 1vw;
-    border-radius: 50%; /* 둥근 형태 유지 */
-    background-image: url("../img/stock.jpg");
+    border-radius: 10%; /* 둥근 형태 유지 */
+    background-image: url("../img/stock.png");
     background-size: cover;
     display: flex;
     flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
     align-items: center; /* 중앙 정렬 */
     justify-content: center; /* 중앙 정렬 */
     border: 1px solid #2C2C2C;
+}
+
+.categori_image_box3:hover{
+    transform: scale(1.1);
+    transition: 0.2s ease;
 }
 
 .categori_image_box4 {
     width: 10vw;
-    height: 10vw;
+    height: 8vw;
     padding: 3vw;
     margin-bottom: 1vw;
-    border-radius: 50%; /* 둥근 형태 유지 */
-    background-image: url("../img/furniture.jpg");
+    border-radius: 10%; /* 둥근 형태 유지 */
+    background-image: url("../img/bed.png");
     background-size: cover;
     display: flex;
     flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
@@ -103,13 +118,22 @@
     border: 1px solid #2C2C2C;
 }
 
+.categori_image_box4:hover{
+    transform: scale(1.1);
+    transition: 0.2s ease;
+}
+
+.categori_image_box4:hover{
+    transform: scale(1.1);
+    transition: 0.2s ease;
+}
 .categori_image_box5 {
     width: 10vw;
-    height: 10vw;
+    height: 8vw;
     padding: 3vw;
     margin-bottom: 1vw;
-    border-radius: 50%; /* 둥근 형태 유지 */
-    background-image: url("../img/floor.jpg");
+    border-radius: 10%; /* 둥근 형태 유지 */
+    background-image: url("../img/floor.png");
     background-size: cover;
     display: flex;
     flex-direction: column; /* 버튼을 아래로 배치하기 위해 세로 방향 정렬 */
@@ -118,6 +142,10 @@
     border: 1px solid #2C2C2C;
 }
 
+.categori_image_box5:hover{
+    transform: scale(1.1);
+    transition: 0.2s ease;
+}
 .item_name{
     font-size: 1.5vw;
     font-weight: 800;
