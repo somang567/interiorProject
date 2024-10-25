@@ -9,6 +9,7 @@ import com.keduit.interiors.entity.ItemImg;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.repository.ItemImgRepository;
+import com.keduit.interiors.repository.MegazineCommentRepository;
 import com.keduit.interiors.repository.MegazineRepository;
 import com.keduit.interiors.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class MegazineService {
     private final MegazineRepository megazineRepository;
     private final MemberRepository memberRepository;
     private final FileService fileService;
+    private final MegazineCommentRepository megazineCommentRepository;
 
 
     @Transactional(readOnly = true) //데이터 베이스 성능 최적화를 위함.
@@ -68,6 +70,10 @@ public class MegazineService {
     //전체 게시글 수 세는 메서드
     public long countTotalMagazines() {
         return megazineRepository.count();
+    }
+
+    public long countTotalComments() {
+        return megazineCommentRepository.count();
     }
 
     @Transactional(readOnly = true)

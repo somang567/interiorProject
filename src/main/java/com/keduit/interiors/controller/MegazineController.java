@@ -44,7 +44,7 @@ public class MegazineController {
   @GetMapping("/list")
   public String megazineItem(
           @RequestParam(required = false) String searchKeyword,
-          @PageableDefault(page = 0, size = 9, sort = "mno", direction = Sort.Direction.DESC) Pageable pageable,
+          @PageableDefault(page = 0, size = 4, sort = "mno", direction = Sort.Direction.DESC) Pageable pageable,
           Model model, Principal principal) {
 
     List<MegazineDTO> megazineProducts = megazineService.getMegazineList();
@@ -56,6 +56,11 @@ public class MegazineController {
     }
 
     String memberId = principal.getName();
+    if(memberId == null){
+      System.out.println("아직 로그인한 사용자가 없음요---------");
+    }else{
+      memberId = principal.getName();
+    }
     // 또는 사용자 ID가 필요하다면, UserDetailsService를 사용하여 사용자 정보를 가져올 수 있습니다.
     Member userDetails = memberService.findByEmail(memberId);
     Long userId = userDetails.getId(); // 사용자 ID를 가져오는 예 (UserDetails 구현에 따라 다를 수 있음)
@@ -75,6 +80,7 @@ public class MegazineController {
     int nowPage = list.getPageable().getPageNumber() + 1; //pageable에서 넘어온 현재 페이지를 반환/ 페이지 1부터 시작.
     int startPage = Math.max(nowPage - 4, 1);
     int endPage = Math.min(nowPage + 5, list.getTotalPages());
+
     model.addAttribute("nowPage", nowPage);
     model.addAttribute("startPage", startPage);
     model.addAttribute("endPage", endPage);
@@ -84,6 +90,7 @@ public class MegazineController {
 
     model.addAttribute("searchKeyword", searchKeyword); // 검색어를 모델에 추가
     model.addAttribute("maxPage", 5); // 한 화면에 5개의 페이지네이션
+
     return "megazine/megazineMain";
 
 
@@ -135,11 +142,31 @@ public class MegazineController {
   // 상세보기 관련 Url --------
   //User 매거진 상세보기 페이지
   @GetMapping("/list/{megazineId}")
-  public String itemDtl(Model model, @PathVariable("megazineId") Long megazineId) {
-
+  public String itemDtl(Model model, @PathVariable("megazineId") Long megazineId, Principal principal) {
 
     MegazineDTO megazineDTO = megazineService.getItemDtl(megazineId);
     model.addAttribute("megazineDTO", megazineDTO);
+
+    //댓글 관련 로직getCommentsByBoardId(id);
+    List<MegazineCommentDTO> comments = megazineCommentServiceImpl.getCommentsByMegazineId(megazineId);
+    Long currentUserId = null;
+    if (principal != null) {
+      Member member = memberService.findByEmail(principal.getName());
+      currentUserId = member.getId();
+    }
+
+    if (comments == null) {
+      //model.addAttribute("errorMessage", "해당 댓글이 존재하지 않습니다.");
+    }else{
+      for (MegazineCommentDTO comment : comments) {
+        comment.setEditable(currentUserId != null && currentUserId.equals(comment.getAuthorId()));
+      }
+      model.addAttribute("comments", comments);
+    }
+
+    long totalCnt = megazineService.countTotalComments();  //전체 매거진 개수
+    model.addAttribute("totalCnt", totalCnt);
+  //댓글 관련 로직 End
     return "megazine/megazineDetail";
   }
 
@@ -246,14 +273,15 @@ public class MegazineController {
 //    return "redirect:/successPage"; // 성공 시 리다이렉트
 //  }
 
-  // 댓글 추가 처리 (AJAX 요청)
+  // 댓글 추가 처리 (AJAX 요청)------------------------------------------------
   @PostMapping("/{megazineId}/comment")
   @ResponseBody
   public ResponseEntity<?> addComment(@PathVariable("megazineId") Long megazineId,
                                       @RequestBody Map<String, String> payload,
                                       Principal principal) {
-
+    System.out.println("megazineId-============================="+ megazineId);
     System.out.println("댓글 Post 매핑 여기로 넘어옴-=============================");
+
     if (principal == null) {
       Map<String, String> errorResponse = new HashMap<>();
       errorResponse.put("error", "로그인이 필요합니다.");
@@ -276,7 +304,9 @@ public class MegazineController {
       Member member = memberService.findByEmail(principal.getName());
       MegazineCommentDTO savedMegazineCommentDTO = megazineCommentService.saveComment(megazineCommentDTO, member);
 
+
       // 댓글이 제대로 저장된 경우 반환
+      // 서버에서 생성된 댓글의 데이터 전송 객체(Data Transfer Object)입니다
       return ResponseEntity.ok(savedMegazineCommentDTO);
     } catch (Exception e) {
       Map<String, String> errorResponse = new HashMap<>();
@@ -286,9 +316,9 @@ public class MegazineController {
   }
 
   // 댓글 수정 처리 (AJAX 요청)
-  @PostMapping("/comment/update/{id}")
+  @PostMapping("/comment/update/{megazineId}")
   @ResponseBody
-  public ResponseEntity<?> updateComment(@PathVariable("id") Long id,
+  public ResponseEntity<?> updateComment(@PathVariable("megazineId") Long id,
                                          @RequestBody Map<String, String> payload,
                                          Principal principal) {
     if (!hasPermissionToModifyOrDeleteComment(id, principal)) {
@@ -347,9 +377,9 @@ public class MegazineController {
 
 
   // 댓글 삭제 처리 (AJAX 요청)
-  @DeleteMapping("/comment/delete/{id}")
+  @DeleteMapping("/comment/delete/{megazineId}")
   @ResponseBody
-  public ResponseEntity<?> deleteComment(@PathVariable("id") Long id, Principal principal) {
+  public ResponseEntity<?> deleteComment(@PathVariable("megazineId") Long id, Principal principal) {
     if (!hasPermissionToModifyOrDeleteComment(id, principal)) {
       Map<String, String> errorResponse = new HashMap<>();
       errorResponse.put("error", "권한이 없습니다. 댓글을 삭제할 수 없습니다.");

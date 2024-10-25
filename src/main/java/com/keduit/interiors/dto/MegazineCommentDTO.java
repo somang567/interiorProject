@@ -17,9 +17,18 @@ public class MegazineCommentDTO extends BaseEntity {
     private String content;
     private Long authorId;  // 작성자의 ID
     private String authorName; // 작성자의 이름
+    private String commentContents;
     private Long megazineId;  // 댓글이 속한 게시글의 ID
     private LocalDateTime createdDate;
     private boolean isEditable; // 댓글 수정 가능 여부
+
+
+//    private Long id;
+//    private String commentWriter;
+//    private String commentContents;  // 작성자의 ID
+//    private Long megazineId; // 작성자의 이름
+//    private LocalDateTime commentCreatedTime;
+
 
     public MegazineCommentDTO() {
 
@@ -33,23 +42,23 @@ public class MegazineCommentDTO extends BaseEntity {
         this.megazineId = megazineId;
     }
 
-/*
-    public MegazineCommentDTO(Long id, String commentWriter, String commentContents, Long megazineId) {
+
+    public MegazineCommentDTO(Long id, String authorName, String commentContents, Long megazineId) {
         this.id = id;
-        this.commentWriter = commentWriter;
+        this.authorName = authorName;
         this.commentContents = commentContents;
         this.megazineId = megazineId;
     }
 
 
-    public static MegazineCommentDTO toCommentDTO(MegazineComment megazineComment, Long megazineId ) {
-        MegazineCommentDTO megazineCommentDTO = new MegazineCommentDTO();
-        megazineCommentDTO.setId(megazineComment.getId());
-        megazineCommentDTO.setCommentWriter(megazineComment.getCommentWriter());
-        megazineCommentDTO.setCommentContents(megazineComment.getCommentContents());
-        megazineCommentDTO.setMegazineId(megazineId);
-        return megazineCommentDTO;
-    }
-*/
+//    public static MegazineCommentDTO toCommentDTO(MegazineComment megazineComment, Long megazineId ) {
+//        MegazineCommentDTO megazineCommentDTO = new MegazineCommentDTO();
+//        megazineCommentDTO.setId(megazineComment.getId());
+//        megazineCommentDTO.setCommentWriter(megazineComment.getCommentWriter());
+//        megazineCommentDTO.setCommentContents(megazineComment.getCommentContents());
+//        megazineCommentDTO.setMegazineId(megazineId);
+//        return megazineCommentDTO;
+//    }
+
 
 }

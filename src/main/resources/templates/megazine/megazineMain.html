@@ -515,29 +515,38 @@
                                     th:data-megazine-id="${lists.mno}">
                         </div>
                     </th:block>
-
-                    <!-- 스크랩 아이콘 (스크랩 상태에 따라 이미지 변경) -->
-                    <!--                    <th:block th:each="megazineDTO : ${megazineList}">-->
-                    <!--                        <div class="scrap-icon">-->
-                    <!--                            <img-->
-                    <!--                                    id="scrapIcon_${megazineDTO.mno}"-->
-                    <!--                                    th:src="@{/img/{image}(image=${#lists.contains(scrapList, megazineDTO.mno) ? 'instaheart.png' : 'instaheartnone.png'})}"-->
-                    <!--                                    alt="스크랩 상태"-->
-                    <!--                                    style="cursor: pointer; width: 2vw; height: 2vw; position: absolute; top:17.2vw; left:0vw;"-->
-                    <!--                                    th:data-megazine-id="${megazineDTO.mno}">-->
-                    <!--                        </div>-->
-                    <!--                    </th:block>-->
-
-
                 </div>
 
                 <div class="pageNation-wrap">
+                    <a th:if="${nowPage > 1}"
+                       th:href="@{/megazines/list(page=${(nowPage - 2)}, searchKeyword=${param.searchKeyword})}">이전</a>
+
                     <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}" >
-
-                        <a th:if="${page != nowPage}" th:href="@{/megazines/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>
+<!--                        <a th:if="${page != nowPage}" th:href="@{/megazines/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>-->
                         <strong th:if="${page == nowPage}" th:text="${page}" style="color: red" ></strong>
-
                     </th:block>
+
+                    <a th:if="${nowPage < endPage}"
+                       th:href="@{/megazines/list(page=${nowPage}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">다음</a>
+
+<!--                    <a th:if="${nowPage > 1}"-->
+<!--                       th:href="@{/megazines/list(page=${(nowPage - 2)}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">이전</a>-->
+
+<!--                        &lt;!&ndash; 페이지 번호 반복 &ndash;&gt;-->
+<!--                        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">-->
+<!--                            <a th:if="${page > 0 && page != nowPage}"-->
+<!--                               th:href="@{/megazines/list(page=${(page - 1)}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}"-->
+<!--                               th:text="${page}"></a>-->
+<!--                            <strong th:if="${page == nowPage}" th:text="${page}"></strong>-->
+<!--                        </th:block>-->
+<!--                    -->
+<!--                    -->
+
+
+<!--                        <a th:if="${nowPage < endPage}"-->
+<!--                           th:href="@{/megazines/list(page=${nowPage}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">다음</a>-->
+
+
                 </div>
             </div><!--wrap-->
         </div><!--wrap-->

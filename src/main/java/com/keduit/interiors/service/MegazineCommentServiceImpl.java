@@ -1,5 +1,6 @@
 package com.keduit.interiors.service;
 
+import com.keduit.interiors.dto.CommentDTO;
 import com.keduit.interiors.dto.MegazineCommentDTO;
 import com.keduit.interiors.entity.*;
 import com.keduit.interiors.repository.MegazineCommentRepository;
@@ -8,7 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -46,19 +50,52 @@ public class MegazineCommentServiceImpl implements MegazineCommentService {
     }
 
     @Override
-    public MegazineCommentDTO getCommentById(Long id) {
-        MegazineComment megazineComment = megazineCommentRepository.findById(id)
+    public MegazineCommentDTO getCommentById(Long megazineId) {
+        MegazineComment megazineComment = megazineCommentRepository.findById(megazineId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
         return mapToDTO(megazineComment);
     }
 
-    //////////////////////
-@Override
-public MegazineCommentDTO getMegazineCommentById(Long id) {
-        MegazineComment megazineComment = megazineCommentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
-        return mapToDTO(megazineComment);
+
+
+//@Override
+//public MegazineCommentDTO getMegazineCommentById(Long megazineId) {
+//        MegazineComment megazineComment = megazineCommentRepository.findById(megazineId)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+//        return mapToDTO(megazineComment);
+//    }
+
+    @Override
+    public List<MegazineCommentDTO> getCommentsByMegazineId(Long megazineId) {
+        List<MegazineComment> comments = megazineCommentRepository.findByMegazineMno(megazineId);
+        return comments.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
+
+    @Override
+    public MegazineCommentDTO getMegazineCommentById(Long megazineId) {
+        MegazineComment comment = megazineCommentRepository.findById(megazineId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+        return mapToDTO(comment);
+    }
+
+
+//이상한 애들 리스트...
+//    @Override
+//    public MegazineCommentDTO getMegazineCommentById(Long megazineId) {
+//        Optional<MegazineComment> megazineComment = megazineCommentRepository.findById(megazineId);
+//        return megazineCommentRepository.findById(megazineId)
+//                .map(this::mapToDTO) // 댓글이 존재할 경우 DTO로 변환
+//                .orElse(null); // 댓글이 존재하지 않을 경우 null 반환
+//    }
+
+//    @Override
+//    public MegazineCommentDTO getMegazineCommentById(Long megazineId) {
+//        return megazineCommentRepository.findById(megazineId)
+//                .stream()
+//                .map(this::mapToDTO)
+//                .collect(Collectors.toList());
+//    }
+
 
     @Override
     public void updateComment(MegazineCommentDTO megazineCommentDTO, Member member) throws IllegalAccessException {
@@ -75,8 +112,8 @@ public MegazineCommentDTO getMegazineCommentById(Long id) {
     }
 
     @Override
-    public void deleteComment(Long id, Member member) throws IllegalAccessException {
-        MegazineComment megazineComment = megazineCommentRepository.findById(id)
+    public void deleteComment(Long megazineId, Member member) throws IllegalAccessException {
+        MegazineComment megazineComment = megazineCommentRepository.findById(megazineId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
 
         // 작성자 또는 관리자 확인
@@ -116,9 +153,16 @@ public MegazineCommentDTO getMegazineCommentById(Long id) {
     }
 
 
-    @Override
-    public List<MegazineCommentDTO> getCommentsByMegazineId(Long megazineMno) {
-        return List.of();
-    }
+//    public List<MegazineCommentDTO>findAll(Long megazineId){
+//        Megazine megazine = megazineRepository.findById(megazineId).get();
+//        List<MegazineComment> megazineCommentList = megazineCommentRepository.findAllByMegazineOrderByIdDesc(megazine);
+//        List<MegazineCommentDTO> commentDTOList = new ArrayList<>();
+//        for(MegazineComment megazineComment : megazineCommentList){
+//            MegazineCommentDTO megazineCommentDTO = MegazineCommentDTO.toCommentDTO(megazineComment, megazineId);
+//            commentDTOList.add(megazineCommentDTO);
+//        }
+//        return commentDTOList;
+//    }
+
 }
 
