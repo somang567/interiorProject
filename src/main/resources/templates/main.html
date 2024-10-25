@@ -467,47 +467,17 @@
     <h3 style="padding-left: 3%; margin: 15px 0 25px 0;">상품 찾기</h3>
     <br>
     <div class="prod_box">
-        <div class="product">
+        <div th:each="product : ${randomProducts}" class="product">
             <div class="find_prod_img">
-                <img th:src="@{/img/door.png}" alt="">
+                <img th:src="${product.firstImageUrl}" alt="상품 이미지">
             </div>
             <div class="introduce_prod">
-                <p>예림 ABS이지도어 민자</p>
-                <p style="color: skyblue;">105,000원</p>
-                <p>판매처 : 자재로</p>
-            </div>
-        </div>
-        <div class="product">
-            <div class="find_prod_img">
-                <img th:src="@{/img/shower.jpg}" alt="">
-            </div>
-            <div class="introduce_prod">
-                <p>샤워전용수전 칼리스토 TF B5010 니켈</p>
-                <p style="color: skyblue;">246,000원</p>
-                <p>판매처 : 자재로</p>
-            </div>
-        </div>
-        <div class="product">
-            <div class="find_prod_img">
-                <img th:src="@{/img/house.jpg}" alt="">
-            </div>
-            <div class="introduce_prod">
-                <p>하우스 미니 장식장</p>
-                <p style="color: skyblue;">175,000원</p>
-                <p>판매처 : 까사디아 굳닷컴</p>
-            </div>
-        </div>
-        <div class="product">
-            <div class="find_prod_img">
-                <img th:src="@{/img/table.jpg}" alt="">
-            </div>
-            <div class="introduce_prod">
-                <p>소소숲 허쉬 세라믹 디자인 소파 테이블</p>
-                <p style="color: skyblue;">166,900원</p>
-                <p>판매처 : 까사디아 굳닷컴</p>
+                <p th:text="${product.productName}">상품 이름</p>
+                <p th:text="${product.price + '원'}" style="color: skyblue;">상품 가격</p>
             </div>
         </div>
     </div>
+
 
     <br>
     <br>
@@ -518,7 +488,7 @@
             <!-- 반복 횟수를 5개로 제한 -->
             <th:block th:if="${status.index < 5}">
                 <button class="ar-item" th:onclick="'Click(this,' + ${status.index} + ')'">
-                    <a th:href="'/megazines/item/' + ${item.mno}">
+                    <a th:href="'/megazines/list/' + ${item.mno}">
                         <img th:src="${item.imageUrl}" th:alt="${item.title}">
                         <div class="arco-tip">
                             <div>

@@ -2,12 +2,10 @@ package com.keduit.interiors.controller;
 
 import com.keduit.interiors.dto.BoardDTO;
 import com.keduit.interiors.dto.MemberDTO;
+import com.keduit.interiors.dto.ProductDTO;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.entity.Member;
-import com.keduit.interiors.service.BoardService;
-import com.keduit.interiors.service.MegazineScrapService;
-import com.keduit.interiors.service.MegazineService;
-import com.keduit.interiors.service.MemberService;
+import com.keduit.interiors.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +31,7 @@ public class MainController {
   private final MegazineService megazineService;
   private final MemberService memberService;
   private final MegazineScrapService megazineScrapService;
+  private final ProductService productService;
 
 
   @GetMapping("/")
@@ -48,6 +47,9 @@ public class MainController {
     Page<Megazine> items = megazineService.getListItemPage(megazinePageable);
     model.addAttribute("items", items);
 
+    // 상품 찾기 부분 (랜덤으로 상품 가져오기)
+    List<ProductDTO> randomProducts = productService.getRandomProducts(4); // 원하는 개수 설정 (예: 2개)
+    model.addAttribute("randomProducts", randomProducts);
 
     return "main";  // main.html로 이동
   }

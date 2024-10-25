@@ -7,6 +7,8 @@ import com.keduit.interiors.entity.ProductImg;
 import com.keduit.interiors.repository.ProductRepository;
 import com.keduit.interiors.service.ProductImgService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -137,5 +139,27 @@ public class ProductService {
 		}
 
 		productRepository.deleteById(id); // 상품 삭제
+	}
+
+	// 등록된 상품 랜덤으로 가져오기
+	public List<ProductDTO> getRandomProducts(int count) {
+		// ProductRepository에서 랜덤으로 상품을 가져오기
+		List<Product> products = productRepository.findRandomProducts(PageRequest.of(0, count));
+
+		return products.stream()
+				.map(product -> {
+					ProductDTO productDTO = ProductDTO.of(product);
+
+					// 썸네일 이미지 URL 설정
+					String firstImageUrl = product.getProductImgList().stream()
+							.filter(ProductImg::isThumbnail) // 썸네일로 지정된 이미지를 찾음
+							.map(ProductImg::getFileUrl)
+							.findFirst()
+							.orElse("/img/default.jpg"); // 썸네일이 없을 경우 기본 이미지 사용
+					productDTO.setFirstImageUrl(firstImageUrl);
+
+					return productDTO;
+				})
+				.collect(Collectors.toList());
 	}
 }
