@@ -15,7 +15,7 @@
 
             .write-button {
                 display: inline-block;
-                padding: 0.6vw 1.2vw;
+                padding: 0.6vw 1vw;
                 background-color: #3498db;
                 color: white;
                 text-decoration: none;
@@ -28,7 +28,6 @@
                 margin-bottom: 2vw;
             }
 
-
             .write-button:hover {
                 background-color: #2980b9;
             }
@@ -36,7 +35,7 @@
             .promotion-list {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 2vw;
+                gap: 1vw;
                 justify-content: center;
             }
 
@@ -145,9 +144,11 @@
     <h1 class="qa_boardtext">업체 홍보 게시판</h1>
     <div class="list_container">
         <!-- 로그인한 사용자에게만 글쓰기 버튼이 보이게 설정 -->
-        <th:block sec:authorize="isAuthenticated()">
-            <a href="/companypromotion/write" class="write-button">게시글 작성</a>
-        </th:block>
+        <div class="button-container">
+            <th:block sec:authorize="isAuthenticated()">
+                <a href="/companypromotion/write" class="write-button">게시글 작성</a>
+            </th:block>
+        </div>
 
         <!-- 홍보 게시글 리스트 -->
         <div class="promotion-list">
@@ -199,7 +200,6 @@
             <input type="text" name="searchKeyword" th:value="${param.searchKeyword}" placeholder="검색어를 입력해주세요.">
             <button type="submit">검색</button>
         </form>
-
     </div>
 </div>
 </html>
