@@ -52,8 +52,7 @@ public class CompanypromotionService {
     // 게시글 삭제 메서드 (delete)
     public void delete(Long id) throws IllegalAccessException {
         // 게시글 조회
-        Companypromotion companypromotion = companypromotionRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 게시글 ID: " + id));
+        Companypromotion companypromotion = companypromotionRepository.getById(id);
 
         // 게시글 삭제
         companypromotionRepository.deleteById(id);
@@ -118,8 +117,7 @@ public class CompanypromotionService {
     // 게시글 수정 메서드 (update)
     public void update(CompanypromotionDTO companypromotionDTO, MultipartFile file, boolean deleteExistingFile, Member member) throws Exception {
         // 기존 게시글 조회
-        Companypromotion existingCompanypromotion = companypromotionRepository.findById(companypromotionDTO.getId())
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 게시글 ID: " + companypromotionDTO.getId()));
+        Companypromotion existingCompanypromotion = companypromotionRepository.getById(companypromotionDTO.getId());
 
         // 작성자 확인
         if (!existingCompanypromotion.getAuthor().equals(member)) {

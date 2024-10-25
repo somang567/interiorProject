@@ -115,10 +115,7 @@ public class BoardController {
     public String boardView(Model model, @RequestParam("id") Long id, Principal principal) {
         try {
             BoardDTO boardDTO = boardService.boardView(id);
-            if (boardDTO == null) {
-                model.addAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
-                return "40411"; // 게시글 없음 페이지
-            }
+
             model.addAttribute("board", boardDTO);
 
             if (boardDTO.getFilename() != null) {
@@ -285,21 +282,9 @@ public class BoardController {
     public String boardModify(@PathVariable("id") Long id, Model model, Principal principal) {
         if (!hasPermissionToModifyOrDeleteBoard(id, principal)) {
             model.addAttribute("errorMessage", "권한이 없습니다. 게시글을 수정할 수 없습니다.");
-            return "error/403"; // 접근 거부 페이지
+            return "error/403";
         }
-
-        try {
-            BoardDTO boardDTO = boardService.boardView(id);
-            if (boardDTO == null) {
-                model.addAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
-                return "40411"; // 게시글 없음 페이지
-            }
-            model.addAttribute("board", boardDTO);
-            return "boards/boardmodify";
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "게시글 수정 폼 로딩 중 오류가 발생했습니다: " + e.getMessage());
-            return "error/500"; // 서버 오류 페이지
-        }
+        return "boards/boardmodify";
     }
 
     // 권한 확인 메서드 (게시글)

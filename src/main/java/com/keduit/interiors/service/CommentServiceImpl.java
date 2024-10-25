@@ -25,9 +25,8 @@ public class CommentServiceImpl implements CommentService {
     // 댓글 저장 메서드
     @Override
     public CommentDTO saveComment(CommentDTO commentDTO, Member member) {
-        // 게시글 존재 여부 확인
-        Board board = boardRepository.findById(commentDTO.getBoardId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+
+        Board board = boardRepository.getById(commentDTO.getBoardId());
 
         // 새로운 댓글 생성
         Comment comment = new Comment();

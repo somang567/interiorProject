@@ -109,10 +109,7 @@ public class CompanypromotionController {
     public String view(Model model, @RequestParam("id") Long id, Principal principal) {
         try {
             CompanypromotionDTO companypromotionDTO = companypromotionService.view(id);
-            if (companypromotionDTO == null) {
-                model.addAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
-                return "error/404"; // 게시글 없음 페이지
-            }
+
             model.addAttribute("companypromotion", companypromotionDTO);
 
             if (companypromotionDTO.getFilename() != null) {
@@ -122,10 +119,6 @@ public class CompanypromotionController {
 
             // 조회수 증가
             companypromotionService.incrementViewCount(id);
-
-            // 댓글 기능은 잠시 주석처리
-            // List<CommentDTO> comments = commentServiceImpl.getCommentsByCompanypromotionId(id);
-            // model.addAttribute("comments", comments);
 
             return "companypromotions/companyview";
         } catch (Exception e) {
@@ -186,10 +179,7 @@ public class CompanypromotionController {
 
         try {
             CompanypromotionDTO companypromotionDTO = companypromotionService.view(id);
-            if (companypromotionDTO == null) {
-                model.addAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
-                return "error/404"; // 게시글 없음 페이지
-            }
+
             model.addAttribute("companypromotion", companypromotionDTO);
             return "companypromotions/companymodify";
         } catch (Exception e) {
