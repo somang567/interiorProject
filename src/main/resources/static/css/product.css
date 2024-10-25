@@ -2,12 +2,6 @@
     width: 100%;
     height: 100%;
 }
-.selection{
-    display: block;
-    background-color: #2c2c2c;
-    background-image: uri("/img/");
-    background-size: cover;
-}
 .carousel_slide {
     width: 100vw;
     height: 30vh;
@@ -19,6 +13,7 @@
 .selection {
     flex: 1; /* 내용이 있는 부분이 공간을 차지하도록 */
     width: 100vw;
+    height: 60vh;
     background-color: white;
     margin: 0 auto;
     display: flex;

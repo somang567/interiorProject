@@ -96,6 +96,13 @@ public class ProductService {
 		return productDTO;
 	}
 
+	public List<ProductDTO> getProductsByIds(List<Long> productIds) {
+		List<Product> products = productRepository.findAllById(productIds);
+		return products.stream()
+				.map(ProductDTO::of) // Product 엔티티를 ProductDTO로 변환
+				.collect(Collectors.toList());
+	}
+
 
 	// 상품 타입에 따라 상품 목록 조회 (썸네일 이미지를 포함하여 반환)
 	public List<ProductDTO> getProductByType(ProductType productType) {

@@ -34,7 +34,7 @@ public class MainController {
   private final MegazineScrapService megazineScrapService;
   private final ProductService productService;
   private final CompanypromotionService companypromotionService;
-
+  private final ProductScrapService productScrapService;
 
   @GetMapping("/")
   public String main(Model model,
@@ -75,6 +75,12 @@ public class MainController {
       model.addAttribute("name", member.getName());
       model.addAttribute("email", member.getEmail());
     }
+
+    // 스크랩한 상품목록 가져오기
+    // 태준 즐겨찾기한 상품 스크랩
+    List<Long> scrappedProductIds = productScrapService.getScrapProductIdsForUser(member.getId());
+    List<ProductDTO> scrappedProducts = productService.getProductsByIds(scrappedProductIds); // 수정된 부분
+    model.addAttribute("scrappedProducts", scrappedProducts);
 
     //민영 스크랩
     Page<Megazine> list = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분

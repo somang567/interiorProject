@@ -3,20 +3,46 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-<div id="comment_container" layout:fragment="content">
-    <!-- 댓글 수정 폼 -->
-    <form class="comment_edit" th:action="@{/csComment/edit/{id}(id=${csCommentDTO.id})}" method="post" th:object="${csCommentDTO}">
-        <input type="hidden" name="csId" th:value="${csCommentDTO.csId}"/> <!-- csId 추가 -->
+<th:block layout:fragment="script">
+    <script>
+        const textarea = document.getElementById('autoTextarea');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto'; // 높이를 자동으로 설정하여 다시 계산
+            this.style.height = (this.scrollHeight) + 'px'; // 콘텐츠 크기에 맞게 높이 설정
+        });
+    </script>
+</th:block>
 
+<div id="CS_container" layout:fragment="content">
+    <form class="cs_write" th:action="@{/cs/edit/{id}(id=${csDTO.id})}" method="post" th:object="${csDTO}">
         <div class="view_all_text-container">
-            <span class="write_text" style="color: #806C61;">댓글 수정</span>
+            <span class="write_text" style="color: #806C61;">문의 수정</span>
         </div>
-        <hr class="comment_write_line">
+        <hr class="cs_write_line">
 
-        <!-- 댓글 내용 수정 -->
+
+        <!-- 상품 타입 수정 -->
+        <div class="form-group">
+            <label for="productType">상품 타입</label>
+            <select id="productType" name="productType" th:field="*{productType}">
+                <option value="TILE" th:selected="${csDTO.productType == 'TILE'}">타일</option>
+                <option value="WALL" th:selected="${csDTO.productType == 'WALL'}">벽지</option>
+                <option value="STOCK" th:selected="${csDTO.productType == 'STOCK'}">수납</option>
+                <option value="FURNITURE" th:selected="${csDTO.productType == 'FURNITURE'}">가구</option>
+                <option value="FLOOR" th:selected="${csDTO.productType == 'FLOOR'}">바닥재</option>
+            </select>
+        </div>
+
+        <!-- 제목 수정 -->
+        <div class="writeTitle">
+            <label for="title">제목</label>
+            <input type="text" placeholder="제목을 입력해주세요." th:field="*{title}" id="title" required>
+        </div>
+
+        <!-- 내용 수정 -->
         <div class="writeContent">
-            <label for="content">댓글 내용</label>
-            <textarea th:field="*{content}" id="content" placeholder="댓글 내용을 입력해주세요" required></textarea>
+            <label for="autoTextarea">문의 내용</label>
+            <textarea placeholder="문의 내용을 입력해주세요" th:field="*{content}" id="autoTextarea" required></textarea>
         </div>
 
         <!-- 저장 버튼 -->

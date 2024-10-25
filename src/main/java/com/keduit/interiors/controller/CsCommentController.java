@@ -34,7 +34,7 @@ public class CsCommentController {
 	public String editCommentForm(@PathVariable Long id, Model model) {
 		CsCommentDTO commentDTO = csCommentService.getCommentById(id);
 		model.addAttribute("csCommentDTO", commentDTO);  // 템플릿에서 사용될 변수명과 일치시킴
-		return "cs/csModifyForm";  // 수정할 댓글 정보를 담은 페이지로 이동
+		return "cs/csCommentModifyForm";  // 수정할 댓글 정보를 담은 페이지로 이동
 	}
 
 

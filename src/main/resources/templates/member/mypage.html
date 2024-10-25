@@ -164,14 +164,16 @@
             <div class="tab" id="tab-megazine">매거진</div>
         </div>
 
-        <!-- 콘텐츠 영역 -->
-        <div class="content-area active" id="content-products">
+        <div class="content-area active" id="content-products" th:if="${scrappedProducts != null and scrappedProducts.size() > 0}">
             <div class="carousel">
                 <button class="btn" id="prev-product">◀</button>
-                <img src="https://via.placeholder.com/100" alt="상품 1">
-                <img src="https://via.placeholder.com/100" alt="상품 2">
-                <img src="https://via.placeholder.com/100" alt="상품 3">
-                <img src="https://via.placeholder.com/100" alt="상품 4">
+                <div th:each="product : ${scrappedProducts}">
+                    <a th:href="@{'/item/product/' + ${product.id}}">
+                        <img th:src="@{${product.firstImageUrl}}" alt="스크랩 상품 이미지">
+                        <h2 th:text="${product.productName}"></h2>
+                        <p class="card-price" th:text="${product.price + ' 원'}"></p>
+                    </a>
+                </div>
                 <button class="btn" id="next-product">▶</button>
             </div>
         </div>

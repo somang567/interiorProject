@@ -35,15 +35,6 @@ public class SecurityConfig {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
                 .logoutSuccessUrl("/");
 
-    http.authorizeRequests()
-            .mvcMatchers("/", "/members/**", "/board/list/**", "/board/write/**", "/board/view/**", "/board/writedo/**",
-                    "/board/modify/**", "/board/delete/**", "/board/update/**", "/img/**", "/board/{boardId}/comment/**",
-                    "error", "favicon.ico", "/boards/list/**", "/files/**",
-                    "/megazines/list/**",
-                    "/item/productMain", "/item/tile/**", "/item/floor/**", "/item/furniture/**", "/item/stock/**", "/item/wall/**" , "/item/**" , "/uploads/**" ,
-                      "/cs/list/**" , "/cs/view/**" , "/cs/write").permitAll()
-            .mvcMatchers("/item/addItem/**", "/item/updateItem/**", "/item/deleteItem/**" , "/cs/edit/**", "/cs/delete/**").hasRole("ADMIN")  // hasRole 사용
-            .anyRequest().authenticated();//이 메서드는 위에서 정의한 특정 URL 패턴 이외의 모든 요청에 대해 인증을 요구합니다. 즉, 사용자가 인증된 상태여야만 다른 모든 요청을 수행할 수 있습니다.
         http.authorizeRequests()
                 .mvcMatchers(
                         "/", "/members/**", "/board/list/**", "/board/write/**", "/board/view/**", "/board/writedo/**",
