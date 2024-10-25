@@ -6,6 +6,7 @@ import com.keduit.interiors.entity.EmptyNumber;
 import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.repository.BoardRepository;
 import com.keduit.interiors.repository.EmptyNumberRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -15,8 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
@@ -26,6 +29,9 @@ public class BoardService {
 
     @Autowired
     private EmptyNumberRepository emptyNumberRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -204,4 +210,12 @@ public class BoardService {
             board.setFilepath(null);
         }
     }
+
+    public List<BoardDTO> findPostsByAuthorId(Long memberId) {
+        List<Board> posts = boardRepository.findByAuthorId(memberId);
+        return posts.stream()
+            .map(board -> modelMapper.map(board, BoardDTO.class))
+            .collect(Collectors.toList());
+    }
+
 }

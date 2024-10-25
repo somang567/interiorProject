@@ -45,46 +45,19 @@
             font-size: 18px;
         }
 
-        .btn_div btn {
-            width: 40%;
-        }
         .btn:hover {
             color: #2c2c2c;
             background-color: #ee7828;
             transition: 0.2s;
         }
 
-        .tabs {
-            display: flex;
-            margin-bottom: 10px;
-            margin-top: 80px;
-        }
-
-        .tab {
-            font-size: 23px;
-            width: 95px;
-            padding: 10px 20px;
-            cursor: pointer;
-            background-color: #ddd;
-            margin-right: 5px;
-        }
-
-        .tab.active {
-            background-color: #999;
-            color: white;
-        }
-
         .content-area {
-            display: none;
+            margin-top: 40px;
             height: 500px;
             transition: all 0.3s;
         }
 
-        .content-area.active {
-            display: block;
-        }
-
-        .carousel {
+        .myContent {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -93,54 +66,56 @@
             height: 95%;
         }
 
-        .carousel img {
+        .myContent img {
             width: 20%;
             height: 350px;
             margin: 0 10px;
         }
 
+        .more-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .more-button .btn {
+            font-size: 20px;
+            padding: 10px 20px;
+        }
+
+        .hidden-post {
+            display: none;
+        }
 
     </style>
 </th:block>
 <th:block layout:fragment="script">
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // 탭 클릭 시 콘텐츠 변경
-            document.getElementById('tab-products').addEventListener('click', function () {
-                setActiveTab('products');
-            });
-
-            document.getElementById('tab-megazine').addEventListener('click', function () {
-                setActiveTab('megazine');
-            });
-
-            function setActiveTab(tab) {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.content-area').forEach(c => c.classList.remove('active'));
-
-                document.getElementById(`tab-${tab}`).classList.add('active');
-                document.getElementById(`content-${tab}`).classList.add('active');
+        document.addEventListener("DOMContentLoaded", function () {
+            // 스크랩된 상품 이전/다음 버튼 숨김 처리
+            const productItems = document.querySelectorAll("#content-products .myContent > div").length;
+            if (productItems <= 4) {
+                document.getElementById("prev-product").style.display = "none";
+                document.getElementById("next-product").style.display = "none";
             }
 
-            // 슬라이더 버튼 (prev/next) 기능 예시
-            document.getElementById('prev-product').addEventListener('click', function () {
-                alert('이전 상품으로 이동');
-            });
+            // 스크랩된 매거진 이전/다음 버튼 숨김 처리
+            const megazineItems = document.querySelectorAll("#content-megazine .myContent > div").length;
+            if (megazineItems <= 4) {
+                document.getElementById("prev-megazine").style.display = "none";
+                document.getElementById("next-megazine").style.display = "none";
+            }
 
-            document.getElementById('next-product').addEventListener('click', function () {
-                alert('다음 상품으로 이동');
-            });
-
-            document.getElementById('prev-megazine').addEventListener('click', function () {
-                alert('이전 매거진으로 이동');
-            });
-
-            document.getElementById('next-megazine').addEventListener('click', function () {
-                alert('다음 매거진으로 이동');
-            });
+            // 더보기 버튼 클릭 시 더 많은 글 보이기
+            const moreButton = document.getElementById("more-posts-btn");
+            if (moreButton) {
+                moreButton.addEventListener("click", function () {
+                    const hiddenPosts = document.querySelectorAll(".hidden-post");
+                    hiddenPosts.forEach(post => post.style.display = "block");
+                    moreButton.style.display = "none";
+                });
+            }
         });
     </script>
-
 </th:block>
 <div layout:fragment="content" th:object="${memberDTO}">
     <div class="container">
@@ -153,50 +128,57 @@
             </div>
             <div class="btn_div">
                 <a th:href="@{/members/edit}" class="btn">정보 수정</a>
-
                 <a href="/members/logout" class="btn">로그아웃</a>
             </div>
         </div>
 
-        <!-- 탭 -->
-        <div class="tabs">
-            <div class="tab active" id="tab-products">상품</div>
-            <div class="tab" id="tab-megazine">매거진</div>
-        </div>
-
-        <div class="content-area active" id="content-products" th:if="${scrappedProducts != null and scrappedProducts.size() > 0}">
-            <div class="carousel">
-                <button class="btn" id="prev-product">◀</button>
-                <div th:each="product : ${scrappedProducts}">
+        <!-- 스크랩된 상품 영역 -->
+        <div class="content-area" id="content-products" th:if="${scrappedProducts != null}">
+            <div class="myContent" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                <p th:if="${scrappedProducts.size() == 0}">스크랩된 상품이 없습니다.</p>
+                <button class="btn" id="prev-product" th:if="${scrappedProducts.size() > 4}">◀</button>
+                <div th:each="product, iterStat : ${scrappedProducts}" th:classappend="${iterStat.count > 4 ? 'hidden-post' : ''}">
                     <a th:href="@{'/item/product/' + ${product.id}}">
                         <img th:src="@{${product.firstImageUrl}}" alt="스크랩 상품 이미지">
                         <h2 th:text="${product.productName}"></h2>
                         <p class="card-price" th:text="${product.price + ' 원'}"></p>
                     </a>
                 </div>
-                <button class="btn" id="next-product">▶</button>
+                <button class="btn" id="next-product" th:if="${scrappedProducts.size() > 4}">▶</button>
             </div>
         </div>
 
-        <div class="content-area" id="content-megazine" th:if="${scrappedMegazines != null and scrappedMegazines.size() > 0}">
-            <div class="carousel">
-                <button class="btn" id="prev-megazine">◀</button>
-                <div th:each="scrap : ${scrappedMegazines}">
-                    <!-- 링크와 이미지 -->
+        <!-- 스크랩된 매거진 영역 -->
+        <div class="content-area" id="content-megazine" th:if="${scrappedMegazines != null}">
+            <div class="myContent" style="display: flex; flex-direction: row; flex-wrap: wrap;">
+                <p th:if="${scrappedMegazines.size() == 0}">스크랩된 매거진이 없습니다.</p>
+                <button class="btn" id="prev-megazine" th:if="${scrappedMegazines.size() > 4}">◀</button>
+                <div th:each="scrap, iterStat : ${scrappedMegazines}" th:classappend="${iterStat.count > 4 ? 'hidden-post' : ''}">
                     <a th:href="@{'/megazines/list/' + ${scrap.mno}}">
                         <img th:src="@{${scrap.imageUrl}}" alt="매거진 스크랩">
                         <h2 th:text="${scrap.title}"></h2>
-                        <p class="card-date" th:text="${UserName}" readonly></p>
-                        <h2 th:text="${#temporals.format(scrap.regTime, 'yyyy-mm-dd HH:mm')}"></h2>
+                        <p class="card-date" th:text="${#temporals.format(scrap.regTime, 'yyyy-MM-dd HH:mm')}"></p>
                     </a>
                 </div>
-                <button class="btn" id="next-megazine">▶</button>
+                <button class="btn" id="next-megazine" th:if="${scrappedMegazines.size() > 4}">▶</button>
             </div>
         </div>
 
+        <!-- 내가 쓴 글 영역 -->
+        <div class="content-area" id="content-my-posts" th:if="${myPosts != null}">
+            <p th:if="${myPosts.size() == 0}">작성한 글이 없습니다.</p>
+            <div class="myContent" style="display: flex; flex-direction: column; gap: 20px;">
+                <div th:each="post, iterStat : ${myPosts}" th:classappend="${iterStat.count > 8 ? 'hidden-post' : ''}">
+                    <a th:href="@{'/board/view/' + ${post.id}}">
+                        <h2 th:text="${post.title}"></h2>
+                        <p class="post-date" th:text="${#temporals.format(post.regTime, 'yyyy-MM-dd HH:mm')}"></p>
+                    </a>
+                </div>
+            </div>
+            <div class="more-button" th:if="${myPosts.size() > 8}">
+                <button class="btn" id="more-posts-btn">더보기</button>
+            </div>
+        </div>
     </div>
-
-
 </div>
-</body>
 </html>

@@ -38,7 +38,7 @@ public class MainController {
 
   @GetMapping("/")
   public String main(Model model,
-                     @PageableDefault(page = 0, size = 10) Pageable boardPageable) {
+                     @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable boardPageable) {
 
     // 게시판 리스트 부분
     Page<BoardDTO> list = boardService.boardList(boardPageable);
@@ -90,12 +90,18 @@ public class MainController {
     List<Megazine> scrappedMegazines = megazineScrapService.getScrappedMegazines(Objects.requireNonNull(member).getId());
     model.addAttribute("scrappedMegazines", scrappedMegazines);
 
+    // 작성한 게시글 목록 가져오기
+    List<BoardDTO> myPosts = boardService.findPostsByAuthorId(member.getId());
+    model.addAttribute("myPosts", myPosts);
+
     //사용자 이름을 가져오기 위한 메서드
     if (principal != null) {
       String username = principal.getName();
       model.addAttribute("UserName", member.getName()); //이거 주석처리하니까 됨
     }
     //민영 스크랩 끝
+
+
 
     return "/member/mypage"; // mypage.html로 이동
   }
