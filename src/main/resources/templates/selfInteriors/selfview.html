@@ -136,6 +136,7 @@
             .comment-date {
                 font-size: 0.8rem;
                 color: #7f8c8d;
+                margin-top: 0.5vw;
             }
 
             .comment-content {
@@ -255,11 +256,13 @@
             <div th:each="selfinteriorComment : ${comments}" class="comment">
                 <div class="comment-details">
                     <span class="comment-author" th:text="${selfinteriorComment.authorName}">작성자</span>
-                    <span class="comment-date"
-                          th:text="${#temporals.format(selfinteriorComment.regTime, 'yyyy-MM-dd HH:mm')}">작성일</span>
                     <div class="comment-content" th:text="${selfinteriorComment.content}">댓글 내용</div>
+                    <span class="comment-date" th:text="${#temporals.format(selfinteriorComment.regTime, 'yyyy-MM-dd HH:mm')}">작성일</span>
                 </div>
-                <div class="comment-actions">
+
+                <!-- 현재 사용자와 댓글 작성자가 일치할 때만 수정 및 삭제 버튼을 표시 -->
+                <div class="comment-actions"
+                     th:if="${currentUserName == selfinteriorComment.authorName}">
                     <button type="button" class="edit-button"
                             onclick="editComment([[${selfinteriorComment.id}]], '[[${#strings.escapeJavaScript(selfinteriorComment.content)}]]')">
                         수정

@@ -3,7 +3,7 @@ package com.keduit.interiors.config;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity; // 메서드 보안 활성화
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -15,7 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true) // 메서드 보안 활성화
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Bean
@@ -48,17 +48,16 @@ public class SecurityConfig {
                         "/selfinterior/update/**",
                         "/selfinterior/modify/**"
                 ).hasRole("ADMIN")
+                // 2. 모든 사용자가 접근 가능한 URL 패턴 (로그인 불필요)
                 .mvcMatchers(
                         "/",
                         "/members/**",
-                        "/members/new",
                         "/board/list/**",
                         "/board/write/**",
                         "/board/view/**",
                         "/board/writedo/**",
-                        "/selfinterior/list/**",
-                        "/selfinterior/view/**",
-                        "/selfinterior/writedo/**",
+                        "/selfinterior/list/**",      // 셀프 인테리어 게시글 목록 접근 허용
+                        "/selfinterior/view/**",      // 셀프 인테리어 게시글 조회 접근 허용
                         "/img/**",
                         "/error/**",
                         "/favicon.ico",
@@ -77,8 +76,7 @@ public class SecurityConfig {
                         "/cs/view/**",
                         "/cs/write"
                 ).permitAll()
-
-                // 4. 그 외 모든 요청은 인증 필요
+                // 그 외 모든 요청은 인증 필요
                 .anyRequest().authenticated();
 
         // 예외 처리
@@ -103,5 +101,4 @@ public class SecurityConfig {
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return null;
     }
-
 }

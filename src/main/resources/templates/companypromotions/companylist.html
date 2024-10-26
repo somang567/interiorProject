@@ -143,9 +143,9 @@
 
     <h1 class="qa_boardtext">업체 홍보 게시판</h1>
     <div class="list_container">
-        <!-- 로그인한 사용자에게만 글쓰기 버튼이 보이게 설정 -->
+        <!-- 관리자에게만 글쓰기 버튼이 보이게 설정 -->
         <div class="button-container">
-            <th:block sec:authorize="isAuthenticated()">
+            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
                 <a href="/companypromotion/write" class="write-button">게시글 작성</a>
             </th:block>
         </div>

@@ -131,12 +131,19 @@ public class SelfInteriorController {
             List<SelfInteriorCommentDTO> comments = selfInteriorCommentService.getCommentsBySelfInteriorId(id);
             model.addAttribute("comments", comments);
 
+            // 현재 사용자 이름 추가
+            if (principal != null) {
+                Member member = memberService.findByEmail(principal.getName());
+                model.addAttribute("currentUserName", member.getName());
+            }
+
             return "selfinteriors/selfview";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "게시글 조회 중 오류가 발생했습니다: " + e.getMessage());
             return "error/500"; // 서버 오류 페이지
         }
     }
+
 
     // 게시글 수정 폼
     @GetMapping("/modify/{id}")
