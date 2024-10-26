@@ -101,6 +101,7 @@
                 width: 80vw;
                 margin: 0 auto;
                 margin-top: 2vw;
+                margin-bottom: 3vw;
                 padding: 2vw;
                 background-color: #f9f9f9;
                 border-radius: 0.8vw;
@@ -173,7 +174,7 @@
             }
 
             .comment-form textarea {
-                width: 100%;
+                width: 98%;
                 padding: 0.8vw;
                 border: 1px solid #ccc;
                 border-radius: 4px;
@@ -257,7 +258,8 @@
                 <div class="comment-details">
                     <span class="comment-author" th:text="${selfinteriorComment.authorName}">작성자</span>
                     <div class="comment-content" th:text="${selfinteriorComment.content}">댓글 내용</div>
-                    <span class="comment-date" th:text="${#temporals.format(selfinteriorComment.regTime, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                    <span class="comment-date"
+                          th:text="${#temporals.format(selfinteriorComment.regTime, 'yyyy-MM-dd HH:mm')}">작성일</span>
                 </div>
 
                 <!-- 현재 사용자와 댓글 작성자가 일치할 때만 수정 및 삭제 버튼을 표시 -->
