@@ -64,11 +64,22 @@
             }
         }*/
 
-        .product .find_prod_img img {
+
+        .find_prod_img {
+            position: relative;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            overflow: hidden; /* 이미지가 넘치지 않도록 설정 */
+        }
+
+        .find_prod_img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 이미지가 부모 요소에 맞게 자르기 */
             transition: 0.5s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .product::after {
@@ -117,6 +128,19 @@
             font-size: 16px;
             line-height: 30px;
         }
+
+        .product a {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2; /* 클릭 가능한 최상위 레이어로 설정 */
+            color: inherit;
+            text-decoration: none;
+        }
+
+
 
         /* 팁&매거진 아코디언 */
         .tip {
@@ -222,6 +246,7 @@
         .main_board h3 {
             text-align: center;
             font-size: 23px;
+            margin: 25px auto;
         }
 
         /* 업체 홍보 슬라이더 섹션 */
@@ -230,7 +255,8 @@
             flex-direction: column;
             align-items: center;
             padding: 20px 0;
-            background-color: #f5f5f5;
+            background-color: #eae0d1;
+
             overflow: hidden; /* 배너가 넘치지 않도록 설정 */
             width: 100%;
         }
@@ -273,25 +299,10 @@
             }
         }
 
-
-        /* 셀프 인테리어와 질문 섹션을 나란히 배치 */
-        .main_board_sub {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            padding-top: 35px;
-            padding-bottom: 35px;
-        }
-
-        .main_board_sub h3 {
-            margin-bottom: 35px;
-        }
-
         /* 셀프 인테리어 섹션 */
         .main_self_interior {
             flex: 1;  /* 셀프 인테리어가 전체의 절반을 차지하도록 설정 */
         }
-
 
         .self_interior_content {
             display: flex;
@@ -299,14 +310,13 @@
         }
 
         .self_item {
-            width: 250px;
+            width: 20vw;
             height: 400px;
             background-color: #e0e0e0;
             text-align: center;
-            border-radius: 50px 50px 0 0;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 10px gray;
+            box-shadow: 0 0 5px gray;
         }
 
         .self_item img {
@@ -330,19 +340,12 @@
             z-index: 0;
         }
 
-        /* 질문 섹션 */
-        .qna {
-            flex: 1; /* 묻고 답하기 섹션이 전체 절반을 차지 */
-            display: flex;
-            flex-direction: column; /* 세로 정렬 */
-            align-items: center; /* 가로 중앙 정렬 */
-        }
-
         /* 질문 내용 */
         .qna_content {
             width: 70%; /* 너비를 70%로 설정 */
             height: 80%;
-            background-color: #f0f0f0;
+            margin: 2vh auto;
+            background-color: #eae0d1;
             padding: 20px;
             border-radius: 10px; /* 둥근 모서리 */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
@@ -468,20 +471,23 @@
     <br>
     <div class="prod_box">
         <div th:each="product : ${randomProducts}" class="product">
-            <div class="find_prod_img">
-                <img th:src="${product.firstImageUrl}" alt="상품 이미지">
-            </div>
-            <div class="introduce_prod">
-                <p th:text="${product.productName}">상품 이름</p>
-                <p th:text="${product.price + '원'}" style="color: skyblue;">상품 가격</p>
-            </div>
+            <a th:href="@{/item/product/{id}(id=${product.id})}">
+                <div class="find_prod_img">
+                    <img th:src="@{${product.firstImageUrl}}" alt="상품 이미지">
+                </div>
+                <div class="introduce_prod">
+                    <p th:text="${product.productName}">상품 이름</p>
+                    <p th:text="${product.price + '원'}" style="color: skyblue;">상품 가격</p>
+                </div>
+            </a>
         </div>
     </div>
 
 
-    <br>ㄹ
+
     <br>
-    <h3 style="padding-left: 3%; margin: 25px 0 25px 0;">TIP&매거진</h3>
+    <br>
+    <h3 style="padding-left: 3%; margin: 40px 0 25px 0;">TIP&매거진</h3>
     <br>
     <section class="tip">   <!-- accordion -->
         <th:block th:each="item, status : ${items}">
@@ -492,8 +498,8 @@
                         <img th:src="${item.imageUrl}" th:alt="${item.title}">
                         <div class="arco-tip">
                             <div>
-                                <h2>[[${item.title}]]</h2>
-                                <p>[[${item.user}]]</p>
+                                <h2>제목 : [[${item.title}]]</h2>
+                                <p>작성자 : [[${item.user}]]</p>
                             </div>
                         </div>
                     </a>
@@ -504,7 +510,7 @@
 
     <br>
     <br>
-    <h3 style="padding-left: 3%; margin: 25px 0 25px 0;">게시판</h3>
+    <h3 style="padding-left: 3%; margin: 40px 0 25px 0;">게시판</h3>
     <br>
     <div class="main_board">
 
@@ -533,51 +539,38 @@
 
 
 
-        <div class="main_board_sub">
-            <!-- 셀프 인테리어 -->
-            <div class="main_self_interior">
-                <h3>셀프 인테리어</h3>
-                <div class="self_interior_content">
+
+        <!-- 셀프 인테리어 -->
+        <div class="main_self_interior">
+            <h3>셀프 인테리어</h3>
+            <div class="self_interior_content">
+                <th:block th:each="interior : ${selfInteriors}">
                     <div class="self_item">
-                        <a href="#">
-                            <img th:src="@{/img/main.jpg}" alt="">
+                        <a th:href="@{/selfinterior/view(id=${interior.id})}">
+                            <img th:src="${interior.filepath}" th:alt="${interior.title}">
                         </a>
-                        <p>셀프 인테리어 사례 1</p>
+                        <p th:text="${interior.title}">셀프 인테리어 사례</p>
                     </div>
-                    <div class="self_item">
-                        <a href="#">
-                            <img th:src="@{/img/main1.jpg}" alt="">
-                        </a>
-                        <p>셀프 인테리어 사례 2</p>
-                    </div>
-                    <div class="self_item">
-                        <a href="#">
-                            <img th:src="@{/img/main2.jpg}" alt="">
-                        </a>
-                        <p>셀프 인테리어 사례 3</p>
-                    </div>
-                </div>
+                </th:block>
             </div>
-
-
-            <!--묻고답하기 부분 타임리프-->
-           <div class="qna">
-               <h3>묻고 답하기</h3>
-               <div class="qna_content">
-                   <ul class="qna_ul">
-                       <li th:each="board : ${list}">
-                           <a th:href="@{/board/view(id=${board.id})}">
-                               <img th:src="@{/img/new.jpg}" alt="이미지">
-                               <span th:text="${board.title}">제목</span>
-                           </a>
-                       </li>
-                   </ul>
-               </div>
-           </div>
-
         </div>
-    </div>
 
-</div>
+
+        <!--묻고답하기 부분 타임리프-->
+        <div class="qna">
+            <h3>묻고 답하기</h3>
+            <div class="qna_content">
+                <ul class="qna_ul">
+                    <li th:each="board : ${list}">
+                        <a th:href="@{/board/view(id=${board.id})}">
+                            <img th:src="@{/img/new.jpg}" alt="이미지">
+                            <span th:text="${board.title}">제목</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
 </div>
 </html>
