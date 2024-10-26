@@ -489,6 +489,10 @@
         transition: all 0.5s ease;
         background-color: #EF7828;
     }
+    .total_cnt{
+        margin-top: 3vw;
+        font-size: 0.8vw;
+    }
   </style>
 </th:block>
 
@@ -512,6 +516,7 @@
         </div>
         <!-- 매거진 상세내용 -->
         <div class="form-content" th:text="${megazineDTO.content}"></div>
+        <h3 class="total_cnt" th:text="'댓글 ' + ${megazineDTO.commentCount}"></h3>
     </form>
 
 
@@ -524,13 +529,13 @@
 
         <!-- 댓글 리스트 -->
         <div class="comments-container">
-            <h3 class="total_cnt">댓글 [[${totalCnt}]]</h3>
             <th:block th:if="${!#lists.isEmpty(comments)}">
                 <th:block th:each="comment : ${comments}">
+
                     <div class="comment">
                         <div>
                             <div class="comment-author" th:text="${comment.authorName} + ' 님'"></div>
-                            <div class="comment-content" th:text="${comment.content}"></div>
+                            <div style="white-space: pre-wrap;" class="comment-content" th:text="${comment.content}"></div>
                             <div class="comment-time"
                                  th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}"></div>
                         </div>
@@ -542,7 +547,7 @@
 
                     <!-- 댓글 수정 폼 -->
                     <div class="edit-comment-form" th:id="'edit-form-' + ${comment.id}" style="display: none;">
-                        <textarea th:id="'editCommentContent-' + ${comment.id}" name="content"
+                        <textarea style="white-space: pre-line;" wrap="hard" th:id="'editCommentContent-' + ${comment.id}" name="content"
                                   th:text="${comment.content}" required></textarea>
                         <button type="button" th:onclick="'updateComment(' + ${comment.id} + ')'">수정 완료</button>
                     </div>
@@ -559,6 +564,7 @@
             <div class="comment-form">
                 <h3>댓글 작성</h3>
                 <form id="commentForm">
+                    <!-- 댓글 수정에서 사용자 이름 가져오기-->
 <!--                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
                     <textarea id="commentContent" name="content" placeholder="댓글을 입력하세요." required></textarea>
                     <button type="submit">댓글 작성</button>

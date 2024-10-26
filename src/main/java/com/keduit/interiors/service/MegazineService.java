@@ -78,19 +78,11 @@ public class MegazineService {
 
     @Transactional(readOnly = true)
     public Page<Megazine> getListItemPage(Pageable pageable) {
+//        Member member = memberRepository.findByEmail(principal.getName());
+//        String Username = member.getName();
+//        megazineDTO.setUser(Username);
         return megazineRepository.findAll(pageable); //모든 아이템을 가져온다.
     }
-
-    //검색 기능=====================================================================
-    //읽기 전용 상품 검색, 페이지별로 볼 수 있는 기능.
-    //관리자가 아이템 페이지를 가져온다는 의미입니다.
-    //@Transactional(readOnly = true)
-    //Page는 페이징 처리된 데이터와 관련된 여러 정보를 제공하는 Spring Data의 인터페이스입니다.
-
-    //public Page<Megazine> getAdminItemPage(ItemSearchDTO itemSearchDTO, Pageable pageable){
-    //  return megazineRepository.getMegazineItemPage(itemSearchDTO, pageable);
-    //}
-
 
     // 포맷팅을 위해 LocalDateTime의 now()메소드를 사용해 현재 시간 구한다.
     LocalDateTime now = LocalDateTime.now();
@@ -123,7 +115,6 @@ public class MegazineService {
         megazineDTO.setImgName(imgName);
         megazineDTO.setOriImgName(originalFileName);
         megazineDTO.setImageUrl(imgUrl);
-        //
 
         Megazine megazine = megazineDTO.createItem();
         System.out.println("----------------register: " + megazine);
@@ -140,7 +131,7 @@ public class MegazineService {
     //제공하신 코드는 Java의 Spring Framework에서 상품(Item)과 관련된 정보를 저장하는 서비스 메서드
     //all 커밋이 되거나 롤백이 되어야 함.
     //상품이 몇번인지 Long으로 등록
-    public Long saveItem(MegazineDTO megazineDTO, MultipartFile itemImgFile) throws Exception {
+    public Long saveItem(MegazineDTO megazineDTO, MultipartFile itemImgFile, Principal principal) throws Exception {
 
         //매핑하기 전에 서비스에서 가져와서 저장하는 거 해줘야 함.
 
@@ -153,13 +144,20 @@ public class MegazineService {
         megazineDTO.setImgName(imgName);
         megazineDTO.setOriImgName(oriImgName);
         megazineDTO.setImageUrl(imgUrl);
+        //현재 로그인 한 유저
+        //이메일 하나 읽어와서 사용자의 이름 가져오기
+        Member member = memberRepository.findByEmail(principal.getName());
+        String Username = member.getName();
+        megazineDTO.setUser(Username);
 
         File directory = new File("C:\\Users\\user\\Desktop\\fileUploads\\item");
         if (!directory.exists()) {
             directory.mkdirs();
         }
 
+        //지금까지의 Megazine 엔티티를 DTO로 매핑함
         Megazine megazine = megazineDTO.createItem();
+
         megazineRepository.save(megazine);  //리포지토리는 엔티티를 줘야 하기 때문에
 
         //이미지 등록

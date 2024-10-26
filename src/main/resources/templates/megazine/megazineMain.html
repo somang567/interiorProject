@@ -42,9 +42,9 @@
             // 스크랩 상태 업데이트 함수
             function updateScrapStatus(element, isScraped) {
                 if (isScraped) {
-                    $(element).attr('src', '/img/instaheart.png');  // 스크랩된 상태
+                    $(element).attr('src', '/img/scrap_full.png');  // 스크랩된 상태
                 } else {
-                    $(element).attr('src', '/img/instaheartnone.png');  // 스크랩되지 않은 상태
+                    $(element).attr('src', '/img/scrap-none.png');  // 스크랩되지 않은 상태
                 }
             }
 
@@ -52,7 +52,7 @@
             function toggleScrap(element) {
                 const megazineId = $(element).data('megazine-id');
                 console.log("Megazine ID:", megazineId);  // 로그 출력
-                const isScraped = $(element).attr('src').includes('instaheart.png');  // 현재 스크랩 상태 확인
+                const isScraped = $(element).attr('src').includes('scrap_full.png');  // 현재 스크랩 상태 확인
 
                 if (isScraped) {
                     removeScrap(megazineId, element);
@@ -246,7 +246,7 @@
             color:rgb(0, 0, 0);
             font-size: 1.2vw;
             font-weight: bold;
-            margin-top: 3vw;
+            margin-top: 5vw;
         }
         .famous_lists{
             display: flex;
@@ -270,30 +270,33 @@
             margin-top: 3vw;
         }
         .mga_search{
-            width:5vw;
-            height:3vw;
+            width:5.5vw;
+            height:3.2vw;
             font-size: 1vw;
-            border: 0.1vw solid rgb(206, 206, 206);
+            color:white;
+            border: 0vw solid rgb(206, 206, 206);
             border-radius: 0.2vw;
+            box-shadow: 0.2vw 0.2vw 0.5vw rgba(115, 115, 115, 0.3);
+            background-color: #C6BAAA;
         }
         .mga_search:hover{
-            background-color: #EF7828;
+            background-color: #806C61;
             transition: all 1s ease;
         }
         .search-box{
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width:78vw;
-            height:1vw;
+            width:100%;
+            height:5vw;
             margin: 0 auto;
         }
         .mega-search-bar{
-            width:65vw;
-            height:1vw;
-            padding: 1.3vw 1vw;
+            width:73vw;
+            height:1.5vw;
+            padding: 1.5vw 1vw;
             border-radius: 0.2vw;
-            border: 0.17vw solid rgba(44, 44, 44, 0.26);
+            border: 0.17vw solid rgba(44, 44, 44, 0.2);
             font-size: 1vw;
         }
         .search-icon{
@@ -316,6 +319,7 @@
         /*전체 매거진 글 수*/
         .total_cnt{
             display: flex;
+            align-items: end;
             font-size:1vw;
             padding-top: 1vw;
         }
@@ -330,18 +334,19 @@
             /*background: #7f8c8d;*/
         }
         #regBtn{
-            width:5vw;
+            width:5.3vw;
             height:3vw;
             padding:0.5vw 1vw;
-            background-color: #2C2C2C;
+            background-color: #C6BAAA;
             border-radius: 0.2vw;
             color:white;
             font-size: 1vw;
+
         }
-        /*#regBtn:hover{*/
-        /*    transition: all 1s ease;*/
-        /*    background-color: #EF7828;*/
-        /*}*/
+        #regBtn:hover{
+            transition: all 1s ease;
+            background-color: #806C61;
+        }
         /*==카드 관련 css==*/
         .mega_wrap{
             width:fit-content;
@@ -384,7 +389,7 @@
         }
         .card-content{
             width: 100%;
-            height:3vw;
+            height:2.5vw;
             overflow: hidden; /* 넘치는 내용 숨기기 */
             white-space: nowrap; /* 줄 바꿈 금지 */
             text-overflow: ellipsis; /* 잘린 부분에 ... 표시 */
@@ -399,9 +404,20 @@
             border-top:0.1vw solid rgba(209, 209, 209, 0.58);
             padding: 0.5vw 0;
         }
+        .date_comment_wrap{
+            display: flex;
+            justify-content: space-between;
+            width:7.3vw;
+            height:fit-content;
+        }
         .card-date{
             font-size: 0.8vw;
             color:black;
+            margin:0.5vw 0;
+        }
+        .card-comments{
+            font-size: 0.8vw;
+            color: #808080;
             margin:0.5vw 0;
         }
         .card-body{
@@ -420,15 +436,18 @@
             /*background-color: #28a745;*/
             margin:3vw auto;
         }
-        .pageNation-wrap > a,strong{
+        .btn{
             display: flex;
             justify-content: center;
             align-items: center;
-            width:2vw;
-            height:2vw;
+            width:2.3vw;
+            height:2.3vw;
             border-radius: 0.5vw;
             margin: 0.2vw;
-            background-color: #efefef;
+            background-color: #F4F2F0;
+        }
+        .next_prev_btn{
+            background-color: #C6BAAA;
         }
         .scrap-icon{
             position: relative;
@@ -475,7 +494,7 @@
 
                 <form th:action="@{/megazines/list}" method="get" class="search-box">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                    <img th:src="@{/img/search.png}" alt="" class="search-icon">
+<!--                    <img th:src="@{/img/search.png}" alt="" class="search-icon">-->
                     <input type="text" name="searchKeyword" placeholder="매거진을 검색해보세요." class="mega-search-bar">
                     <button type="submit" class="search-btn mga_search">검색</button>
                 </form>
@@ -484,7 +503,7 @@
                     <h3 class="total_cnt">전체 매거진 글 수 [[${totalCnt}]]</h3>
                     <button type="button" id="regBtn"
                             sec:authorize="isAuthenticated()"
-                            class="register-btn">글쓰기</button>
+                            >글쓰기</button>
                 </div>
 
                 <!-- 카드 하나 -->
@@ -501,51 +520,48 @@
                             <div class="card-body">
                                 <h4 class="card-title" th:text="${lists.title}">[[${lists.title}]]</h4>
                                 <h4 class="card-content" th:text="${lists.content}">[[${lists.content}]]</h4>
-                                <p class="card-date text-danger" th:text="${#temporals.format(lists.regTime, 'yyyy-MM-dd')}"></p>
-                                <p class="card_user" th:text="${authorName}" readonly></p>
+                                <div class="date_comment_wrap">
+                                    <p class="card-date text-danger" th:text="${#temporals.format(lists.regTime, 'yyyy-MM-dd')}"></p>
+                                    <p class="card-comments text-danger" th:text="'댓글 '+${lists.commentCount}"></p>
+                                </div>
+                                <p class="card_user" th:text="'by. '+${lists.user}" readonly></p>
                             </div>
                         </a>
                         <!-- 스크랩 아이콘 (스크랩 상태에 따라 이미지 변경) -->
                         <div class="scrap-icon">
                             <img
                                     id="scrapIcon_${lists.mno}"
-                                    th:src="@{/img/{image}(image=${#lists.contains(scrapList, lists.mno) ? 'instaheart.png' : 'instaheartnone.png'})}"
+                                    th:src="@{/img/{image}(image=${#lists.contains(scrapList, lists.mno) ? 'scrap_full.png' : 'scrap-none.png'})}"
                                     alt="스크랩 상태"
-                                    style="cursor: pointer; width: 2vw; height: 2vw; position: absolute; top:10.5vw; right:2vw;"
+                                    style="cursor: pointer; width: 2vw; height: 2vw; position: absolute; top:19.8vw; right:2vw;"
                                     th:data-megazine-id="${lists.mno}">
                         </div>
                     </th:block>
                 </div>
 
                 <div class="pageNation-wrap">
-                    <a th:if="${nowPage > 1}"
-                       th:href="@{/megazines/list(page=${(nowPage - 2)}, searchKeyword=${param.searchKeyword})}">이전</a>
+                    <a th:if="${nowPage > 1}" class="btn next_prev_btn"
+                       th:href="@{/megazines/list(page=${(nowPage - 2)}, searchKeyword=${param.searchKeyword})}">
+                        <img
+                                th:src="@{/img/back.png}"
+                                alt=""
+                                style="cursor: pointer; width: 1.5vw; height: 1.5vw;"
+                        >
+                    </a>
 
                     <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}" >
-<!--                        <a th:if="${page != nowPage}" th:href="@{/megazines/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}"></a>-->
-                        <strong th:if="${page == nowPage}" th:text="${page}" style="color: red" ></strong>
+                        <a th:if="${page != nowPage}" th:href="@{/megazines/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}" class="btn"></a>
+                        <strong th:if="${page == nowPage}" th:text="${page}" style="color: red" class="btn"></strong>
                     </th:block>
 
-                    <a th:if="${nowPage < endPage}"
-                       th:href="@{/megazines/list(page=${nowPage}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">다음</a>
-
-<!--                    <a th:if="${nowPage > 1}"-->
-<!--                       th:href="@{/megazines/list(page=${(nowPage - 2)}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">이전</a>-->
-
-<!--                        &lt;!&ndash; 페이지 번호 반복 &ndash;&gt;-->
-<!--                        <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">-->
-<!--                            <a th:if="${page > 0 && page != nowPage}"-->
-<!--                               th:href="@{/megazines/list(page=${(page - 1)}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}"-->
-<!--                               th:text="${page}"></a>-->
-<!--                            <strong th:if="${page == nowPage}" th:text="${page}"></strong>-->
-<!--                        </th:block>-->
-<!--                    -->
-<!--                    -->
-
-
-<!--                        <a th:if="${nowPage < endPage}"-->
-<!--                           th:href="@{/megazines/list(page=${nowPage}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">다음</a>-->
-
+                    <a th:if="${nowPage < endPage}" class="btn next_prev_btn"
+                       th:href="@{/megazines/list(page=${nowPage}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">
+                        <img
+                                th:src="@{/img/next2.png}"
+                                alt=""
+                                style="cursor: pointer; width: 1.5vw; height: 1.5vw;"
+                        >
+                    </a>
 
                 </div>
             </div><!--wrap-->

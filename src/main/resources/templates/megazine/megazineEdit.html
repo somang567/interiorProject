@@ -267,13 +267,12 @@
 
 
 
-
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <label hidden th:for="content" class="input-group-text">내용</label>
                     </div>
-                    <textarea class="form-content" th:field="*{content}" placeholder="내용을 입력해주세요."></textarea>
+                    <textarea style="white-space: pre-wrap;" class="form-content" th:field="*{content}" placeholder="내용을 입력해주세요."></textarea>
                     <p th:if="${#fields.hasErrors('content')}"
                        th:errors="*{content}" class="fieldError">Incorrect data</p>
                 </div>

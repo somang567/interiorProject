@@ -44,7 +44,8 @@ public class MainController {
 
     // 매거진 리스트 부분 (정렬 없이 기본 페이징)
     Pageable megazinePageable = PageRequest.of(0, 5); // 기본 페이지 크기만 설정
-    Page<Megazine> items = megazineService.getListItemPage(megazinePageable);
+    Page<Megazine> items = megazineService.getListItemPage(boardPageable);
+
     model.addAttribute("items", items);
 
     // 상품 찾기 부분 (랜덤으로 상품 가져오기)
@@ -87,6 +88,9 @@ public class MainController {
     model.addAttribute("scrappedProducts", scrappedProducts);
 
     //민영 스크랩
+//    List<MegazineDTO> megazineProducts = megazineService.getMegazineList();
+//    model.addAttribute("megazineList", megazineProducts);
+//
     Page<Megazine> list = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
     model.addAttribute("list", list);
     

@@ -23,8 +23,7 @@
 
 .writeTitle input, .writeContent textarea {
     width: 100%;
-    padding: 1vw;
-    border: 1px solid #ccc;
+    border: 0.3vw solid #ccc;
     border-radius: 5px;
 }
 

@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .mvcMatchers(
                         "/",
                         "/members/**",
+                        "/members/new",
                         "/board/list/**",
                         "/board/write/**",
                         "/board/view/**",

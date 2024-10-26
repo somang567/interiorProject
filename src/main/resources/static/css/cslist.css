@@ -63,22 +63,27 @@ table {
     margin-bottom: 10px;
 }
 
+/*
 .view_all_text {
     font-size: 1.8vw;
     font-weight: 800;
 }
-
+ */
 /* 글쓰기 버튼 오른쪽 정렬 */
 .write_btn {
     display: block;
     margin-left: auto; /* 오른쪽으로 정렬 */
     width: 5vw;
-    height: 2vw;
+    height: 2.3vw;
     color: white;
+    font-size: 0.8vw;
     background-color: #C6BAAA;
-    border: 0.5px solid #2c2c2c;
-    border-radius: 10%;
+    border-radius: 0.2vw;
     cursor: pointer;
+}
+.write_btn:hover {
+    background-color: #806C61;
+    transition: all 0.5s ease;
 }
 /* 페이지네이션 스타일 */
 .CS_pagination {
@@ -126,13 +131,15 @@ table {
     background-color: #C6BAAA;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 0.2vw;
     font-size: 1vw;
     cursor: pointer;
+    margin-left: 0.5vw;
 }
 
 .CS_search_container button:hover {
-    background-color: #C6BAAA;
+    transition: all 1s ease;
+    background-color: #806C61;
 }
 
 
@@ -149,10 +156,9 @@ table {
 /* select 스타일 */
 .form-group select {
     width: 20%;
-    padding: 0.8vw;
-    font-size: 1.1vw;
-    border: 1px solid #ccc;
-    border-radius: 2%;
+    font-size: 1vw;
+    border: 0.18vw solid #C6BAAA;
+    border-radius: 0.2vw;
     background-color: white;
     color: #333;
     appearance: none; /* 기본 화살표 제거 */
@@ -163,7 +169,9 @@ table {
     background-position: right 1vw center;
     background-size: 1.1vw 1.1vw;
 }
-
+#productType{
+    padding: 0.5vw;
+}
 .form-group {
     margin-bottom: 1vw;
 }
@@ -178,19 +186,24 @@ table {
 /* option 스타일 */
 .form-group select option {
     padding: 1vw;
-    font-size: 0.7vw;
+    font-size: 1vw;
     background-color: #ffffff;
     color: #333;
 }
 /* 제목 입력 스타일 */
 .writeTitle input[type="text"] {
     width: 100%;
-    padding: 0.5vw;
-    font-size: 1.2vw;
-    border: 1px solid #ccc;
-    border-radius: 1%;
+    padding: 0.8vw;
+    font-size: 1.1vw;
+    border: 0.15vw solid #C6BAAA;
+    border-radius: 0.2vw;
     margin-bottom: 1vw;
     box-sizing: border-box;
+}
+.writeTitle input[type="text"]:hover {
+    transition: all 1s ease;
+    border: 0.15vw solid #806C61;
+
 }
 
 .cs_write{
@@ -208,30 +221,39 @@ table {
     width: 100%;
     height: 30vw;
     padding: 10px;
-    font-size: 1.2vw;
-    border: 1px solid #ccc;
-    border-radius: 1%;
+    font-size: 1.1vw;
+    border: 0.15vw solid #C6BAAA;
+    border-radius: 0.2vw;
     box-sizing: border-box;
     resize: none;
     overflow: hidden;
 }
+.writeContent textarea:hover {
+    transition: all 0.5s ease;
+    border: 0.15vw solid #806C61;
+}
 
 /* 헤더와 바디 구분선 */
 .cs_write_line {
-    width: 30%;
+    width: 25%;
     margin-bottom: 3vw;
-    border: 2px solid #806C61;
-    opacity: 1;
+    border: 0.15vw solid #806C61;
+    opacity: 0.8;
 }
 .addBtn{
     display: block;
-    margin-top: 0.5vw;
+    margin-top:0.8vw;
     margin-left: auto; /* 오른쪽으로 정렬 */
     width: 5vw;
-    height: 2vw;
+    height: 2.5vw;
     color: white;
+    font-size: 1vw;
     background-color: #C6BAAA;
-    border: 0.5px solid #2c2c2c;
-    border-radius: 10%;
+    border-radius: 0.2vw;
     cursor: pointer;
+}
+.addBtn:hover{
+    background-color: #806C61;
+    transition: all 0.5s ease;
+
 }

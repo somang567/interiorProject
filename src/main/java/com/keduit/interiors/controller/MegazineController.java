@@ -45,27 +45,44 @@ public class MegazineController {
   public String megazineItem(
           @RequestParam(required = false) String searchKeyword,
           @PageableDefault(page = 0, size = 4, sort = "mno", direction = Sort.Direction.DESC) Pageable pageable,
-          Model model, Principal principal) {
+          Model model, Principal principal,MemberDTO memberDTO) {
 
     List<MegazineDTO> megazineProducts = megazineService.getMegazineList();
     model.addAttribute("megazineList", megazineProducts);
+
+    //principal -> 지금 로그인한 사용자임.
+//    if (principal != null) {
+//      //현재 로그인 한 사용자의 이름을 가져와줘,
+//      String username = memberDTO.getEmail();
+//      Member member = memberService.findByEmail(username);
+//      model.addAttribute("authorName", member.getName()); //이거 주석처리하니까 됨
+//    }else{
+//      String username = "User";
+//    }
+
+    // 현재 로그인한 사용자를 확인
     if (principal != null) {
-      String username = principal.getName();
-      Member member = memberService.findByEmail(username);
-      model.addAttribute("authorName", member.getName()); //이거 주석처리하니까 됨
+      String username = principal.getName(); // 로그인한 사용자의 이메일 또는 사용자 이름
+      Member member = memberService.findByEmail(username); // 이메일로 사용자 조회
+
+      if (member != null) {
+        model.addAttribute("authorName", member.getName()); // 사용자 이름을 모델에 추가
+      }
+    } else {
+      model.addAttribute("authorName", "User"); // 로그인하지 않은 경우 기본값 설정
     }
 
+    //사용자 Id 가져오기
     String memberId = principal.getName();
     if(memberId == null){
       System.out.println("아직 로그인한 사용자가 없음요---------");
     }else{
-      memberId = principal.getName();
+      //memberId = principal.getName();
+      // 또는 사용자 ID가 필요하다면, UserDetailsService를 사용하여 사용자 정보를 가져올 수 있습니다.
+      Member userDetails = memberService.findByEmail(memberId);
+      Long userId = userDetails.getId(); // 사용자 ID를 가져오는 예 (UserDetails 구현에 따라 다를 수 있음)
+      model.addAttribute("scrapList", megazineScrapService.getScrapMegazineIdsForUser(userId));
     }
-    // 또는 사용자 ID가 필요하다면, UserDetailsService를 사용하여 사용자 정보를 가져올 수 있습니다.
-    Member userDetails = memberService.findByEmail(memberId);
-    Long userId = userDetails.getId(); // 사용자 ID를 가져오는 예 (UserDetails 구현에 따라 다를 수 있음)
-    model.addAttribute("scrapList", megazineScrapService.getScrapMegazineIdsForUser(userId));
-
 
     Page<Megazine> list = null;
 
@@ -111,7 +128,7 @@ public class MegazineController {
   //model: 뷰에 데이터를 전달하는 데 사용되는 객체입니다.
   //itemImgFileList: 사용자가 업로드한 이미지 파일 리스트를 나타냅니다.
   public String itemNew(@Valid MegazineDTO megazineDTO, BindingResult bindingResult, Model model,
-                        @RequestParam("itemImgFile") MultipartFile itemImgFile) {
+                        @RequestParam("itemImgFile") MultipartFile itemImgFile, Principal principal) {
 
     //유효성 검사에서 에러가 발생한 경우, 사용자에게 폼을 다시 보여줍니다. 이때 itemForm.html이 반환됩니다.
     if (bindingResult.hasErrors()) {
@@ -125,19 +142,32 @@ public class MegazineController {
       return "megazine/megazineForm";
     }
 
+    // 줄 바꿈 처리
+    String contentWithLineBreaks = convertNewlinesToHtml(megazineDTO.getContent());
+    megazineDTO.setContent(contentWithLineBreaks);
+
 
     try {
-      megazineService.saveItem(megazineDTO, itemImgFile);
+      megazineDTO.setUser(megazineDTO.getUser());
+      megazineService.saveItem(megazineDTO, itemImgFile,principal);
 
     } catch (Exception e) {
       model.addAttribute("errorMessage", "매거진 등록 중 에러가 발생하였습니다.");
       System.out.println("====================================");
       e.printStackTrace();
-      return "megazine/megazineForm";
+      return "megazine/megazineEdit";
     }
     return "redirect:/megazines/list";  //상품등록이 잘 되면 메인으로 이동
   }
-
+  
+  //줄 바꿈 처리 메서드
+  private String convertNewlinesToHtml(String text) {
+    if (text == null) {
+      return null;
+    }
+    return text.replaceAll(" ", "\n"); // 공백을 &nbsp;로 변환
+//    return text != null ? text.replaceAll("\n", "<br/>") : null;
+  }
 
   // 상세보기 관련 Url --------
   //User 매거진 상세보기 페이지
@@ -186,7 +216,7 @@ public class MegazineController {
   @PostMapping("/edit/{megazineId}")
   public String itemEdited(@Valid MegazineDTO megazineDTO, BindingResult bindingResult,
                            Model model, @PathVariable("megazineId") Long megazineId,
-                           @RequestParam("itemImgFile") MultipartFile itemImgFile) throws Exception {
+                           @RequestParam("itemImgFile") MultipartFile itemImgFile, Principal principal) throws Exception {
 
     //megazineService.updateItemImg(itemImgFile,megazineDTO);
     megazineDTO = megazineService.getItemDtl(megazineId); //이미 있는 것을 읽어옴
@@ -202,7 +232,7 @@ public class MegazineController {
     megazineDTO.setOriImgName(megazineDTO.getOriImgName());
 
     try {
-      megazineService.saveItem(megazineDTO, itemImgFile);
+      megazineService.saveItem(megazineDTO, itemImgFile, principal);
 
     } catch (Exception e) {
       model.addAttribute("errorMessage", "매거진 등록 중 에러가 발생하였습니다.");
