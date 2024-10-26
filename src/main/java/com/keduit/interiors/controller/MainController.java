@@ -44,7 +44,7 @@ public class MainController {
 
     // 매거진 리스트 부분 (정렬 없이 기본 페이징)
     Pageable megazinePageable = PageRequest.of(0, 5); // 기본 페이지 크기만 설정
-    Page<Megazine> items = megazineService.getListItemPage(boardPageable);
+    Page<Megazine> items = megazineService.getListItemPage(megazinePageable);
 
     model.addAttribute("items", items);
 
