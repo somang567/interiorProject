@@ -64,11 +64,22 @@
             }
         }*/
 
-        .product .find_prod_img img {
+
+        .find_prod_img {
+            position: relative;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            overflow: hidden; /* 이미지가 넘치지 않도록 설정 */
+        }
+
+        .find_prod_img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 이미지가 부모 요소에 맞게 자르기 */
             transition: 0.5s ease-in-out;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .product::after {
@@ -117,6 +128,19 @@
             font-size: 16px;
             line-height: 30px;
         }
+
+        .product a {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             z-index: 2; /* 클릭 가능한 최상위 레이어로 설정 */
+             color: inherit;
+             text-decoration: none;
+         }
+
+
 
         /* 팁&매거진 아코디언 */
         .tip {
@@ -286,14 +310,13 @@
         }
 
         .self_item {
-            width: 250px;
+            width: 20vw;
             height: 400px;
             background-color: #e0e0e0;
             text-align: center;
-            border-radius: 50px 50px 0 0;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 10px gray;
+            box-shadow: 0 0 5px gray;
         }
 
         .self_item img {
@@ -448,15 +471,18 @@
     <br>
     <div class="prod_box">
         <div th:each="product : ${randomProducts}" class="product">
-            <div class="find_prod_img">
-                <img th:src="${product.firstImageUrl}" alt="상품 이미지">
-            </div>
-            <div class="introduce_prod">
-                <p th:text="${product.productName}">상품 이름</p>
-                <p th:text="${product.price + '원'}" style="color: skyblue;">상품 가격</p>
-            </div>
+            <a th:href="@{/item/product/{id}(id=${product.id})}">
+                <div class="find_prod_img">
+                    <img th:src="@{${product.firstImageUrl}}" alt="상품 이미지">
+                </div>
+                <div class="introduce_prod">
+                    <p th:text="${product.productName}">상품 이름</p>
+                    <p th:text="${product.price + '원'}" style="color: skyblue;">상품 가격</p>
+                </div>
+            </a>
         </div>
     </div>
+
 
 
     <br>
@@ -472,8 +498,8 @@
                         <img th:src="${item.imageUrl}" th:alt="${item.title}">
                         <div class="arco-tip">
                             <div>
-                                <h2>[[${item.title}]]</h2>
-                                <p>none</p>
+                                <h2>제목 : [[${item.title}]]</h2>
+                                <p>작성자 : [[${item.user}]]</p>
                             </div>
                         </div>
                     </a>
@@ -518,24 +544,14 @@
             <div class="main_self_interior">
                 <h3>셀프 인테리어</h3>
                 <div class="self_interior_content">
-                    <div class="self_item">
-                        <a href="#">
-                            <img th:src="@{/img/main.jpg}" alt="">
-                        </a>
-                        <p>셀프 인테리어 사례 1</p>
-                    </div>
-                    <div class="self_item">
-                        <a href="#">
-                            <img th:src="@{/img/main1.jpg}" alt="">
-                        </a>
-                        <p>셀프 인테리어 사례 2</p>
-                    </div>
-                    <div class="self_item">
-                        <a href="#">
-                            <img th:src="@{/img/main2.jpg}" alt="">
-                        </a>
-                        <p>셀프 인테리어 사례 3</p>
-                    </div>
+                    <th:block th:each="interior : ${selfInteriors}">
+                        <div class="self_item">
+                            <a th:href="@{/selfinterior/view(id=${interior.id})}">
+                                <img th:src="${interior.filepath}" th:alt="${interior.title}">
+                            </a>
+                            <p th:text="${interior.title}">셀프 인테리어 사례</p>
+                        </div>
+                    </th:block>
                 </div>
             </div>
 

@@ -1,9 +1,6 @@
 package com.keduit.interiors.controller;
 
-import com.keduit.interiors.dto.BoardDTO;
-import com.keduit.interiors.dto.CompanypromotionDTO;
-import com.keduit.interiors.dto.MemberDTO;
-import com.keduit.interiors.dto.ProductDTO;
+import com.keduit.interiors.dto.*;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.service.*;
@@ -35,6 +32,7 @@ public class MainController {
   private final ProductService productService;
   private final CompanypromotionService companypromotionService;
   private final ProductScrapService productScrapService;
+  private final SelfInteriorService selfInteriorService;
 
   @GetMapping("/")
   public String main(Model model,
@@ -58,6 +56,12 @@ public class MainController {
     Pageable promotionPageable = PageRequest.of(0, maxPromotionCount, Sort.by(Sort.Direction.DESC, "id"));
     Page<CompanypromotionDTO> promotions = companypromotionService.list(promotionPageable);
     model.addAttribute("promotions", promotions.getContent());
+
+    // 셀프 인테리어 리스트 부분
+    Pageable selfInteriorPageable = PageRequest.of(0, 4, Sort.by(Sort.Direction.DESC, "id")); // 최신 3개 가져오기
+    Page<SelfInteriorDTO> selfInteriorsPage = selfInteriorService.list(selfInteriorPageable);
+    List<SelfInteriorDTO> selfInteriors = selfInteriorsPage.getContent();
+    model.addAttribute("selfInteriors", selfInteriors);
 
     return "main";  // main.html로 이동
   }
