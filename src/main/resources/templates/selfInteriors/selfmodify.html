@@ -100,7 +100,7 @@
     <form th:action="@{/selfinterior/update/{id}(id=${selfinterior.id})}" method="post"
           enctype="multipart/form-data" onsubmit="return validateForm()">
         <div class="form-container">
-            <h1>자기 인테리어 게시글 수정</h1>
+            <h1>셀프 인테리어 게시글 수정</h1>
 
             <!-- 제목 입력 -->
             <div class="form-group">
@@ -170,7 +170,7 @@
                     preview.style.display = 'none';
                     preview.src = '';
                 }
-            }
+            }       
 
             // 폼 유효성 검사 함수
             function validateForm() {

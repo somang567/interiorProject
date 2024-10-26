@@ -22,16 +22,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         // 로그인 설정
-        http.formLogin()
-                .loginPage("/members/login")
-                .defaultSuccessUrl("/")
-                .usernameParameter("email")
-                .failureUrl("/members/login/error")
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
-                .logoutSuccessUrl("/");
-
         // 권한 설정
         http.authorizeRequests()
                 // 1. 관리자 권한이 필요한 URL 패턴
@@ -41,14 +31,20 @@ public class SecurityConfig {
                         "/item/deleteItem/**",
                         "/cs/edit/**",
                         "/cs/delete/**",
+                        "/selfinterior/write/**",
+                        "/selfinterior/delete/**",
+                        "/selfinterior/update/**"
+                ).hasRole("ADMIN")
+                // 2. 관리자와 사용자 권한이 필요한 URL 패턴
+                .mvcMatchers(
                         "/board/delete/**",
                         "/board/update/**",
                         "/board/modify/**",
                         "/selfinterior/delete/**",
                         "/selfinterior/update/**",
                         "/selfinterior/modify/**"
-                ).hasRole("ADMIN")
-                // 2. 모든 사용자가 접근 가능한 URL 패턴 (로그인 불필요)
+                ).hasAnyRole("ADMIN", "USER")
+                // 3. 모든 사용자가 접근 가능한 URL 패턴 (로그인 불필요)
                 .mvcMatchers(
                         "/",
                         "/members/**",
@@ -56,8 +52,8 @@ public class SecurityConfig {
                         "/board/write/**",
                         "/board/view/**",
                         "/board/writedo/**",
-                        "/selfinterior/list/**",      // 셀프 인테리어 게시글 목록 접근 허용
-                        "/selfinterior/view/**",      // 셀프 인테리어 게시글 조회 접근 허용
+                        "/selfinterior/list/**",
+                        "/selfinterior/view/**",
                         "/img/**",
                         "/error/**",
                         "/favicon.ico",
@@ -78,6 +74,7 @@ public class SecurityConfig {
                 ).permitAll()
                 // 그 외 모든 요청은 인증 필요
                 .anyRequest().authenticated();
+
 
         // 예외 처리
         http.exceptionHandling()

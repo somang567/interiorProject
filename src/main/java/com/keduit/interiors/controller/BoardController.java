@@ -5,7 +5,6 @@ import com.keduit.interiors.dto.CommentDTO;
 import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.service.BoardService;
 import com.keduit.interiors.service.CommentService;
-import com.keduit.interiors.service.CommentServiceImpl;
 import com.keduit.interiors.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,13 +32,10 @@ public class BoardController {
     private BoardService boardService;
 
     @Autowired
-    private CommentServiceImpl commentServiceImpl;
+    private CommentService commentService;
 
     @Autowired
     private MemberService memberService;
-
-    @Autowired
-    private CommentService commentService;
 
     // 게시글 작성 폼
     @GetMapping("/write")
@@ -57,7 +53,7 @@ public class BoardController {
     public String boardWritePro(BoardDTO boardDTO, Model model, MultipartFile file, Principal principal) {
         if (principal == null) {
             model.addAttribute("errorMessage", "로그인이 필요합니다.");
-            return "error/401"; // 로그인 필요 페이지
+            return "error/401";
         }
 
         try {
@@ -68,11 +64,11 @@ public class BoardController {
             return "boards/message";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "게시글 작성 중 오류가 발생했습니다: " + e.getMessage());
-            return "error/500"; // 서버 오류 페이지
+            return "error/500";
         }
     }
 
-    // 게시글 목록 조회 (뷰 반환)
+    // 게시글 목록 조회
     @GetMapping("/list")
     public String boardList(Model model,
                             @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
@@ -80,7 +76,6 @@ public class BoardController {
                             @RequestParam(required = false) String searchKeyword) {
         try {
             Page<BoardDTO> list;
-
             if (searchKeyword != null && !searchKeyword.isEmpty()) {
                 if ("title".equals(searchType)) {
                     list = boardService.boardSearchByTitle(searchKeyword, pageable);
@@ -106,16 +101,15 @@ public class BoardController {
             return "boards/boardlist";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "게시글 목록 조회 중 오류가 발생했습니다: " + e.getMessage());
-            return "error/500"; // 서버 오류 페이지
+            return "error/500";
         }
     }
 
-    // 게시글 상세 조회 (뷰 반환)
+    // 게시글 상세 조회
     @GetMapping("/view")
     public String boardView(Model model, @RequestParam("id") Long id, Principal principal) {
         try {
             BoardDTO boardDTO = boardService.boardView(id);
-
             model.addAttribute("board", boardDTO);
 
             if (boardDTO.getFilename() != null) {
@@ -123,7 +117,7 @@ public class BoardController {
                 model.addAttribute("imageUrl", imageUrl);
             }
 
-            List<CommentDTO> comments = commentServiceImpl.getCommentsByBoardId(id);
+            List<CommentDTO> comments = commentService.getCommentsByBoardId(id);
             Long currentUserId = null;
             if (principal != null) {
                 Member member = memberService.findByEmail(principal.getName());
@@ -133,13 +127,11 @@ public class BoardController {
             for (CommentDTO comment : comments) {
                 comment.setEditable(currentUserId != null && currentUserId.equals(comment.getAuthorId()));
             }
-
             model.addAttribute("comments", comments);
-
             return "boards/boardview";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "게시글 조회 중 오류가 발생했습니다: " + e.getMessage());
-            return "error/500"; // 서버 오류 페이지
+            return "error/500";
         }
     }
 
@@ -170,7 +162,6 @@ public class BoardController {
             Member member = memberService.findByEmail(principal.getName());
             CommentDTO savedCommentDTO = commentService.saveComment(commentDTO, member);
 
-            // 댓글이 제대로 저장된 경우 반환
             return ResponseEntity.ok(savedCommentDTO);
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -199,11 +190,11 @@ public class BoardController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }
 
-            CommentDTO commentDTO = commentServiceImpl.getCommentById(id);
+            CommentDTO commentDTO = commentService.getCommentById(id);
             commentDTO.setContent(content);
 
             Member member = memberService.findByEmail(principal.getName());
-            commentServiceImpl.updateComment(commentDTO, member);
+            commentService.updateComment(commentDTO, member);
 
             return ResponseEntity.ok(commentDTO);
         } catch (Exception e) {
@@ -224,7 +215,7 @@ public class BoardController {
         }
 
         try {
-            commentServiceImpl.deleteComment(id, memberService.findByEmail(principal.getName()));
+            commentService.deleteComment(id, memberService.findByEmail(principal.getName()));
             Map<String, String> successResponse = new HashMap<>();
             successResponse.put("message", "댓글이 성공적으로 삭제되었습니다.");
             return ResponseEntity.ok(successResponse);
@@ -240,7 +231,7 @@ public class BoardController {
     public String boardDelete(@PathVariable Long id, Principal principal, RedirectAttributes redirectAttributes) {
         if (!hasPermissionToModifyOrDeleteBoard(id, principal)) {
             redirectAttributes.addFlashAttribute("error", "권한이 없습니다. 게시글을 삭제할 수 없습니다.");
-            return "redirect:/board/list"; // 권한이 없을 경우 목록으로 리다이렉트
+            return "redirect:/board/list";
         }
 
         try {
@@ -250,10 +241,10 @@ public class BoardController {
             redirectAttributes.addFlashAttribute("error", "게시글 삭제 중 오류가 발생했습니다: " + e.getMessage());
         }
 
-        return "redirect:/board/list"; // 삭제 성공 후 목록으로 리다이렉트
+        return "redirect:/board/list";
     }
 
-    // 게시글 수정 처리 (폼 제출)
+    // 게시글 수정 처리
     @PostMapping("/update/{id}")
     public String boardUpdate(@PathVariable("id") Long id, BoardDTO boardDTO,
                               @RequestParam(value = "file", required = false) MultipartFile file,
@@ -261,7 +252,7 @@ public class BoardController {
                               Principal principal, Model model) {
         if (!hasPermissionToModifyOrDeleteBoard(id, principal)) {
             model.addAttribute("errorMessage", "권한이 없습니다. 게시글을 수정할 수 없습니다.");
-            return "error/403"; // 접근 거부 페이지
+            return "error/403";
         }
 
         try {
@@ -273,21 +264,22 @@ public class BoardController {
             return "boards/message";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "게시글 수정 중 오류가 발생했습니다: " + e.getMessage());
-            return "error/500"; // 서버 오류 페이지
+            return "error/500";
         }
     }
 
-    // 게시글 수정 폼 (뷰 반환)
+    // 게시글 수정 폼
     @GetMapping("/modify/{id}")
     public String boardModify(@PathVariable("id") Long id, Model model, Principal principal) {
         if (!hasPermissionToModifyOrDeleteBoard(id, principal)) {
             model.addAttribute("errorMessage", "권한이 없습니다. 게시글을 수정할 수 없습니다.");
             return "error/403";
         }
+        BoardDTO boardDTO = boardService.boardView(id);
+        model.addAttribute("board", boardDTO);
         return "boards/boardmodify";
     }
 
-    // 권한 확인 메서드 (게시글)
     private boolean hasPermissionToModifyOrDeleteBoard(Long boardId, Principal principal) {
         if (principal == null) {
             return false;
@@ -300,12 +292,11 @@ public class BoardController {
         return boardDTO.getAuthorId().equals(member.getId()) || "ROLE_ADMIN".equals(member.getRole());
     }
 
-    // 권한 확인 메서드 (댓글)
     private boolean hasPermissionToModifyOrDeleteComment(Long commentId, Principal principal) {
         if (principal == null) {
             return false;
         }
-        CommentDTO commentDTO = commentServiceImpl.getCommentById(commentId);
+        CommentDTO commentDTO = commentService.getCommentById(commentId);
         if (commentDTO == null) {
             return false;
         }
