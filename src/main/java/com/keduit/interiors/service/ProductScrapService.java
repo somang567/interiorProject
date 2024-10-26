@@ -54,17 +54,6 @@ public class ProductScrapService {
 		productScrapRepository.deleteByMemberAndProduct(member, product);
 	}
 
-	// 특정 사용자의 스크랩 상태 확인
-	public boolean isScraped(Long memberId, Long productId) {
-		// memberId와 productId를 기반으로 각각 Member와 Product 엔티티 조회
-		Member member = memberRepository.findById(memberId)
-				.orElseThrow(() -> new EntityNotFoundException("회원이 존재하지 않습니다. ID: " + memberId));
-		Product product = productRepository.findById(productId)
-				.orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다. ID: " + productId));
-
-		// 스크랩 여부 확인
-		return productScrapRepository.existsByMemberAndProduct(member, product);
-	}
 
 	// 특정 사용자가 스크랩한 상품 목록 반환
 	public List<Long> getScrapProductIdsForUser(Long memberId) {

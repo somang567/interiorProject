@@ -148,6 +148,35 @@ public class ProductService {
 		productRepository.deleteById(id); // 상품 삭제
 	}
 
+	public List<ProductDTO> searchProducts(String keyword, String category, ProductType productType) {
+		List<Product> products;
+		switch (category) {
+			case "productName":
+				products = productRepository.findByProductNameContainingAndProductType(keyword, productType);
+				break;
+			case "productDetail":
+				products = productRepository.findByProductDetailContainingAndProductType(keyword, productType);
+				break;
+			case "member.email": // 작성자 이메일 검색
+				products = productRepository.findByMemberEmailContainingAndProductType(keyword, productType);
+				break;
+			default:
+				throw new IllegalArgumentException("잘못된 검색 카테고리: " + category);
+		}
+
+		// 검색된 상품 목록을 DTO로 변환하고, 각 상품의 첫 번째 썸네일 이미지 URL을 설정
+		return products.stream().map(product -> {
+			ProductDTO productDTO = ProductDTO.of(product);
+			String firstImageUrl = product.getProductImgList().stream()
+					.filter(ProductImg::isThumbnail) // 썸네일로 지정된 이미지를 찾음
+					.map(ProductImg::getFileUrl)
+					.findFirst()
+					.orElse("/img/default.jpg"); // 썸네일이 없을 경우 기본 이미지 사용
+			productDTO.setFirstImageUrl(firstImageUrl); // 썸네일 URL 설정
+			return productDTO;
+		}).collect(Collectors.toList());
+	}
+
 	// 등록된 상품 랜덤으로 가져오기
 	public List<ProductDTO> getRandomProducts(int count) {
 		// ProductRepository에서 랜덤으로 상품을 가져오기
@@ -169,4 +198,5 @@ public class ProductService {
 				})
 				.collect(Collectors.toList());
 	}
+
 }

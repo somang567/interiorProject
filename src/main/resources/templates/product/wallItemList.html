@@ -83,6 +83,7 @@
                 toggleScrap(this);  // 스크랩 상태 토글
             });
         });
+
     </script>
 
 </th:block>
@@ -100,8 +101,8 @@
             <!-- 상품명, 가격, 스크랩 아이콘 -->
             <div class="product-info">
                 <div class="product-details" style="flex: 1;">
-                    <p class="product-name" th:text="${productDTO.productName}" >상품명</p>
-                    <p class="product-stockNum"style="display: inline-flex; font-weight: 600">재고: </p>
+                    <p class="product-name" th:text="${productDTO.productName}">상품명</p>
+                    <p class="product-stockNum" style="display: inline-flex; font-weight: 600">재고: </p>
                     <p class="product-stockNum" th:text="${productDTO.stockNumber} + '개'" style="display: inline-flex; color: #268bcc"></p>
                     <p class="product-price" th:text="${productDTO.price} + '원'"></p>
                 </div>
@@ -122,6 +123,20 @@
     <div class="crudButtonContainer" th:if="${isAdmin}">
         <button type="button" class="addItemButton" id="addButton"
                 onclick="window.location.href='/item/addItem'">상품 등록하기</button>
+    </div>
+
+    <!-- 검색창 -->
+    <div class="CS_search_container">
+        <form th:action="@{/item/wall}" method="get"> <!-- 타일 검색 경로로 변경 -->
+            <input type="hidden" name="productType" value="TILE"/> <!-- 타일 타입을 지정 -->
+            <select name="category" style="width: 5vw; height: 2vw; font-size: 1.2vw; font-weight: 400; text-align: center">
+                <option value="productName">상품명</option>
+                <option value="productDetail">상품 내용</option>
+                <option value="member.email">작성자 이메일</option>
+            </select>
+            <input type="text" name="keyword" placeholder="검색어를 입력하세요">
+            <button type="submit">검색</button>
+        </form>
     </div>
 </div>
 </html>

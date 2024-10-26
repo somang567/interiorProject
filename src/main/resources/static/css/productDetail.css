@@ -6,7 +6,7 @@
 .item-detail-wrapper {
     display: flex;
     width: 100%;
-    gap: 2vw; /* 두 영역 사이의 간격 */
+    /* 두 영역 사이의 간격 */
     border: 1px solid #2C2C2C;
     background-color: rgba(255, 255, 255, 0);
 }
@@ -19,7 +19,7 @@
 }
 
 .detailTitle_line {
-    width: 60vw;
+    width: 5vw;
     height: 0.2vw;
     border-radius: 5%;
     display: flex;
@@ -32,7 +32,7 @@
 /* 왼쪽 영역: 이미지 슬라이드 */
 .carousel {
     flex: 1;
-    max-width: 50%; /* 왼쪽 영역이 50%를 차지 */
+    max-width: 45%; /* 왼쪽 영역이 50%를 차지 */
 }
 
 /* 오른쪽 영역: Product Detail */
@@ -43,6 +43,13 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+}
+
+.vertical_line {
+    width: 2px;  /* 세로선의 너비 */
+    background-color: #333333; /* 선의 색상 */
+    height: 100%; /* 세로선의 높이 */
+    opacity: 1;
 }
 
 .ItemSizeBox {
@@ -66,11 +73,16 @@
 }
 
 .itemCS {
-    width: 85%;
+    width: 100%;
     height: 3vw;
+    color: #2c2c2c;
+    border: 1px solid #2c2c2c;
+    background-color: white;
+    text-align: center;
+}
+.itemCS:hover{
     color: white;
     background-color: black;
-    text-align: center;
 }
 
 .item-buttons {

@@ -134,48 +134,87 @@ public class ProductController {
 		return "/product/itemDetail";
 	}
 
-	// 각 상품 페이지들 (타일, 벽, 바닥, 가구, 재고)
-	@GetMapping("/wall")
-	public String wallItemList(Model model, Principal principal) {
-		List<ProductDTO> wallProducts = productService.getProductByType(ProductType.WALL);
-		setScrapDataForUser(model, principal);
-		model.addAttribute("productList", wallProducts);
-		model.addAttribute("isAdmin", isAdmin(principal));
-		return "/product/wallItemList";
-	}
-
+	// 상품 목록(타일)
 	@GetMapping("/tile")
-	public String tileItemList(Model model, Principal principal) {
-		List<ProductDTO> tileProducts = productService.getProductByType(ProductType.TILE);
+	public String tileItemList(Model model, Principal principal,
+	                           @RequestParam(value = "category", required = false) String category,
+	                           @RequestParam(value = "keyword", required = false) String keyword) {
+		List<ProductDTO> products;
+		if (keyword != null && category != null) {
+			products = productService.searchProducts(keyword, category, ProductType.TILE);
+		} else {
+			products = productService.getProductByType(ProductType.TILE);
+		}
 		setScrapDataForUser(model, principal);
-		model.addAttribute("productList", tileProducts);
+		model.addAttribute("productList", products);
 		model.addAttribute("isAdmin", isAdmin(principal));
 		return "/product/tileItemList";
 	}
 
-	@GetMapping("/floor")
-	public String floorItemList(Model model, Principal principal) {
-		List<ProductDTO> floorProducts = productService.getProductByType(ProductType.FLOOR);
+	// 상품 목록(벽)
+	@GetMapping("/wall")
+	public String wallItemList(Model model, Principal principal,
+	                           @RequestParam(value = "category", required = false) String category,
+	                           @RequestParam(value = "keyword", required = false) String keyword) {
+		List<ProductDTO> products;
+		if (keyword != null && category != null) {
+			products = productService.searchProducts(keyword, category, ProductType.WALL);
+		} else {
+			products = productService.getProductByType(ProductType.WALL);
+		}
 		setScrapDataForUser(model, principal);
-		model.addAttribute("productList", floorProducts);
+		model.addAttribute("productList", products);
+		model.addAttribute("isAdmin", isAdmin(principal));
+		return "/product/wallItemList";
+	}
+
+	// 상품 목록(바닥)
+	@GetMapping("/floor")
+	public String floorItemList(Model model, Principal principal,
+	                            @RequestParam(value = "category", required = false) String category,
+	                            @RequestParam(value = "keyword", required = false) String keyword) {
+		List<ProductDTO> products;
+		if (keyword != null && category != null) {
+			products = productService.searchProducts(keyword, category, ProductType.FLOOR);
+		} else {
+			products = productService.getProductByType(ProductType.FLOOR);
+		}
+		setScrapDataForUser(model, principal);
+		model.addAttribute("productList", products);
 		model.addAttribute("isAdmin", isAdmin(principal));
 		return "/product/floorItemList";
 	}
 
+	// 상품 목록(가구)
 	@GetMapping("/furniture")
-	public String furnitureItemList(Model model, Principal principal) {
-		List<ProductDTO> furnitureProducts = productService.getProductByType(ProductType.FURNITURE);
+	public String furnitureItemList(Model model, Principal principal,
+	                                @RequestParam(value = "category", required = false) String category,
+	                                @RequestParam(value = "keyword", required = false) String keyword) {
+		List<ProductDTO> products;
+		if (keyword != null && category != null) {
+			products = productService.searchProducts(keyword, category, ProductType.FURNITURE);
+		} else {
+			products = productService.getProductByType(ProductType.FURNITURE);
+		}
 		setScrapDataForUser(model, principal);
-		model.addAttribute("productList", furnitureProducts);
+		model.addAttribute("productList", products);
 		model.addAttribute("isAdmin", isAdmin(principal));
 		return "/product/furnitureItemList";
 	}
 
+	// 상품 목록(재고)
 	@GetMapping("/stock")
-	public String stockItemList(Model model, Principal principal) {
-		List<ProductDTO> stockProducts = productService.getProductByType(ProductType.STOCK);
+	public String stockItemList(Model model, Principal principal,
+	                            @RequestParam(value = "category", required = false) String category,
+	                            @RequestParam(value = "keyword", required = false) String keyword) {
+		List<ProductDTO> products;
+		if (keyword != null && category != null) {
+			products = productService.searchProducts(keyword, category, ProductType.STOCK);
+		} else {
+			products = productService.getProductByType(ProductType.STOCK);
+		}
 		setScrapDataForUser(model, principal);
-		model.addAttribute("productList", stockProducts);
+		model.addAttribute("productList", products);
 		model.addAttribute("isAdmin", isAdmin(principal));
 		return "/product/stockItemList";
 	}
@@ -199,6 +238,8 @@ public class ProductController {
 			model.addAttribute("scrapProductIds", scrapProductIds);
 		}
 	}
+
+
 
 	// 상품 타입별로 리다이렉트하는 메서드
 	private String redirectByProductType(ProductType productType) {

@@ -13,4 +13,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	@Query("SELECT p FROM Product p ORDER BY function('RAND')")
 	List<Product> findRandomProducts(Pageable pageable);
+	// 상품명 검색
+	List<Product> findByProductNameContainingAndProductType(String productName, ProductType productType);
+
+	// 상품 내용 검색
+	List<Product> findByProductDetailContainingAndProductType(String productDetail, ProductType productType);
+
+	// 작성자 이메일로 검색
+	@Query("SELECT p FROM Product p WHERE p.member.email LIKE %:email% AND p.productType = :productType")
+	List<Product> findByMemberEmailContainingAndProductType(String email, ProductType productType);
+
 }
