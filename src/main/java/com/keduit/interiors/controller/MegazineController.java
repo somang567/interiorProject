@@ -41,6 +41,7 @@ public class MegazineController {
   private final MegazineScrapService megazineScrapService;
 
   //  String searchKeyword,
+
   @GetMapping("/list")
   public String megazineItem(
           @RequestParam(required = false) String searchKeyword,
@@ -74,6 +75,7 @@ public class MegazineController {
 
     //사용자 Id 가져오기
     String memberId = principal.getName();
+
     if(memberId == null){
       System.out.println("아직 로그인한 사용자가 없음요---------");
     }else{
@@ -83,6 +85,7 @@ public class MegazineController {
       Long userId = userDetails.getId(); // 사용자 ID를 가져오는 예 (UserDetails 구현에 따라 다를 수 있음)
       model.addAttribute("scrapList", megazineScrapService.getScrapMegazineIdsForUser(userId));
     }
+
 
     Page<Megazine> list = null;
 
@@ -95,8 +98,8 @@ public class MegazineController {
     }
 
     int nowPage = list.getPageable().getPageNumber() + 1; //pageable에서 넘어온 현재 페이지를 반환/ 페이지 1부터 시작.
-    int startPage = Math.max(nowPage - 4, 1);
-    int endPage = Math.min(nowPage + 5, list.getTotalPages());
+    int startPage = Math.max(nowPage - 9, 1);
+    int endPage = Math.min(nowPage + 10, list.getTotalPages());
 
     model.addAttribute("nowPage", nowPage);
     model.addAttribute("startPage", startPage);
@@ -106,11 +109,64 @@ public class MegazineController {
     model.addAttribute("totalCnt", totalCnt);
 
     model.addAttribute("searchKeyword", searchKeyword); // 검색어를 모델에 추가
-    model.addAttribute("maxPage", 5); // 한 화면에 5개의 페이지네이션
+    model.addAttribute("maxPage", 10); // 한 화면에 5개의 페이지네이션
 
     return "megazine/megazineMain";
 
 
+  }
+
+/*
+  @GetMapping("/list")
+  public String megazineItem(
+          @RequestParam(required = false) String searchKeyword,
+          @PageableDefault(page = 0, size = 12, sort = "mno", direction = Sort.Direction.DESC) Pageable pageable,
+          Model model, Principal principal) {
+
+    List<MegazineDTO> megazineProducts = megazineService.getMegazineList();
+    model.addAttribute("megazineList", megazineProducts);
+
+    // 현재 로그인한 사용자를 확인
+    if (principal != null) {
+      String username = principal.getName(); // 로그인한 사용자의 이메일 또는 사용자 이름
+      Member member = memberService.findByEmail(username); // 이메일로 사용자 조회
+
+      if (member != null) {
+        model.addAttribute("authorName", member.getName()); // 사용자 이름을 모델에 추가
+
+        // 사용자 ID 가져오기
+        Long userId = member.getId(); // 사용자 ID를 가져오는 예
+        model.addAttribute("scrapList", megazineScrapService.getScrapMegazineIdsForUser(userId)); // 스크랩 목록 추가
+      }
+    } else {
+      model.addAttribute("authorName", "User"); // 로그인하지 않은 경우 기본값 설정
+      model.addAttribute("scrapList", Collections.emptyList()); // 로그인하지 않은 경우 빈 목록
+    }
+
+    Page<Megazine> list;
+
+    if (searchKeyword == null) {
+      list = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
+    } else {
+      list = megazineService.megazineSearchList(searchKeyword, pageable); // 검색 리스트
+    }
+    model.addAttribute("list", list);
+
+    int nowPage = list.getPageable().getPageNumber() + 1; // 현재 페이지
+    int startPage = Math.max(nowPage - 4, 1);
+    int endPage = Math.min(nowPage + 5, list.getTotalPages());
+
+    model.addAttribute("nowPage", nowPage);
+    model.addAttribute("startPage", startPage);
+    model.addAttribute("endPage", endPage);
+
+    long totalCnt = megazineService.countTotalMagazines();  // 전체 매거진 개수
+    model.addAttribute("totalCnt", totalCnt);
+
+    model.addAttribute("searchKeyword", searchKeyword); // 검색어를 모델에 추가
+    model.addAttribute("maxPage", 5); // 한 화면에 5개의 페이지네이션
+
+    return "megazine/megazineMain";
   }
 
 
@@ -120,7 +176,7 @@ public class MegazineController {
     model.addAttribute("megazineDTO", new MegazineDTO());
     return "megazine/megazineForm";
   }
-
+*/
   //상품 등록 데이터 서버에 전달
   @PostMapping("/user/write/new")
   //@Valid 유효성 검사 수행
