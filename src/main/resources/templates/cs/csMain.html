@@ -56,10 +56,16 @@
         </ul>
 
 
-        <!-- 검색창 -->
         <div class="CS_search_container">
-            <input type="text" placeholder="검색어를 입력하세요">
-            <button type="submit">검색</button>
+            <form th:action="@{/cs/list}" method="get">
+                <select name="category" style="width: 5vw; height: 2vw; font-size: 1.2vw; font-weight: 400;">
+                    <option value="title">제목</option>
+                    <option value="content">내용</option>
+                    <option value="member.email">작성자</option>
+                </select>
+                <input type="text" name="keyword" placeholder="검색어를 입력하세요" style="width: 15vw; height: 2vw;">
+                <button type="submit" style="width: 5vw; height: 2vw;">검색</button>
+            </form>
         </div>
     </div>
 </div>

@@ -35,11 +35,20 @@ public class CsController {
 	@GetMapping("/cs/list")
 	public String getCsList(Model model,
 	                        @RequestParam(value = "page", defaultValue = "1") int page,
+	                        @RequestParam(value = "category", required = false) String category,
+	                        @RequestParam(value = "keyword", required = false) String keyword,
 	                        Principal principal) {
 
 		int pageSize = 10;  // 페이지 당 게시물 수
 		Pageable pageable = PageRequest.of(page - 1, pageSize);
-		Page<CsDTO> csPage = csService.getAllCs(pageable);
+		Page<CsDTO> csPage;
+
+
+		if (category != null && keyword != null) {
+			csPage = csService.searchCs(category, keyword, pageable);
+		} else {
+			csPage = csService.getAllCs(pageable);
+		}
 
 		int totalPages = csPage.getTotalPages();
 		int currentPage = page;

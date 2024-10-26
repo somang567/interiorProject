@@ -21,4 +21,12 @@ public interface CsRepository extends JpaRepository<CSEntity, Long> {
 
 	// NOTICE가 아닌 일반 게시물만 가져오기 (페이지네이션 지원)
 	Page<CSEntity> findByCsWriteTypeNotOrderByRegTimeDesc(CsWriteType csWriteType, Pageable pageable);
+
+	Page<CSEntity> findByTitleContaining(String title, Pageable pageable);
+
+	// 내용으로 검색
+	Page<CSEntity> findByContentContaining(String content, Pageable pageable);
+
+	// 작성자 이메일로 검색
+	Page<CSEntity> findByMemberEmailContaining(String email, Pageable pageable);
 }

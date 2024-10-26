@@ -82,4 +82,23 @@ public class CsService {
 		}
 		csRepository.deleteById(id);
 	}
+
+	// 검색
+	public Page<CsDTO> searchCs(String category, String keyword, Pageable pageable) {
+		Page<CSEntity> csPage;
+		switch (category) {
+			case "title":
+				csPage = csRepository.findByTitleContaining(keyword, pageable);
+				break;
+			case "content":
+				csPage = csRepository.findByContentContaining(keyword, pageable);
+				break;
+			case "member.email":
+				csPage = csRepository.findByMemberEmailContaining(keyword, pageable);
+				break;
+			default:
+				throw new IllegalArgumentException("잘못된 검색 카테고리입니다: " + category);
+		}
+		return csPage.map(CsDTO::of);
+	}
 }
