@@ -2,6 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
+
 <th:block layout:fragment="css">
     <style>
         /* 기본 레이아웃 스타일 */
@@ -54,25 +55,105 @@
 
         .content-area {
             margin-top: 40px;
-            height: 500px;
+            margin-bottom: 40px;
             transition: all 0.3s;
+        }
+
+        .content-area p {
+            margin-bottom: 3vh;
+        }
+
+        .section-title {
+            font-size: 25px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .no-scraps {
+            font-size: 35px;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
         }
 
         .myContent {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #dad1c6;
-            padding: 10px;
-            height: 95%;
-            margin: 15px auto;
-            border-radius: 10px;
+            flex-wrap: nowrap;
+            gap: 20px;
+            position: relative;
+            color: black;
         }
 
-        .myContent img {
-            width: 90%;
-            height: 350px;
-            margin: 0 10px;
+
+        .m_scrap a img {
+            height: 80%;
+        }
+
+        .product-item, .megazine-item {
+            width: calc(33.333% - 20px);
+            box-sizing: border-box;
+            background-color: #dad1c6;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .product-item img, .megazine-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .hidden-post {
+            display: none;
+        }
+
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            background-color: rgba(153, 153, 153, 0.8);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .prev-btn:hover, .next-btn:hover {
+            background-color: #ee7828;
+        }
+
+        .prev-btn {
+            left: -50px;
+        }
+
+        .next-btn {
+            right: -50px;
+        }
+
+        @media (max-width: 1024px) {
+            .product-item, .megazine-item {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .prev-btn, .next-btn {
+                left: -30px;
+                right: -30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-item, .megazine-item {
+                width: 100%;
+            }
+
+            .prev-btn, .next-btn {
+                display: none; /* 작은 화면에서는 페이지네이션 숨김 */
+            }
         }
 
         .more-button {
@@ -85,34 +166,95 @@
             padding: 10px 20px;
         }
 
-        .hidden-post {
-            display: none;
+        .m_scrap {
+            width: 100%;
         }
+
+        .myContent p {
+            margin-bottom: 0.5vh;
+        }
+
 
     </style>
 </th:block>
+
 <th:block layout:fragment="script">
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // 스크랩된 상품 이전/다음 버튼 숨김 처리
-            const productItems = document.querySelectorAll("#content-products .myContent > div").length;
-            if (productItems <= 4) {
-                document.getElementById("prev-product").style.display = "none";
-                document.getElementById("next-product").style.display = "none";
+            const itemsPerPage = 3;
+
+            function initializePagination(contentId, itemClass) {
+                const contentArea = document.querySelector(contentId);
+                const container = contentArea.querySelector('.myContent');
+                const items = container.querySelectorAll(itemClass);
+                const totalItems = items.length;
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                container.setAttribute('data-current-page', 0);
+
+                // 초기 표시
+                items.forEach((item, index) => {
+                    if (index < itemsPerPage) {
+                        item.classList.remove('hidden-post');
+                    } else {
+                        item.classList.add('hidden-post');
+                    }
+                });
+
+                // 버튼 상태 설정
+                const prevBtn = contentArea.querySelector('.prev-btn');
+                const nextBtn = contentArea.querySelector('.next-btn');
+
+                if (totalPages <= 1) {
+                    if (prevBtn) prevBtn.style.display = 'none';
+                    if (nextBtn) nextBtn.style.display = 'none';
+                }
+
+                // 버튼 이벤트 리스너
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', function () {
+                        let currentPage = parseInt(container.getAttribute('data-current-page'));
+                        if (currentPage > 0) {
+                            currentPage--;
+                            container.setAttribute('data-current-page', currentPage);
+                            updateDisplay(container, items, currentPage, itemsPerPage);
+                        }
+                    });
+                }
+
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', function () {
+                        let currentPage = parseInt(container.getAttribute('data-current-page'));
+                        if (currentPage < totalPages - 1) {
+                            currentPage++;
+                            container.setAttribute('data-current-page', currentPage);
+                            updateDisplay(container, items, currentPage, itemsPerPage);
+                        }
+                    });
+                }
             }
 
-            // 스크랩된 매거진 이전/다음 버튼 숨김 처리
-            const megazineItems = document.querySelectorAll("#content-megazine .myContent > div").length;
-            if (megazineItems <= 4) {
-                document.getElementById("prev-megazine").style.display = "none";
-                document.getElementById("next-megazine").style.display = "none";
+            function updateDisplay(container, items, currentPage, itemsPerPage) {
+                const start = currentPage * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                items.forEach((item, index) => {
+                    if (index >= start && index < end) {
+                        item.classList.remove('hidden-post');
+                    } else {
+                        item.classList.add('hidden-post');
+                    }
+                });
             }
 
-            // 더보기 버튼 클릭 시 더 많은 글 보이기
+            // 초기화: 상품과 매거진 각각
+            initializePagination("#content-products", ".product-item");
+            initializePagination("#content-megazine", ".megazine-item");
+
+            // 더보기 버튼 클릭 시 더 많은 글 보이기 (기존 기능 유지)
             const moreButton = document.getElementById("more-posts-btn");
             if (moreButton) {
                 moreButton.addEventListener("click", function () {
-                    const hiddenPosts = document.querySelectorAll(".hidden-post");
+                    const hiddenPosts = document.querySelectorAll("#content-my-posts .hidden-post");
                     hiddenPosts.forEach(post => post.style.display = "block");
                     moreButton.style.display = "none";
                 });
@@ -120,6 +262,7 @@
         });
     </script>
 </th:block>
+
 <div layout:fragment="content" th:object="${memberDTO}">
     <div class="container">
 
@@ -137,49 +280,50 @@
 
         <!-- 스크랩된 상품 영역 -->
         <div>
-        <div class="content-area" id="content-products" th:if="${scrappedProducts != null}">
-            <p style="font-size: 25px; font-weight: bold; margin-top: 20px">상품</p>
-            <div class="myContent" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; ">
-                <p th:if="${scrappedProducts.size() == 0}" style="font-size: 35px; font-weight: bold; text-align: center">스크랩된 상품이 없습니다.</p>
-                <button class="btn" id="prev-product" th:if="${scrappedProducts.size() > 4}">◀</button>
-                <div th:each="product, iterStat : ${scrappedProducts}" th:classappend="${iterStat.count > 4 ? 'hidden-post' : ''}">
-                    <a th:href="@{'/item/product/' + ${product.id}}">
-                        <img th:src="@{${product.firstImageUrl}}" alt="스크랩 상품 이미지">
-                        <h2 th:text="${product.productName}"></h2>
-                        <p class="card-price" th:text="${product.price + ' 원'}"></p>
-                    </a>
+            <div class="content-area" id="content-products" th:if="${scrappedProducts != null}">
+                <p class="section-title">상품</p>
+                <div class="myContent" data-current-page="0">
+                    <p th:if="${scrappedProducts.size() == 0}" class="no-scraps">스크랩된 상품이 없습니다.</p>
+                    <button class="btn prev-btn" th:if="${scrappedProducts.size() > 3}">◀</button>
+                    <div th:each="product, iterStat : ${scrappedProducts}"
+                         th:classappend="${iterStat.count > 3 ? ' hidden-post' : ''}"
+                         class="product-item">
+                        <a th:href="@{'/item/product/' + ${product.id}}">
+                            <img th:src="@{${product.firstImageUrl}}" alt="스크랩 상품 이미지">
+                            <h2 th:text="${product.productName}"></h2>
+                            <p class="card-price" th:text="${product.price + ' 원'}"></p>
+                        </a>
+                    </div>
+                    <button class="btn next-btn" th:if="${scrappedProducts.size() > 3}">▶</button>
                 </div>
-                <button class="btn" id="next-product" th:if="${scrappedProducts.size() > 4}">▶</button>
+            </div>
+
+            <br><br>
+
+            <!-- 스크랩된 매거진 영역 -->
+            <div class="content-area" id="content-megazine" th:if="${scrappedMegazines != null}">
+                <p class="section-title">팁&매거진</p>
+                <div class="myContent" data-current-page="0">
+                    <p th:if="${scrappedMegazines.size() == 0}" class="no-scraps">스크랩된 매거진이 없습니다.</p>
+                    <button class="btn prev-btn" th:if="${scrappedMegazines.size() > 3}">◀</button>
+                    <div class="m_scrap megazine-item" th:each="scrap, iterStat : ${scrappedMegazines}"
+                         th:classappend="${iterStat.count > 3 ? ' hidden-post' : ''}">
+                        <a th:href="@{'/megazines/list/' + ${scrap.mno}}">
+                            <img th:src="@{${scrap.imageUrl}}" alt="매거진 스크랩">
+                            <h2 th:text="${scrap.title}"></h2>
+                            <p class="card-date" th:text="${#temporals.format(scrap.regTime, 'yyyy-MM-dd HH:mm')}"></p>
+                        </a>
+                    </div>
+                    <button class="btn next-btn" th:if="${scrappedMegazines.size() > 3}">▶</button>
+                </div>
             </div>
         </div>
 
-            <br>
-            <br>
-
-        <!-- 스크랩된 매거진 영역 -->
-        <div class="content-area" id="content-megazine" th:if="${scrappedMegazines != null}">
-            <p style="font-size: 25px; font-weight: bold; margin-top: 20px">팁&매거진</p>
-            <div class="myContent" style="display: flex; flex-direction: row; flex-wrap: wrap;">
-                <p th:if="${scrappedMegazines.size() == 0}" style="font-size: 35px; font-weight: bold; text-align: center">스크랩된 매거진이 없습니다.</p>
-                <button class="btn" id="prev-megazine" th:if="${scrappedMegazines.size() > 4}">◀</button>
-                <div th:each="scrap, iterStat : ${scrappedMegazines}" th:classappend="${iterStat.count > 4 ? 'hidden-post' : ''}">
-                    <a th:href="@{'/megazines/list/' + ${scrap.mno}}">
-                        <img th:src="@{${scrap.imageUrl}}" alt="매거진 스크랩">
-                        <h2 th:text="${scrap.title}"></h2>
-                        <p class="card-date" th:text="${#temporals.format(scrap.regTime, 'yyyy-MM-dd HH:mm')}"></p>
-                    </a>
-                </div>
-                <button class="btn" id="next-megazine" th:if="${scrappedMegazines.size() > 4}">▶</button>
-            </div>
-        </div>
-        </div>
-
-        <br>
-        <br>
+        <br><br>
 
         <!-- 내가 쓴 글 영역 -->
         <div class="content-area" id="content-my-posts" th:if="${myPosts != null}">
-            <p style="font-size: 25px; font-weight: bold; margin-top: 20px">작성한 글</p>
+            <p class="section-title">작성한 글</p>
             <p th:if="${myPosts.size() == 0}">작성한 글이 없습니다.</p>
             <div class="myContent" style="display: flex; flex-direction: column; gap: 20px; align-items: flex-start; justify-content: space-around">
                 <div th:each="post, iterStat : ${myPosts}" th:classappend="${iterStat.count > 8 ? 'hidden-post' : ''}">
