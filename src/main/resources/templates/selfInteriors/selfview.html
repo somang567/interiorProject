@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content">
+
+    <!-- CSRF 토큰 메타 태그 (로그인한 사용자만 보이도록 설정) -->
+    <th:block sec:authorize="isAuthenticated()">
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    </th:block>
+
+    <!-- CSS 스타일 -->
+    <th:block layout:fragment="css">
+        <style>
+            /* 기존 스타일 유지 */
+            .view-container {
+                width: 80vw;
+                margin: 0 auto;
+                margin-top: 3vw;
+                padding: 2vw;
+                background-color: #f4f4f4;
+                border-radius: 0.8vw;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                font-size: 1rem;
+                margin-bottom: 2vw;
+            }
+
+            p {
+                line-height: 3vw;
+                padding-left: 1vw;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 2vw;
+                border: 1px solid #ddd;
+            }
+
+            th, td {
+                padding: 1rem;
+                border: 1px solid #ddd;
+                text-align: left;
+            }
+
+            th {
+                text-align: center;
+                background-color: #f9f9f9;
+                font-weight: bold;
+                width: 15%;
+                color: #333;
+            }
+
+            td {
+                background-color: #fff;
+                color: #333;
+            }
+
+            .content-cell {
+                background-color: #fdfdfd;
+                padding: 1.5rem;
+                white-space: pre-line;
+            }
+
+            .image-cell {
+                text-align: center;
+            }
+
+            /* 이미지 크기 제한 */
+            .image-cell img {
+                max-width: 100%;
+                height: 40vw;
+            }
+
+            .button-container {
+                text-align: right;
+                margin-top: 1.5rem;
+                display: flex;
+                justify-content: flex-end;
+                gap: 1rem;
+            }
+
+            .button {
+                padding: 0.8vw 1.6vw;
+                background-color: #555;
+                color: white;
+                border: none;
+                border-radius: 0.4vw;
+                cursor: pointer;
+                font-size: 0.9rem;
+                text-decoration: none;
+            }
+
+            .button:hover {
+                background-color: #333;
+            }
+
+            /* 댓글 섹션 스타일 */
+            .comments-section {
+                width: 80vw;
+                margin: 0 auto;
+                margin-top: 2vw;
+                padding: 2vw;
+                background-color: #f9f9f9;
+                border-radius: 0.8vw;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .comments-section h2 {
+                margin-bottom: 1.5vw;
+                color: #3498db;
+            }
+
+            .comment {
+                border-bottom: 1px solid #ddd;
+                padding: 1vw 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+
+            .comment:last-child {
+                border-bottom: none;
+            }
+
+            .comment-details {
+                flex-grow: 1;
+            }
+
+            .comment-author {
+                font-weight: bold;
+                color: #2c3e50;
+            }
+
+            .comment-date {
+                font-size: 0.8rem;
+                color: #7f8c8d;
+            }
+
+            .comment-content {
+                margin-top: 0.5vw;
+                white-space: pre-line;
+            }
+
+            .comment-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5vw;
+            }
+
+            .comment-actions button {
+                padding: 0.4vw 0.8vw;
+                background-color: #f39c12;
+                color: white;
+                border: none;
+                border-radius: 0.4vw;
+                cursor: pointer;
+                font-size: 0.8rem;
+            }
+
+            .comment-actions button.delete-button {
+                background-color: #e74c3c;
+            }
+
+            .comment-actions button:hover {
+                opacity: 0.8;
+            }
+
+            .comment-form {
+                margin-top: 2vw;
+            }
+
+            .comment-form textarea {
+                width: 100%;
+                padding: 0.8vw;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                resize: vertical;
+                font-size: 1rem;
+            }
+
+            .comment-form button {
+                margin-top: 1vw;
+                padding: 0.8vw 1.6vw;
+                background-color: #3498db;
+                color: white;
+                border: none;
+                border-radius: 0.4vw;
+                cursor: pointer;
+                font-size: 1rem;
+            }
+
+            .comment-form button:hover {
+                background-color: #2980b9;
+            }
+        </style>
+    </th:block>
+
+    <!-- 게시글 상세 내용 -->
+    <div class="view-container">
+        <table>
+            <tr>
+                <th>제목</th>
+                <td th:text="${selfinterior.title}"></td>
+            </tr>
+            <tr>
+                <th>작성자</th>
+                <td th:text="${selfinterior.authorName}"></td>
+            </tr>
+            <tr>
+                <th>첨부 이미지</th>
+                <td class="image-cell">
+                    <th:block th:if="${selfinterior.filename}">
+                        <img th:src="@{/files/{filename}(filename=${selfinterior.filename})}" alt="첨부 이미지"/>
+                    </th:block>
+                    <th:block th:unless="${selfinterior.filename}">
+                        이미지가 없습니다.
+                    </th:block>
+                </td>
+            </tr>
+            <tr>
+                <th>수정일</th>
+                <td th:text="${#temporals.format(selfinterior.updateTime, 'yyyy-MM-dd HH:mm')}">수정일</td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td class="content-cell">
+                    <span th:text="${selfinterior.content}"></span>
+                </td>
+            </tr>
+        </table>
+
+        <!-- 버튼 -->
+        <div class="button-container">
+            <a href="/selfinterior/list" class="button">목록으로</a>
+            <a th:href="@{/selfinterior/modify/{id}(id=${selfinterior.id})}" class="button"
+               sec:authorize="isAuthenticated()">수정하기</a>
+
+            <form th:action="@{/selfinterior/delete/{id}(id=${selfinterior.id})}" method="post"
+                  sec:authorize="isAuthenticated()"
+                  onsubmit="return confirm('정말로 게시글을 삭제하시겠습니까?');">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <button type="submit" class="button">삭제하기</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 댓글 섹션 -->
+    <div class="comments-section">
+        <h2>댓글</h2>
+
+        <!-- 기존 댓글 목록 -->
+        <div th:if="${comments != null and !#lists.isEmpty(comments)}">
+            <div th:each="selfinteriorComment : ${comments}" class="comment">
+                <div class="comment-details">
+                    <span class="comment-author" th:text="${selfinteriorComment.authorName}">작성자</span>
+                    <span class="comment-date"
+                          th:text="${#temporals.format(selfinteriorComment.regTime, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                    <div class="comment-content" th:text="${selfinteriorComment.content}">댓글 내용</div>
+                </div>
+                <div class="comment-actions">
+                    <button type="button" class="edit-button"
+                            onclick="editComment([[${selfinteriorComment.id}]], '[[${#strings.escapeJavaScript(selfinteriorComment.content)}]]')">
+                        수정
+                    </button>
+                    <button type="button" class="delete-button"
+                            onclick="deleteComment([[${selfinteriorComment.id}]], '[[${selfinteriorComment.content}]]')">
+                        삭제
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div th:if="${comments == null or #lists.isEmpty(comments)}">
+            <p>댓글이 없습니다.</p>
+        </div>
+
+        <!-- 댓글 작성 폼 -->
+        <div sec:authorize="isAuthenticated()" class="comment-form">
+            <h3>댓글 작성</h3>
+            <form id="commentForm" th:action="@{/selfinterior/comment/add}" method="post">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <input type="hidden" name="selfInteriorId" th:value="${selfinterior.id}"/>
+                <textarea name="content" rows="4" placeholder="댓글을 입력하세요" required></textarea>
+                <button type="submit">댓글 작성</button>
+            </form>
+        </div>
+        <div sec:authorize="!isAuthenticated()">
+            <p>댓글을 작성하려면 <a href="/login">로그인</a>하세요.</p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <th:block layout:fragment="javascript">
+        <script>
+            // 댓글 추가 처리
+            document.getElementById('commentForm')?.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const form = event.target;
+                const formData = new FormData(form);
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        [csrfHeader]: csrfToken,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        selfInteriorId: formData.get('selfInteriorId'),
+                        content: formData.get('content')
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                        } else {
+                            location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('댓글 추가 중 오류가 발생했습니다.');
+                    });
+            });
+
+            // 댓글 수정 함수
+            function editComment(commentId, currentContent) {
+                const newContent = prompt("댓글을 수정하세요:", currentContent);
+                if (newContent !== null && newContent.trim() !== "") {
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                    fetch(`/selfinterior/comment/update/${commentId}`, {
+                        method: 'POST',
+                        headers: {
+                            [csrfHeader]: csrfToken,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            content: newContent
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                alert(data.error);
+                            } else {
+                                location.reload();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('댓글 수정 중 오류가 발생했습니다.');
+                        });
+                }
+            }
+
+            // 댓글 삭제 함수
+            function deleteComment(commentId, commentContent) {
+                if (confirm(`정말로 이 댓글을 삭제하시겠습니까?\n"${commentContent}"`)) {
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+                    fetch(`/selfinterior/comment/delete/${commentId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            [csrfHeader]: csrfToken,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.error) {
+                                alert(data.error);
+                            } else {
+                                location.reload();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('댓글 삭제 중 오류가 발생했습니다.');
+                        });
+                }
+            }
+        </script>
+    </th:block>
+</div>
+</html>
