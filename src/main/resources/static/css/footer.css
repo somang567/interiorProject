@@ -12,12 +12,12 @@ body {
     background-color:#C6BAAA ;
     /*background: linear-gradient(transparent, #d6c8ba,#C6BAAA,#C6BAAA);*/
     width: 100vw;
-    height: 20vw;
+    height: 23vw;
     opacity: 0.9;
 }
 .footer {
     width:80vw;
-    height: 15.5vw;
+    height: 18vw;
     padding-top: 4vw;
     color:#2C2C2C;
     margin: 0 auto;
@@ -31,16 +31,17 @@ body {
 }
 
 .footer_main_wrap{
-    width:31vw;
+    width:40vw;
+    height:2vw;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     font-size: 0.9vw;
-    margin: 0.8vw 0.5vw;
+    margin: 0.5vw 0.5vw;
     /*background-color: #007bff;*/
 }
 .footer_sub_wrap{
-    width:40.9vw;
+    width:100%;
+    height:2vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -50,16 +51,19 @@ body {
 }
 .footer_etc{
     width:100%;
+    height:2vw;
     display: flex;
     align-items:center;
+    margin:0.5vw;
     justify-content: space-between;
     /*background-color: #75a8dd;*/
 }
 .etc_wrap{
     width:25vw;
+    height:2vw;
     display: flex;
     justify-content: space-between;
-    margin: 0.5vw;
+    align-items: center;
     font-size: 0.6vw;
     /*background-color: #75a8dd;*/
 }
@@ -90,8 +94,7 @@ body {
 
 hr {
     width: 90vw;
-    margin: auto;
-    margin-top: 10px;
+    margin: 0.5vw auto;
     color: white;
     opacity: 0.1;
     border: 0;

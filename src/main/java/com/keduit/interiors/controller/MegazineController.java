@@ -44,7 +44,7 @@ public class MegazineController {
   @GetMapping("/list")
   public String megazineItem(
           @RequestParam(required = false) String searchKeyword,
-          @PageableDefault(page = 0, size = 4, sort = "mno", direction = Sort.Direction.DESC) Pageable pageable,
+          @PageableDefault(page = 0, size = 12, sort = "mno", direction = Sort.Direction.DESC) Pageable pageable,
           Model model, Principal principal,MemberDTO memberDTO) {
 
     List<MegazineDTO> megazineProducts = megazineService.getMegazineList();
