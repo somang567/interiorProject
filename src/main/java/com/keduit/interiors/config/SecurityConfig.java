@@ -22,6 +22,16 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         // 로그인 설정
+        System.out.println("------------SecurityFilterChain 이랑께");
+        http.formLogin()
+                .loginPage("/members/login")
+                .defaultSuccessUrl("/")
+                .usernameParameter("email")
+                .failureUrl("/members/login/error")
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+                .logoutSuccessUrl("/");
         // 권한 설정
         http.authorizeRequests()
                 // 1. 관리자 권한이 필요한 URL 패턴
@@ -37,6 +47,7 @@ public class SecurityConfig {
                 ).hasRole("ADMIN")
                 // 2. 관리자와 사용자 권한이 필요한 URL 패턴
                 .mvcMatchers(
+                        "/megazines/user/write/new",
                         "/board/delete/**",
                         "/board/update/**",
                         "/board/modify/**",

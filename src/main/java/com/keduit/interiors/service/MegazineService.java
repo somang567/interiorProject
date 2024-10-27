@@ -8,10 +8,7 @@ import com.keduit.interiors.entity.Board;
 import com.keduit.interiors.entity.ItemImg;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.entity.Member;
-import com.keduit.interiors.repository.ItemImgRepository;
-import com.keduit.interiors.repository.MegazineCommentRepository;
-import com.keduit.interiors.repository.MegazineRepository;
-import com.keduit.interiors.repository.MemberRepository;
+import com.keduit.interiors.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +38,7 @@ public class MegazineService {
     private final MemberRepository memberRepository;
     private final FileService fileService;
     private final MegazineCommentRepository megazineCommentRepository;
+    private final MegazineScrapRepository megazineScrapRepository;
 
 
     @Transactional(readOnly = true) //데이터 베이스 성능 최적화를 위함.
@@ -74,6 +72,11 @@ public class MegazineService {
 
     public long countTotalComments() {
         return megazineCommentRepository.count();
+    }
+
+    //전체 게시글 수 세는 메서드
+    public long countTotalScraps() {
+        return megazineScrapRepository.count();
     }
 
     @Transactional(readOnly = true)
@@ -132,10 +135,8 @@ public class MegazineService {
     //all 커밋이 되거나 롤백이 되어야 함.
     //상품이 몇번인지 Long으로 등록
     public Long saveItem(MegazineDTO megazineDTO, MultipartFile itemImgFile, Principal principal) throws Exception {
-
-        //매핑하기 전에 서비스에서 가져와서 저장하는 거 해줘야 함.
-
-        System.out.println("saveItem 들어감----------------------------------->");
+        
+        System.out.println("saveItem 메서드임 ----------------------------------->");
 
         String oriImgName = itemImgFile.getOriginalFilename();
         String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
@@ -154,11 +155,14 @@ public class MegazineService {
         if (!directory.exists()) {
             directory.mkdirs();
         }
-
-        //지금까지의 Megazine 엔티티를 DTO로 매핑함
-        Megazine megazine = megazineDTO.createItem();
-
+        
+        Megazine megazine = megazineDTO.createItem();   //매핑
         megazineRepository.save(megazine);  //리포지토리는 엔티티를 줘야 하기 때문에
+
+
+        return megazine.getMno();  //Long 타입 리턴하는 메서드임.
+
+
 
         //이미지 등록
     /*
@@ -180,7 +184,7 @@ public class MegazineService {
       itemImgService.saveItemImg(itemImg, itemImgFileList.get(i));
     }*/
 
-        return megazine.getMno();  //Long 타입 리턴하는 메서드임.
+
     }
 
 

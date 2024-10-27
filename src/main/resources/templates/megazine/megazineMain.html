@@ -51,11 +51,17 @@
             // 스크랩 추가/삭제 처리
             function toggleScrap(element) {
                 const megazineId = $(element).data('megazine-id');
+                if(megazineId == null){
+                    alert("로그인 후 이용해주세요");
+                   return "members/login";
+                }
                 console.log("Megazine ID:", megazineId);  // 로그 출력
                 const isScraped = $(element).attr('src').includes('scrap_full.png');  // 현재 스크랩 상태 확인
-
+                let scrapCnt = 0;
                 if (isScraped) {
+                    scrapCnt -= 1;
                     removeScrap(megazineId, element);
+                    console.log("scrapCnt: ",scrapCnt);
                 } else {
                     addScrap(megazineId, element);
                 }
@@ -64,7 +70,8 @@
 
             // 스크랩 추가 요청
             function addScrap(megazineId, element) {
-
+                scrapCnt += 1;
+                console.log("scrapCnt: ",scrapCnt);
                 //megazineId = $(element).data('megazine-id');
                 console.log("addScrap 안에서의 Megazine ID:", megazineId);  // 로그 출력
 
@@ -96,6 +103,8 @@
 
             // 스크랩 삭제 요청
             function removeScrap(megazineId, element) {
+                scrapCnt = 0;
+                console.log("scrapCnt: ",scrapCnt);
                 $.ajax({
                     url: '/megascrap/remove',
                     type: 'POST',

@@ -41,12 +41,12 @@ public class MegazineController {
   private final MegazineScrapService megazineScrapService;
 
   //  String searchKeyword,
-
+/*
   @GetMapping("/list")
   public String megazineItem(
           @RequestParam(required = false) String searchKeyword,
           @PageableDefault(page = 0, size = 12, sort = "mno", direction = Sort.Direction.DESC) Pageable pageable,
-          Model model, Principal principal,MemberDTO memberDTO) {
+          Model model, Principal principal) {
 
     List<MegazineDTO> megazineProducts = megazineService.getMegazineList();
     model.addAttribute("megazineList", megazineProducts);
@@ -89,7 +89,7 @@ public class MegazineController {
 
     Page<Megazine> list = null;
 
-    if (searchKeyword == null) {
+    if (searchKeyword == null && memberId == null) {
       list = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
       model.addAttribute("list", list);
     } else {
@@ -113,10 +113,9 @@ public class MegazineController {
 
     return "megazine/megazineMain";
 
-
   }
+*/
 
-/*
   @GetMapping("/list")
   public String megazineItem(
           @RequestParam(required = false) String searchKeyword,
@@ -163,6 +162,7 @@ public class MegazineController {
     long totalCnt = megazineService.countTotalMagazines();  // 전체 매거진 개수
     model.addAttribute("totalCnt", totalCnt);
 
+    long totalScrapCnt = megazineService.countTotalScraps();
     model.addAttribute("searchKeyword", searchKeyword); // 검색어를 모델에 추가
     model.addAttribute("maxPage", 5); // 한 화면에 5개의 페이지네이션
 
@@ -176,7 +176,7 @@ public class MegazineController {
     model.addAttribute("megazineDTO", new MegazineDTO());
     return "megazine/megazineForm";
   }
-*/
+
   //상품 등록 데이터 서버에 전달
   @PostMapping("/user/write/new")
   //@Valid 유효성 검사 수행
@@ -202,7 +202,6 @@ public class MegazineController {
     String contentWithLineBreaks = convertNewlinesToHtml(megazineDTO.getContent());
     megazineDTO.setContent(contentWithLineBreaks);
 
-
     try {
       megazineDTO.setUser(megazineDTO.getUser());
       megazineService.saveItem(megazineDTO, itemImgFile,principal);
@@ -221,8 +220,8 @@ public class MegazineController {
     if (text == null) {
       return null;
     }
-    return text.replaceAll(" ", "\n"); // 공백을 &nbsp;로 변환
-//    return text != null ? text.replaceAll("\n", "<br/>") : null;
+    return text.replaceAll(" ", "\t"); // 공백을 &nbsp;로 변환
+    //return text != null ? text.replaceAll("\n", "<br/>") : null;
   }
 
   // 상세보기 관련 Url --------

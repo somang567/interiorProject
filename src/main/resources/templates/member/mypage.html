@@ -75,7 +75,6 @@
             text-align: center;
             width: 100%;
         }
-
         .myContent {
             display: flex;
             flex-wrap: nowrap;
@@ -83,31 +82,43 @@
             position: relative;
             color: black;
         }
-
-
         .m_scrap a img {
             height: 80%;
         }
-
         .product-item, .megazine-item {
             width: calc(33.333% - 20px);
+            height:25vw;
             box-sizing: border-box;
             background-color: #dad1c6;
             padding: 10px;
             border-radius: 10px;
             text-align: center;
         }
-
+        .megazine-item a{
+            text-decoration: none;
+            color:black;
+        }
+        .megazine_title{
+            width:24vw;
+            overflow: hidden; /* 넘치는 내용 숨기기 */
+            white-space: nowrap; /* 줄 바꿈 금지 */
+            text-overflow: ellipsis; /* 잘린 부분에 ... 표시 */
+            margin-bottom: 0.7vw;
+            font-size: 1.2vw;
+        }
+        .megazine_sub-title{
+            text-align: center;
+            overflow: hidden; /* 넘치는 내용 숨기기 */
+            white-space: nowrap; /* 줄 바꿈 금지 */
+            text-overflow: ellipsis; /* 잘린 부분에 ... 표시 */
+            margin-bottom: 0.5vw;
+            font-size: 0.9vw;
+        }
         .product-item img, .megazine-item img {
             width: 100%;
             height: auto;
             border-radius: 5px;
         }
-
-        .hidden-post {
-            display: none;
-        }
-
         .prev-btn, .next-btn {
             position: absolute;
             top: 50%;
@@ -120,37 +131,30 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
         .prev-btn:hover, .next-btn:hover {
             background-color: #ee7828;
         }
-
         .prev-btn {
-            left: -50px;
+            left: -5vw;
         }
-
         .next-btn {
-            right: -50px;
+            right: -5vw;
         }
-
         @media (max-width: 1024px) {
             .product-item, .megazine-item {
                 width: calc(50% - 20px);
             }
         }
-
         @media (max-width: 768px) {
             .prev-btn, .next-btn {
                 left: -30px;
                 right: -30px;
             }
         }
-
         @media (max-width: 480px) {
             .product-item, .megazine-item {
                 width: 100%;
             }
-
             .prev-btn, .next-btn {
                 display: none; /* 작은 화면에서는 페이지네이션 숨김 */
             }
@@ -310,7 +314,8 @@
                          th:classappend="${iterStat.count > 3 ? ' hidden-post' : ''}">
                         <a th:href="@{'/megazines/list/' + ${scrap.mno}}">
                             <img th:src="@{${scrap.imageUrl}}" alt="매거진 스크랩">
-                            <h2 th:text="${scrap.title}"></h2>
+                            <h2 class="megazine_title" th:text="${scrap.title}"></h2>
+                            <p class="megazine_sub-title" th:text="${scrap.user}"></p>
                             <p class="card-date" th:text="${#temporals.format(scrap.regTime, 'yyyy-MM-dd HH:mm')}"></p>
                         </a>
                     </div>
