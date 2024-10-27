@@ -293,13 +293,12 @@
                 <div class="myContent" data-current-page="0">
                     <p th:if="${scrappedProducts.size() == 0}" class="no-scraps">스크랩된 상품이 없습니다.</p>
                     <button class="btn prev-btn" th:if="${scrappedProducts.size() > 3}">◀</button>
-                    <div th:each="product, iterStat : ${scrappedProducts}"
-                         th:classappend="${iterStat.count > 3 ? ' hidden-post' : ''}"
-                         class="product-item">
-                        <a th:href="@{'/item/product/' + ${product.id}}">
-                            <img th:src="@{${product.firstImageUrl}}" alt="스크랩 상품 이미지">
-                            <h2 th:text="${product.productName}"></h2>
-                            <p class="card-price" th:text="${product.price + ' 원'}"></p>
+                    <div th:each="productDTO : ${scrappedProducts}" class="product-item">
+                        <a th:href="@{'/item/progduct/' + ${productDTO.id}}">
+                            <!-- 썸네일 이미지가 있을 경우에만 이미지 태그 렌더링 -->
+                            <img th:if="${productDTO.firstImageUrl != null}" th:src="@{${productDTO.firstImageUrl}}" alt="스크랩 상품 이미지">
+                            <h2 th:text="${productDTO.productName}"></h2>
+                            <p class="card-price" th:text="${productDTO.price + ' 원'}"></p>
                         </a>
                     </div>
                     <button class="btn next-btn" th:if="${scrappedProducts.size() > 3}">▶</button>
