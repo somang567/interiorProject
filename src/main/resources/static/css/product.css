@@ -213,6 +213,7 @@
 }
 
 .crudButtonContainer {
+    width: 100vw;
     text-align: center;
     margin-top: 20px;
 }
@@ -254,6 +255,24 @@
 
 
 .addItemButton:hover {
+    background-color: #C6BAAA;
+    color: white;
+}
+
+.addItemButton3 {
+    display: flex;
+    justify-content: center;
+    width: 7vw;
+    height: 2.4vw;
+    color: white;
+    background-color: #806C61;
+    border: 0.5px solid #2c2c2c;
+    border-radius: 0.2vw;
+    cursor: pointer;
+}
+
+
+.addItemButton3:hover {
     background-color: #C6BAAA;
     color: white;
 }
