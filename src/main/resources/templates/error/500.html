@@ -1,10 +1,82 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout/layout}">
+
 <div layout:fragment="content">
-    <h1>500 - 서버 오류가 발생했습니다</h1>
-    <p>서버에서 오류가 발생했습니다. 나중에 다시 시도해주세요.</p>
-    <a th:href="@{/}">홈으로 돌아가기</a>
+    <!-- 에러 메시지 컨테이너 -->
+    <div class="error-container">
+        <h1>500 - 서버 오류가 발생했습니다</h1>
+        <p>서버에서 오류가 발생했습니다. 나중에 다시 시도해주세요.</p>
+        <a th:href="@{/}" class="home-button">홈으로 돌아가기</a>
+    </div>
 </div>
+
+<!-- CSS 스타일 -->
+<th:block layout:fragment="css">
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            text-align: center;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            max-width: 600px;
+        }
+
+        .error-container h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #e74c3c;
+        }
+
+        .error-container p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .home-button {
+            padding: 0.8rem 1.6rem;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 0.4rem;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .home-button:hover {
+            background-color: #2980b9;
+        }
+
+        @media (max-width: 600px) {
+            .error-container {
+                padding: 1.5rem;
+            }
+
+            .error-container h1 {
+                font-size: 2rem;
+            }
+
+            .error-container p {
+                font-size: 1rem;
+            }
+
+            .home-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</th:block>
 </html>

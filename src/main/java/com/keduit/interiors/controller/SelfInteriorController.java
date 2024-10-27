@@ -14,8 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,9 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/selfinterior")
@@ -39,7 +35,9 @@ public class SelfInteriorController {
     private final MemberService memberService;
 
     @Autowired
-    public SelfInteriorController(SelfInteriorService selfInteriorService, SelfInteriorCommentService selfInteriorCommentService, MemberService memberService) {
+    public SelfInteriorController(SelfInteriorService selfInteriorService,
+                                  SelfInteriorCommentService selfInteriorCommentService,
+                                  MemberService memberService) {
         this.selfInteriorService = selfInteriorService;
         this.selfInteriorCommentService = selfInteriorCommentService;
         this.memberService = memberService;
@@ -57,7 +55,10 @@ public class SelfInteriorController {
 
     // 게시글 작성 처리
     @PostMapping("/writedo")
-    public String writeDo(SelfInteriorDTO selfInteriorDTO, @RequestParam(value = "file", required = false) MultipartFile file, Model model, Principal principal) {
+    public String writeDo(SelfInteriorDTO selfInteriorDTO,
+                          @RequestParam(value = "file", required = false) MultipartFile file,
+                          Model model,
+                          Principal principal) {
         try {
             Member member = memberService.findByEmail(principal.getName());
             selfInteriorService.save(selfInteriorDTO, file, member);
@@ -144,7 +145,6 @@ public class SelfInteriorController {
         }
     }
 
-
     // 게시글 수정 폼
     @GetMapping("/modify/{id}")
     public String modifyForm(@PathVariable("id") Long id, Model model, Principal principal) {
@@ -210,79 +210,87 @@ public class SelfInteriorController {
         return "redirect:/selfinterior/list"; // 삭제 성공 후 목록으로 리다이렉트
     }
 
-    // 댓글 추가 처리 (AJAX 요청)
+    // 댓글 추가 처리 (표준 폼 제출 방식)
     @PostMapping("/comment/add")
-    @ResponseBody
-    public ResponseEntity<?> addComment(@RequestBody SelfInteriorCommentDTO commentDTO, Principal principal) {
+    public String addComment(@ModelAttribute SelfInteriorCommentDTO commentDTO, Principal principal, RedirectAttributes redirectAttributes) {
         if (principal == null) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "로그인이 필요합니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            redirectAttributes.addFlashAttribute("error", "로그인이 필요합니다.");
+            return "redirect:/login";
         }
 
         try {
             Member member = memberService.findByEmail(principal.getName());
-            SelfInteriorCommentDTO savedComment = selfInteriorCommentService.addComment(commentDTO, member);
-            return ResponseEntity.ok(savedComment);
+            selfInteriorCommentService.addComment(commentDTO, member);
+            // 기존: redirectAttributes.addFlashAttribute("message", "댓글이 성공적으로 추가되었습니다.");
+            redirectAttributes.addFlashAttribute("commentAdded", true);
         } catch (Exception e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "댓글 추가 중 오류가 발생했습니다: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            logger.error("댓글 추가 중 오류 발생: ", e);
+            redirectAttributes.addFlashAttribute("error", "댓글 추가 중 오류가 발생했습니다: " + e.getMessage());
         }
+
+        return "redirect:/selfinterior/view?id=" + commentDTO.getSelfInteriorId();
     }
 
-    // 댓글 수정 처리 (AJAX 요청)
+    // 댓글 수정 처리 (표준 폼 제출 방식)
     @PostMapping("/comment/update/{id}")
-    @ResponseBody
-    public ResponseEntity<?> updateComment(@PathVariable("id") Long id,
-                                           @RequestBody SelfInteriorCommentDTO commentDTO,
-                                           Principal principal) {
+    public String updateComment(@PathVariable("id") Long id,
+                                @RequestParam("content") String content,
+                                Principal principal,
+                                RedirectAttributes redirectAttributes) {
         if (principal == null) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "로그인이 필요합니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            redirectAttributes.addFlashAttribute("error", "로그인이 필요합니다.");
+            return "redirect:/login";
         }
 
         try {
-            // 권한 검증은 서비스 레이어에서 처리됨
-            selfInteriorCommentService.updateComment(commentDTO, memberService.findByEmail(principal.getName()));
-            return ResponseEntity.ok("댓글이 성공적으로 수정되었습니다.");
+            Member member = memberService.findByEmail(principal.getName());
+
+            // SelfInteriorCommentDTO 생성
+            SelfInteriorCommentDTO commentDTO = new SelfInteriorCommentDTO();
+            commentDTO.setId(id);
+            commentDTO.setContent(content);
+
+            selfInteriorCommentService.updateComment(commentDTO, member);
+            // 기존: redirectAttributes.addFlashAttribute("message", "댓글이 성공적으로 수정되었습니다.");
+            redirectAttributes.addFlashAttribute("commentUpdated", true);
         } catch (AccessDeniedException e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+            logger.error("댓글 수정 권한 없음: ", e);
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         } catch (Exception e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "댓글 수정 중 오류가 발생했습니다: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            logger.error("댓글 수정 중 오류 발생: ", e);
+            redirectAttributes.addFlashAttribute("error", "댓글 수정 중 오류가 발생했습니다: " + e.getMessage());
         }
+
+        SelfInteriorCommentDTO updatedComment = selfInteriorCommentService.getCommentById(id);
+        return "redirect:/selfinterior/view?id=" + updatedComment.getSelfInteriorId();
     }
 
-    // 댓글 삭제 처리 (AJAX 요청)
-    @DeleteMapping("/comment/delete/{id}")
-    @ResponseBody
-    public ResponseEntity<?> deleteComment(@PathVariable("id") Long id, Principal principal) {
+    // 댓글 삭제 처리 (표준 폼 제출 방식)
+    @PostMapping("/comment/delete/{id}")
+    public String deleteComment(@PathVariable("id") Long id, Principal principal, RedirectAttributes redirectAttributes) {
         if (principal == null) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "로그인이 필요합니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            redirectAttributes.addFlashAttribute("error", "로그인이 필요합니다.");
+            return "redirect:/login";
         }
 
         try {
-            // 권한 검증은 서비스 레이어에서 처리됨
-            selfInteriorCommentService.deleteComment(id, memberService.findByEmail(principal.getName()));
-            Map<String, String> successResponse = new HashMap<>();
-            successResponse.put("message", "댓글이 성공적으로 삭제되었습니다.");
-            return ResponseEntity.ok(successResponse);
+            Member member = memberService.findByEmail(principal.getName());
+            SelfInteriorCommentDTO comment = selfInteriorCommentService.getCommentById(id);
+            selfInteriorCommentService.deleteComment(id, member);
+            // 기존: redirectAttributes.addFlashAttribute("message", "댓글이 성공적으로 삭제되었습니다.");
+            redirectAttributes.addFlashAttribute("commentDeleted", true);
+            return "redirect:/selfinterior/view?id=" + comment.getSelfInteriorId();
         } catch (AccessDeniedException e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+            logger.error("댓글 삭제 권한 없음: ", e);
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         } catch (Exception e) {
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "댓글 삭제 중 오류가 발생했습니다: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            logger.error("댓글 삭제 중 오류 발생: ", e);
+            redirectAttributes.addFlashAttribute("error", "댓글 삭제 중 오류가 발생했습니다: " + e.getMessage());
         }
+
+        // 실패 시에도 게시글 상세 페이지로 리다이렉트
+        SelfInteriorCommentDTO comment = selfInteriorCommentService.getCommentById(id);
+        return "redirect:/selfinterior/view?id=" + comment.getSelfInteriorId();
     }
 
     // 권한 확인 메서드 (게시글)

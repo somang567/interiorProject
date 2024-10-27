@@ -12,6 +12,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,8 @@ public class SelfInteriorCommentService {
         SelfInteriorComment comment = dtoToEntity(commentDTO);
         comment.setAuthor(member);
         comment.setSelfInterior(selfInterior);
+        comment.setRegTime(LocalDateTime.now());
+        comment.setUpdateTime(LocalDateTime.now());
 
         selfInterior.setCommentCount(selfInterior.getCommentCount() + 1);
 
@@ -64,6 +67,7 @@ public class SelfInteriorCommentService {
 
         if (comment.getAuthor().equals(member) || isAdmin) {
             comment.setContent(commentDTO.getContent());
+            comment.setUpdateTime(LocalDateTime.now());
             selfInteriorCommentRepository.save(comment);
             logger.info("Comment {} updated by user {}", comment.getId(), member.getEmail());
         } else {
@@ -86,7 +90,7 @@ public class SelfInteriorCommentService {
         if (comment.getAuthor().equals(member) || isAdmin) {
             SelfInterior selfInterior = comment.getSelfInterior();
             selfInterior.setCommentCount(selfInterior.getCommentCount() - 1);
-            selfInteriorCommentRepository.deleteById(commentId);
+            selfInteriorCommentRepository.delete(comment);
             logger.info("Comment {} deleted by user {}", commentId, member.getEmail());
         } else {
             logger.warn("User {} attempted to delete comment {} without permission", member.getEmail(), commentId);
@@ -113,8 +117,15 @@ public class SelfInteriorCommentService {
         comment.setId(dto.getId());
         comment.setContent(dto.getContent());
         // selfInterior와 author는 서비스에서 설정
-        comment.setRegTime(dto.getRegTime());
-        comment.setUpdateTime(dto.getUpdateTime());
+        // comment.setRegTime(dto.getRegTime()); // 서버에서 설정
+        // comment.setUpdateTime(dto.getUpdateTime()); // 서버에서 설정
         return comment;
+    }
+
+    // 댓글 조회 by ID
+    public SelfInteriorCommentDTO getCommentById(Long id) {
+        SelfInteriorComment comment = selfInteriorCommentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 댓글 ID: " + id));
+        return entityToDto(comment);
     }
 }
