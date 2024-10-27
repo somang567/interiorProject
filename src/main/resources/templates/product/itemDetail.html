@@ -48,8 +48,8 @@
             initializeFirstImage();
         });
     </script>
-
 </th:block>
+
 <div class="item_detailContainer" layout:fragment="content">
     <h1 class="productTitle">상품 상세정보</h1>
     <hr class="enrollTitle_line">
@@ -57,16 +57,15 @@
     <!-- 숨겨진 필드로 상품 ID 저장 -->
     <input type="hidden" th:value="${productDTO.id}" name="productId">
 
-
     <!-- 상품 이미지와 상세 정보 -->
     <div class="item-detail-wrapper">
+        <!-- 상품 이미지 슬라이더 -->
         <div id="imageSlideIndicator" class="carousel slide">
             <div class="slider__wrap">
                 <!-- 상품 이미지 리스트 반복 -->
                 <div class="slider__img">
                     <img th:each="imgUrl : ${productDTO.productImgUrls}" th:src="@{${imgUrl}}" class="active imgList"/>
                 </div>
-                <div>  </div>
                 <div class="slider__btn">
                     <a href="#" class="previous"><</a>
                     <a href="#" class="next">></a>
@@ -74,31 +73,37 @@
             </div>
         </div>
 
+        <!-- 세로선 -->
         <div class="vertical_line"></div>
-
 
         <!-- 상품 상세 정보 -->
         <div class="product-detail">
-                <p style="margin-top: 2vw;"></p>
-                <p style="font-size: 2vw; color: black; font-weight: 800;margin-top: 1vw;">상품명</p>
-                <p><span th:text="${productDTO.productName}" style="font-size: 1.4vw; font-weight: 600; margin-top: 2vw; "></span></p>
-                <p style="font-size: 2vw; color: black; font-weight: 800;margin-top: 1vw;">상품사이즈</p>
-                <div class="ItemSizeBox">
-                    <button class="itemSize1"><p>137mm x 133mm</p></button>
-                    <button class="itemSize2"><p>137mm x 133mm</p></button>
-                    <button class="itemSize3"><p>137mm x 133mm</p></button>
-                </div>
-                <p><span th:text=" '₩' + '' + ${productDTO.price} + '원'" style="font-size: 2.3vw; font-weight: 600;"> </span></p>
-
-                <p style="font-size: 2vw; font-weight: 600; margin-top: 2vw;">재고</p><p><span style="font-size: 2vw; font-weight: 600; " th:text="${productDTO.stockNumber} + '개'"></span></p>
-                <button class="itemCS" style="margin-top: 2vw; margin-right: 2vw;"
-                        th:onclick="|location.href='/cs/write?productId=' + ${productDTO.id}|">
-                    상품 문의하기
-                </button>
-
-                <p style="margin-top: 3vw; font-size: 2vw; font-weight: 600;">- 상품 상세설명</p>
-                <span th:text="${productDTO.productDetail}" style="margin-top: 1vw; font-size: 1.4vw; font-weight: 550;"></span>
+            <p style="margin-top: 2vw;"></p>
+            <p style="font-size: 1.4vw; color: black; margin-top: 1vw;">상품명</p>
+            <p><span th:text="${productDTO.productName}" style="font-size: 2vw; font-weight: 600; margin-top: 2vw;"></span></p>
+            <p style="font-size: 1.4vw; color: black; margin-top: 1vw;">상품사이즈</p>
+            <div class="ItemSizeBox">
+                <button class="itemSize1"><span>137mm x 133mm</span></button>
+                <button class="itemSize2"><span>137mm x 133mm</span></button>
+                <button class="itemSize3"><span>137mm x 133mm</span></button>
             </div>
+            <p><span th:text=" '₩' + '' + ${productDTO.price} + '원'" style="font-size: 2.3vw; font-weight: 600;"></span></p>
+
+            <p style="font-size: 1.4vw; font-weight: 600; margin-top: 2vw;">재고</p>
+            <p><span style="font-size: 2vw; font-weight: 600;" th:text="${productDTO.stockNumber} + '개'"></span></p>
+            <button class="itemCS" style="margin-top: 2vw; margin-right: 2vw;"
+                    th:onclick="|location.href='/cs/write?productId=' + ${productDTO.id}|">
+                상품 문의하기
+            </button>
+        </div>
+
+
+    </div>
+    <!-- 상품 상세 설명 -->
+    <div class="product-account">
+        <p style="margin-top: 1vw; font-size: 2vw; font-weight: 600; text-align: center; margin-bottom: 1vw">상품 상세설명</p>
+        <hr style="height: 0.2vw; width: 90%; padding-right: 3vw; color: #EE7828; opacity: 1;" >
+        <div th:text="${productDTO.productDetail}" class="product-detail-text"></div>
     </div>
     <!-- 수정 및 삭제 버튼 (관리자만 보임) -->
     <div class="item-buttons" style="margin-top: 0.7vw;" th:if="${isAdmin}">
@@ -111,6 +116,5 @@
             <button type="submit" class="deleteButtons">삭제</button>
         </form>
     </div>
-
 </div>
 </html>
