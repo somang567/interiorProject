@@ -1,8 +1,11 @@
 /* 기본적인 스타일 설정 */
+
 #CS_detailContainer{
     width: 80%;
     height: 30vw;
+    margin: 0 auto;
 }
+
 #comment_edit{
     width: 80%;
     height: 30vw;
@@ -19,7 +22,7 @@
 }
 
 .cs_view {
-    width: 100%;
+    width: 80%;
     display: flex;
     flex-direction: column;
 }

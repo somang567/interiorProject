@@ -16,8 +16,8 @@
 
 <div id="CS_detailContainer" layout:fragment="content">
     <!-- 상세보기 및 수정/삭제 폼 -->
-    <form class="cs_view" th:action="@{/cs/delete/{id}(id=${csDTO.id})}" method="post" th:object="${csDTO}">
-        <div class="view_all_text-container">
+    <form class="cs_view" style="width: 60%; margin: 0 auto;" th:action="@{/cs/delete/{id}(id=${csDTO.id})}" method="post" th:object="${csDTO}">
+        <div class="view_all_text-container" style="margin-top: 2vw; margin-bottom: 1vw;">
             <span class="write_text" style="color: #806C61;">문의 상세 보기</span>
         </div>
         <hr class="cs_write_line">
@@ -59,7 +59,7 @@
     </form>
 
     <!-- 댓글 섹션 -->
-    <div class="comment_section" style="">
+    <div class="comment_section" style="margin: 0 auto;">
         <h3 style="font-size: 1.2vw;">댓글</h3>
         <ul>
             <!-- 댓글 리스트 반복 -->
