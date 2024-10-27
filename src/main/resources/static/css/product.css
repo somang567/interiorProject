@@ -166,6 +166,8 @@
 }
 
 .product_img_group {
+    width: 80vw;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
 }
@@ -174,6 +176,7 @@
     display: flex;
     justify-content: center;
     gap: 10vw;
+    margin-bottom: 1vw;
 }
 
 #productSell , #productType{
@@ -181,8 +184,8 @@
     height: 3vw;
     font-size: 1.5vw;
     font-weight: 800;
-    padding: 0; /* 가로 가운데 정렬 */
-    margin-top: 2vw;
+    margin-top:2vw;
+    padding: 0 0.5vw;
 }
 
 .formFile{
@@ -221,8 +224,8 @@
     margin: 0 auto;
     background-color: #806C61;
     border: 0.5px solid #2c2c2c;
-    border-radius: 10%;
     cursor: pointer;
+
 }
 .addImageButton:hover{
     background-color: #C6BAAA;
@@ -232,19 +235,20 @@
     justify-content: space-around;
 }
 .fileButton{
+    width: 16vw;
     display: flex;
     justify-content: space-around;
 }
 .addItemButton {
     display: block;
-    margin: 0 auto;
+    margin-top: 2vw;
     margin-bottom: 2vw;
     width: 7vw;
     height: 2.4vw;
     color: white;
     background-color: #806C61;
     border: 0.5px solid #2c2c2c;
-    border-radius: 10%;
+    border-radius: 0.2vw;
     cursor: pointer;
 }
 
@@ -379,6 +383,7 @@
     align-items: center;
     justify-content: center;
     margin-top: 1vw;
+
 }
 
 .productExplain {
@@ -387,6 +392,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-left: 1vw;
     margin-top: 1vw;
 }
 
@@ -404,9 +410,9 @@
     width: 100%; /* 입력 필드가 오른쪽 영역을 가득 채우도록 */
     font-size: 1.2vw; /* 입력 필드의 글꼴 크기 */
     padding: 1vw; /* 여백 추가 */
+    border: 1px solid #333;
 }
 
 .productExplain textarea {
     height: 10vw; /* 텍스트 영역의 높이 설정 */
 }
-
