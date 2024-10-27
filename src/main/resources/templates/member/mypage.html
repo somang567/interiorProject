@@ -94,11 +94,11 @@
             border-radius: 10px;
             text-align: center;
         }
-        .megazine-item a{
+        .megazine-item a, .myProductItem a{
             text-decoration: none;
             color:black;
         }
-        .megazine_title{
+        .megazine_title, .product_h2{
             width:24vw;
             overflow: hidden; /* 넘치는 내용 숨기기 */
             white-space: nowrap; /* 줄 바꿈 금지 */
@@ -297,7 +297,7 @@
                         <a th:href="@{'/item/product/' + ${productDTO.id}}">
                             <!-- 썸네일 이미지가 있을 경우에만 이미지 태그 렌더링 -->
                             <img th:if="${productDTO.firstImageUrl != null}" th:src="@{${productDTO.firstImageUrl}}" alt="스크랩 상품 이미지">
-                            <h2 th:text="${productDTO.productName}"></h2>
+                            <h2 class="product_h2" th:text="${productDTO.productName}"></h2>
                             <p class="card-price" th:text="${productDTO.price + ' 원'}"></p>
                         </a>
                     </div>
