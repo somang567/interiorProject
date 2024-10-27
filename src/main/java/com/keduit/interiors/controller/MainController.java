@@ -82,10 +82,14 @@ public class MainController {
     }
 
     // 스크랩한 상품목록 가져오기
-    // 태준 즐겨찾기한 상품 스크랩
     List<Long> scrappedProductIds = productScrapService.getScrapProductIdsForUser(member.getId());
-    List<ProductDTO> scrappedProducts = productService.getProductsByIds(scrappedProductIds); // 수정된 부분
-    model.addAttribute("scrappedProducts", scrappedProducts);
+    List<ProductDTO> scrappedProducts = productService.getProductsByIds(scrappedProductIds);
+
+    // 썸네일 이미지 설정
+    scrappedProducts.forEach(product -> {
+      String firstImageUrl = productService.getFirstImageUrl(product.getId());
+      product.setFirstImageUrl(firstImageUrl);  // 썸네일 이미지 설정
+    });
 
     //민영 스크랩
 //    List<MegazineDTO> megazineProducts = megazineService.getMegazineList();
