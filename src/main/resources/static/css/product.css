@@ -147,7 +147,7 @@
 }
 
 .productTitle{
-    margin-top: 1vw;
+    margin-top: 5vw;
     font-size: 1.8vw;
     font-weight: 800;
     text-align: center;
@@ -161,6 +161,7 @@
     background-color: #806C61;
     color:#806C61;
     margin-top: 1vh; /* 밑줄 위에 간격 */
+    margin-bottom: 3vh;
     opacity: 1;
 }
 
@@ -390,8 +391,8 @@
 }
 
 .productExplain .form-group {
-     margin-bottom: 1vw; /* 각 입력 필드 간 간격 */
- }
+    margin-bottom: 1vw; /* 각 입력 필드 간 간격 */
+}
 
 .productExplain label {
     font-size: 1.5vw; /* 큰 라벨 글꼴 */
