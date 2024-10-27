@@ -1,21 +1,17 @@
 package com.keduit.interiors.controller;
 
-import com.keduit.interiors.constant.ProductType;
 import com.keduit.interiors.dto.*;
 import com.keduit.interiors.entity.Megazine;
 import com.keduit.interiors.entity.Member;
 import com.keduit.interiors.repository.MegazineRepository;
 import com.keduit.interiors.service.*;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -220,7 +216,7 @@ public class MegazineController {
       return null;
     }
     //return text.replaceAll("", "\t"); // 공백을 &nbsp;로 변환
-    return text != null ? text.replaceAll("\n", "<br/>") : null;
+    return text != null ? text.replaceAll(" ", "\n") : null;
   }
 
   // 상세보기 관련 Url --------

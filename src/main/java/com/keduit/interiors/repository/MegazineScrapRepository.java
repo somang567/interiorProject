@@ -34,6 +34,7 @@ public interface MegazineScrapRepository extends JpaRepository<MegazineScrap, Lo
 
     //새로 추가한 칭긔
     //사용자가 스크랩한 매거진을 가져오는 쿼리 메서드를 추가합니다.
+
     @Query("SELECT s.megazine FROM MegazineScrap s WHERE s.member.id = :memberId")
     List<Megazine> findScrapMegazinesByMemberId(@Param("memberId") Long memberId);
 

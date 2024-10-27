@@ -92,14 +92,13 @@ public class MainController {
       model.addAttribute("scrappedProducts" , scrappedProducts);
     });
 
+    //List<Megazine> scrappedMegazines = megazineScrapService.getScrappedMegazines(member.getId());
+
     //민영 스크랩
-//    List<MegazineDTO> megazineProducts = megazineService.getMegazineList();
-//    model.addAttribute("megazineList", megazineProducts);
-//
+
     Page<Megazine> list = megazineService.getListItemPage(pageable); // 메인페이지 리스트 부분
     model.addAttribute("list", list);
     
-    //List<Megazine> scrappedMegazines = megazineScrapService.getScrappedMegazines(member.getId());
     List<Megazine> scrappedMegazines = megazineScrapService.getScrappedMegazines(Objects.requireNonNull(member).getId());
     model.addAttribute("scrappedMegazines", scrappedMegazines);
 
