@@ -89,6 +89,7 @@ public class MainController {
     scrappedProducts.forEach(product -> {
       String firstImageUrl = productService.getFirstImageUrl(product.getId());
       product.setFirstImageUrl(firstImageUrl);  // 썸네일 이미지 설정
+      model.addAttribute("scrappedProducts" , scrappedProducts);
     });
 
     //민영 스크랩

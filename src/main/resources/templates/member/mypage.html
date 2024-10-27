@@ -82,10 +82,10 @@
             position: relative;
             color: black;
         }
-        .m_scrap a img {
+        .m_scrap a img, .myProductItem a img {
             height: 80%;
         }
-        .product-item, .megazine-item {
+        .myProductItem, .megazine-item {
             width: calc(33.333% - 20px);
             height:25vw;
             box-sizing: border-box;
@@ -114,7 +114,7 @@
             margin-bottom: 0.5vw;
             font-size: 0.9vw;
         }
-        .product-item img, .megazine-item img {
+        .myProductItem img, .megazine-item img {
             width: 100%;
             height: auto;
             border-radius: 5px;
@@ -141,7 +141,7 @@
             right: -5vw;
         }
         @media (max-width: 1024px) {
-            .product-item, .megazine-item {
+            .myProductItem, .megazine-item {
                 width: calc(50% - 20px);
             }
         }
@@ -152,7 +152,7 @@
             }
         }
         @media (max-width: 480px) {
-            .product-item, .megazine-item {
+            .myProductItem, .megazine-item {
                 width: 100%;
             }
             .prev-btn, .next-btn {
@@ -255,7 +255,7 @@
             }
 
             // 초기화: 상품과 매거진 각각
-            initializePagination("#content-products", ".product-item");
+            initializePagination("#content-products", ".myProductItem");
             initializePagination("#content-megazine", ".megazine-item");
 
             // 더보기 버튼 클릭 시 더 많은 글 보이기 (기존 기능 유지)
@@ -293,8 +293,8 @@
                 <div class="myContent" data-current-page="0">
                     <p th:if="${scrappedProducts.size() == 0}" class="no-scraps">스크랩된 상품이 없습니다.</p>
                     <button class="btn prev-btn" th:if="${scrappedProducts.size() > 3}">◀</button>
-                    <div th:each="productDTO : ${scrappedProducts}" class="product-item">
-                        <a th:href="@{'/item/progduct/' + ${productDTO.id}}">
+                    <div th:each="productDTO : ${scrappedProducts}" class="myProductItem">
+                        <a th:href="@{'/item/product/' + ${productDTO.id}}">
                             <!-- 썸네일 이미지가 있을 경우에만 이미지 태그 렌더링 -->
                             <img th:if="${productDTO.firstImageUrl != null}" th:src="@{${productDTO.firstImageUrl}}" alt="스크랩 상품 이미지">
                             <h2 th:text="${productDTO.productName}"></h2>
