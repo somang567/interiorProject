@@ -39,6 +39,7 @@
 
             console.log("CSRF Header:", csrfHeader);
             console.log("CSRF Token:", csrfToken);
+
             // 스크랩 상태 업데이트 함수
             function updateScrapStatus(element, isScraped) {
                 if (isScraped) {
@@ -48,7 +49,7 @@
                 }
             }
 
-            // 스크랩 추가/삭제 처리
+            // 매거진 스크랩 추가/삭제 처리
             function toggleScrap(element) {
                 const megazineId = $(element).data('megazine-id');
                 if(megazineId == null){
@@ -57,29 +58,20 @@
                 }
                 console.log("Megazine ID:", megazineId);  // 로그 출력
                 const isScraped = $(element).attr('src').includes('scrap_full.png');  // 현재 스크랩 상태 확인
-                let scrapCnt = 0;
+
                 if (isScraped) {
-                    scrapCnt -= 1;
                     removeScrap(megazineId, element);
-                    console.log("scrapCnt: ",scrapCnt);
                 } else {
                     addScrap(megazineId, element);
                 }
             }
 
-
             // 스크랩 추가 요청
             function addScrap(megazineId, element) {
-                scrapCnt += 1;
-                console.log("scrapCnt: ",scrapCnt);
-                //megazineId = $(element).data('megazine-id');
                 console.log("addScrap 안에서의 Megazine ID:", megazineId);  // 로그 출력
 
-                // if (megazineId == null) {
-                //     throw new IllegalArgumentException("Megazine ID must not be null");
-                // }
                 if (megazineId == null) {
-                    throw new Error("Megazine ID must not be null");
+                    throw new Error("Megazine ID 인식 안됨----------------------------");
                 }
 
                 $.ajax({

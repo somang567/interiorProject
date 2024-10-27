@@ -140,6 +140,13 @@
         .next-btn {
             right: -5vw;
         }
+        .post_title{
+            color:black;
+        }
+        .post-date{
+            color:black;
+            margin-top: 0.5vw;
+        }
         @media (max-width: 1024px) {
             .myProductItem, .megazine-item {
                 width: calc(50% - 20px);
@@ -335,8 +342,8 @@
             <p th:if="${myPosts.size() == 0}">작성한 글이 없습니다.</p>
             <div class="myContent" style="display: flex; flex-direction: column; gap: 20px; align-items: flex-start; justify-content: space-around">
                 <div th:each="post, iterStat : ${myPosts}" th:classappend="${iterStat.count > 8 ? 'hidden-post' : ''}">
-                    <a th:href="@{'/board/view/' + ${post.id}}">
-                        <h2 th:text="${post.title}"></h2>
+                    <a th:href="@{/board/view(id=${post.id})}">
+                        <h2 class="post_title" th:text="${post.title}"></h2>
                         <p class="post-date" th:text="${#temporals.format(post.regTime, 'yyyy-MM-dd HH:mm')}"></p>
                     </a>
                 </div>

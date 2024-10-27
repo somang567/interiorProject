@@ -133,10 +133,11 @@ public class MegazineService {
 
     //제공하신 코드는 Java의 Spring Framework에서 상품(Item)과 관련된 정보를 저장하는 서비스 메서드
     //all 커밋이 되거나 롤백이 되어야 함.
-    //상품이 몇번인지 Long으로 등록
+    //상품이 몇번인지 Long으로 등록ㄴ
+
     public Long saveItem(MegazineDTO megazineDTO, MultipartFile itemImgFile, Principal principal) throws Exception {
         
-        System.out.println("saveItem 메서드임 ----------------------------------->");
+        System.out.println("saveItem 메서드ㄴ ----------------------------------->");
 
         String oriImgName = itemImgFile.getOriginalFilename();
         String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
@@ -155,10 +156,8 @@ public class MegazineService {
         if (!directory.exists()) {
             directory.mkdirs();
         }
-        
         Megazine megazine = megazineDTO.createItem();   //매핑
         megazineRepository.save(megazine);  //리포지토리는 엔티티를 줘야 하기 때문에
-
 
         return megazine.getMno();  //Long 타입 리턴하는 메서드임.
 
