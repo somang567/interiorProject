@@ -59,6 +59,7 @@ table {
 
 /* 전체 글 보기 텍스트 중앙 정렬 */
 .view_all_text-container {
+    width: 100%;
     text-align: center;
     margin-bottom: 10px;
 }

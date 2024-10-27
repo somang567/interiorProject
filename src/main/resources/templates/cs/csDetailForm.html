@@ -14,7 +14,7 @@
     </script>
 </th:block>
 
-<div id="CS_container" layout:fragment="content">
+<div id="CS_detailContainer" layout:fragment="content">
     <!-- 상세보기 및 수정/삭제 폼 -->
     <form class="cs_view" th:action="@{/cs/delete/{id}(id=${csDTO.id})}" method="post" th:object="${csDTO}">
         <div class="view_all_text-container">
@@ -59,25 +59,25 @@
     </form>
 
     <!-- 댓글 섹션 -->
-    <div class="comment_section" style="background-color: #d7d7d7;">
-        <h3>댓글</h3>
+    <div class="comment_section" style="">
+        <h3 style="font-size: 1.2vw;">댓글</h3>
         <ul>
             <!-- 댓글 리스트 반복 -->
-            <li th:each="comment : ${CsComments}">
+            <li th:each="comment : ${CsComments}" style="font-size: 1.3vw;">
                 <p th:text="${comment.memberEmail}">작성자</p>
-                <p th:text="${comment.content}">댓글 내용</p>
+                <p th:text="${comment.content}" style="font-size: 1vw;">댓글 내용</p>
                 <p th:text="${#temporals.format(comment.regTime, 'yyyy-MM-dd')}">작성일</p>
 
                 <!-- 댓글 수정 및 삭제 버튼: 댓글 작성자일 때만 표시 -->
-                <div th:if="${comment.memberEmail == #authentication.name}">
+                <div th:if="${comment.memberEmail == #authentication.name}" style="display: flex; margin-bottom: 1vw; padding-right: 1vw">
                     <!-- 댓글 수정 버튼 -->
-                    <form th:action="@{/csComment/edit/{id}(id=${comment.id})}" method="get" style="display:inline;">
-                        <button type="submit">수정</button>
+                    <form th:action="@{/csComment/edit/{id}(id=${comment.id})}" method="get" style="padding-right: 1vw;">
+                        <button type="submit" class="addBtn" style="width: 5vw; height: 2vw;">수정</button>
                     </form>
 
                     <!-- 댓글 삭제 버튼 -->
-                    <form th:action="@{/csComment/delete/{id}(id=${comment.id})}" method="post" style="display:inline;">
-                        <button type="submit">삭제</button>
+                    <form th:action="@{/csComment/delete/{id}(id=${comment.id})}" method="post" style="">
+                        <button type="submit" class="addBtn" style="width: 5vw; height: 2vw;">삭제</button>
                         <!-- CSRF Token -->
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     </form>
@@ -86,10 +86,10 @@
         </ul>
 
         <!-- 댓글 작성 폼 -->
-        <form th:action="@{/csComment/add}" method="post">
+        <form th:action="@{/csComment/add}" method="post" style="justify-items: auto">
             <input type="hidden" name="csId" th:value="${csDTO.id}"/>
-            <textarea name="content" placeholder="댓글을 입력하세요"></textarea>
-            <button type="submit">댓글 작성</button>
+            <textarea name="content" style="width: 20vw; height: 10vw" placeholder="댓글을 입력하세요"></textarea>
+            <button type="submit" class="addBtn" style="width: 5vw; height: 2vw; margin-bottom: 1vw;">댓글 작성</button>
 
             <!-- CSRF Token -->
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">

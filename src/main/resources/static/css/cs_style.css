@@ -1,10 +1,16 @@
 /* 기본적인 스타일 설정 */
-.cs_container {
+#CS_detailContainer{
     width: 80%;
-    margin: 0 auto;
-    padding: 2vw;
+    height: 30vw;
 }
-
+#comment_edit{
+    width: 80%;
+    height: 30vw;
+}
+#CS_modifycontainer{
+    width: 80%;
+    height: 30vw;
+}
 .write_text {
     font-size: 2em;
     font-weight: bold;
@@ -12,7 +18,8 @@
     margin-bottom: 1vw;
 }
 
-.cs_write, .cs_view {
+.cs_view {
+    width: 100%;
     display: flex;
     flex-direction: column;
 }

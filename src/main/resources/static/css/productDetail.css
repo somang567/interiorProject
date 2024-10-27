@@ -5,7 +5,8 @@
 
 .item-detail-wrapper {
     display: flex;
-    width: 100%;
+    width: 80%;
+    margin: 1vw auto;
     /* 두 영역 사이의 간격 */
     border: 1px solid #2C2C2C;
     background-color: rgba(255, 255, 255, 0);
@@ -32,7 +33,7 @@
 /* 왼쪽 영역: 이미지 슬라이드 */
 .carousel {
     flex: 1;
-    max-width: 45%; /* 왼쪽 영역이 50%를 차지 */
+    max-width: 50%; /* 왼쪽 영역이 50%를 차지 */
 }
 
 /* 오른쪽 영역: Product Detail */
@@ -54,7 +55,8 @@
 
 .ItemSizeBox {
     display: flex;
-    gap: 1vw;
+    justify-content: space-between;
+    margin: 0 2vw;
 }
 
 .itemSize1, .itemSize2, .itemSize3 {
@@ -66,10 +68,14 @@
     cursor: pointer;
     border-radius: 5px;
     text-align: center;
-    font-size: 0.8vw;
+    font-size: 1vw;
     font-weight: 700;
     margin-top: 1vw;
     margin-bottom: 1vw;
+}
+.itemSize1:hover , .itemSize2:hover , .itemSize3:hover{
+    border: 4px solid #C6BAAA;
+
 }
 
 .itemCS {
@@ -87,6 +93,8 @@
 
 .item-buttons {
     display: flex;
+    margin-right: 10vw;
+    margin-bottom: 1vw;
 }
 
 .EditButtons {
@@ -124,17 +132,6 @@
     color: white;
 }
 
-/* SNS */
-.snsShare {
-    width: 20vw;
-    height: 5vw;
-    padding-top: 2vw;
-    margin: 0 auto;
-    text-align: center;
-    font-size: 2vw;
-    font-weight: 800;
-    background-color: #ffffff;
-}
 
 /* 이미지 슬라이더 */
 .slider__wrap {
@@ -156,17 +153,23 @@
 }
 
 .slider__img img {
-    position: absolute;
-    object-fit: cover; /* 이미지를 박스에 맞추고, 초과된 부분은 잘라냅니다. */
-    opacity: 0;
-    transform: scale(0.6);
-    transition: all 600ms ease-in-out;
+    width: 100%;         /* 이미지가 부모 요소의 너비를 채우도록 설정 */
+    height: auto;        /* 높이는 자동으로 설정 */
+    display: none;       /* 모든 이미지를 숨김 */
 }
 
 .slider__img img.active {
-    opacity: 1;
-    transform: scale(1);
+    display: block;      /* 활성화된 이미지만 표시 */
 }
+
+.slider__btn a {
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+    color: black;
+    padding: 10px;
+}
+
 .active.imgList{
     width: 100%;
     height: 100%;

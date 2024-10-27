@@ -3,12 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 
-<div id="comment_container" layout:fragment="content">
+<div id="CS_modifycontainer" layout:fragment="content">
     <!-- 댓글 수정 폼 -->
-    <form class="comment_edit" th:action="@{/csComment/edit/{id}(id=${csCommentDTO.id})}" method="post" th:object="${csCommentDTO}">
+    <form class="comment_edit" style="width: 50%; height: 80%; margin: 0 auto;" th:action="@{/csComment/edit/{id}(id=${csCommentDTO.id})}" method="post" th:object="${csCommentDTO}">
         <input type="hidden" name="csId" th:value="${csCommentDTO.csId}"/> <!-- csId 추가 -->
 
-        <div class="view_all_text-container">
+        <div class="view_all_text-container" style="margin-top: 2vw;">
             <span class="write_text" style="color: #806C61;">댓글 수정</span>
         </div>
         <hr class="comment_write_line">
@@ -21,7 +21,7 @@
 
         <!-- 저장 버튼 -->
         <div>
-            <button type="submit" class="addBtn">수정 완료</button>
+            <button type="submit" class="addBtn" style="margin-bottom: 1vw;">수정 완료</button>
         </div>
 
         <!-- CSRF Token -->
