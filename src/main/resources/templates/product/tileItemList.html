@@ -82,6 +82,8 @@
             $('.scrap-icon img').off('click').on('click', function () {
                 toggleScrap(this);  // 스크랩 상태 토글
             });
+
+
         });
 
     </script>
@@ -121,7 +123,7 @@
 
     <!-- 관리자만 보이는 상품 등록 버튼 -->
     <div class="crudButtonContainer" th:if="${isAdmin}">
-        <button type="button" class="addItemButton" id="addButton"
+        <button type="button" class="addItemButton"
                 onclick="window.location.href='/item/addItem'">상품 등록하기</button>
     </div>
 
