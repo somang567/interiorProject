@@ -66,7 +66,7 @@
 |![main](https://github.com/user-attachments/assets/6935f248-f2f3-4e04-be0a-c36b83dbe411)|![product](https://github.com/user-attachments/assets/98397960-d54f-4852-9d23-5099b8eecd83)|![tipNmegazine](https://github.com/user-attachments/assets/a684f125-3cf7-415c-8444-146eb942e668)|
 
 
-|업체조회|게시판|마이페이지|
+|업체조회|게시판(업체홍보, 셀프 인테리어, 묻고 답하기)|마이페이지|
 |---|---|---|
 |![searchFirm](https://github.com/user-attachments/assets/2f8fa0ce-20c7-4e4d-a336-366e2195a06e)|![boardGroup](https://github.com/user-attachments/assets/6c5c2280-af24-44f0-af4c-7ab2b9063325)|![myPage](https://github.com/user-attachments/assets/ed2b571d-7f40-4a22-8631-33e5d33174ea)|
 
