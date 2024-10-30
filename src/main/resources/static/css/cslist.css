@@ -105,16 +105,20 @@ table {
     margin: 0 5px;
 }
 
-.CS_pagination a {
-    display: block;
-    padding: 10px 15px;
+.CS_pagination .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.3vw;
+    height: 2.3vw;
     text-decoration: none;
     color: black;
-    border: 1px solid #C6BAAA;
-    border-radius: 5px;
+    border-radius: 0.5vw;
 }
-
-.CS_pagination a:hover {
+.btnNum{
+    background-color: #F4F2F0;
+}
+.nextPrevBtn{
     background-color: #C6BAAA;
     color: white;
 }
@@ -129,7 +133,7 @@ table {
     width: 40%;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 0.2vw;
     font-size: 1vw;
 }
 
