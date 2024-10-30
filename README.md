@@ -39,7 +39,7 @@
 ## 📺화면 구성
 |메인페이지|상품보기|팁 앤 매거진|
 |------|---|---|
-|<img src="https://github.com/user-attachments/assets/d6ffa7a1-14a7-41be-9144-3b389a527d96.png" width="200" height="400"/>|테스트2|테스트3|
+|![main](https://github.com/user-attachments/assets/6935f248-f2f3-4e04-be0a-c36b83dbe411)|테스트2|테스트3|
 
 
 |업체조회|게시판|마이페이지|
