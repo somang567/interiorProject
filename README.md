@@ -51,11 +51,6 @@
     </tr>
     
 </table>
-- java 11
-- Gradle: 2.7.18 Version
-- IDEA: 2024.2.3
-- **Framework** : springBoot(2.7.18)
-- **Database**: Maria DB (HeidiSQL)
 
 🖊️ 디자인
 <a href="https://www.figma.com/?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUsJka6YCtrhkvqra87DUVNSvr2kxpOmVRkQsI5u3MVyym41FojenhcaAujSEALw_wcB">Figma </a> 
