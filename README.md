@@ -52,7 +52,7 @@
     
 </table>
 
-🖊️ 디자인
+<h1>🖊️ 디자인</h1>
 <a style="display: flex;" href="https://www.figma.com/?gad_source=1&gclid=Cj0KCQjwsoe5BhDiARIsAOXVoUsJka6YCtrhkvqra87DUVNSvr2kxpOmVRkQsI5u3MVyym41FojenhcaAujSEALw_wcB">Figma </a> 
 
 <div style="display: flex;">
