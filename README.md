@@ -3,7 +3,7 @@
 스프링 부트 : thymeleaf + ajax + api 프로젝트
 
 ## ✏️프로젝트 소개
-![artInHome](https://github.com/user-attachments/assets/1cc96645-bfd9-4cd3-b3e4-b00d904de03f){: width="300" height="100"}
+![logo 4](https://github.com/user-attachments/assets/c9092b44-2a21-4bfc-99a0-391adb6085ce)
 **서비스 명: Art In Home
 **설명 : 셀프 인테리어를 희망하는 2030세대를 위한 웹사이트입니다.
 
