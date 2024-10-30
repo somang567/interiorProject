@@ -41,6 +41,8 @@
 |------|---|---|
 |<img src="https://github.com/user-attachments/assets/b84137da-8338-40b8-b852-6ec6e3a68d4e.png" width="200" height="400"/>|테스트2|테스트3|
 
+![main](https://github.com/user-attachments/assets/a36423ce-8005-4fa1-9966-732a76bccb1a)
+
 |업체조회|게시판|마이페이지|
 |---|---|---|
 |테스트1|테스트2|테스트3|
