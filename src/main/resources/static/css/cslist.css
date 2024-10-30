@@ -5,7 +5,7 @@
 }
 
 .cs_list {
-    width: 90%;
+    width: 75%;
     height: auto;
     background-color: #ffffff;
     padding: 5vw;
@@ -15,32 +15,39 @@
 }
 
 th {
-    padding: 10px 21px; /* 상하 10px, 좌우 20px 간격 */
-    text-align: center; /* th 요소 가운데 정렬 */
-    border-right: 1px solid #806C61;
-    color: #806C61;
+    background-color: #C6BAAA;
+    font-weight: bold;
+    text-align: center;
 }
 
-th:nth-child(1) {
+th, td {
+    padding: 1.2vw;
+    border-bottom: 0.1vw solid #ddd;
+}
+
+/* 각 컬럼의 간격 설정부분 */
+th:nth-child(1), td:nth-child(1) { /* 글 번호 */
+    width: 8%;
+}
+
+th:nth-child(2), td:nth-child(2) { /* 제목 */
+    width: 25%;
+}
+
+th:nth-child(3), td:nth-child(3) { /* 작성자 */
     width: 10%;
 }
 
-th:nth-child(2) {
-    width: 50%;
+th:nth-child(4), td:nth-child(4) { /* 작성일 */
+    width: 8%;
 }
 
-th:nth-child(3) {
-    width: 10%;
+th:nth-child(5), td:nth-child(5) { /* 조회수 */
+    width: 7%;
 }
 
-th:nth-child(4) {
-    width: 10%;
-}
-
-/* 마지막 th는 구분선을 없앰 */
-th:last-child {
-    width: 10%;
-    border-right: none;
+th:nth-child(6), td:nth-child(6) { /* 댓글수 */
+    width: 20%;
 }
 
 table {
@@ -64,12 +71,11 @@ table {
     margin-bottom: 10px;
 }
 
-/*
 .view_all_text {
     font-size: 1.8vw;
     font-weight: 800;
 }
- */
+
 /* 글쓰기 버튼 오른쪽 정렬 */
 .write_btn {
     display: block;
@@ -120,7 +126,7 @@ table {
 }
 
 .CS_search_container input[type="text"] {
-    width: 30%;
+    width: 40%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;

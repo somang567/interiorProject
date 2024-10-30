@@ -89,6 +89,9 @@ public class CsController {
 		if (member.getRole() == Role.USER) {
 			csDTO.setCsStatus(CS.ACCEPT);
 		}
+		else{
+			csDTO.setCsStatus(CS.SUCCESS);
+		}
 
 		// 관리자이면 NOTICE로, 유저이면 COMMON으로 설정
 		if (member.getRole() == Role.ADMIN) {
@@ -115,6 +118,10 @@ public class CsController {
 		// 로그인한 사용자가 해당 게시물의 작성자인지 여부 확인
 		boolean isWriter = principal != null && csDTO.getMemberEmail().equals(principal.getName());
 		model.addAttribute("isWriter", isWriter);
+
+		// 관리자인지 여부 확인
+		boolean isAdmin = principal != null && memberService.findByEmail(principal.getName()).getRole() == Role.ADMIN;
+		model.addAttribute("isAdmin", isAdmin);
 
 		return "cs/csDetailForm";  // 해당 뷰 페이지로 이동
 	}
