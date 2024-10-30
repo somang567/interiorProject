@@ -26,9 +26,10 @@
 - **Database**: Maria DB (HeidiSQL)
 
 ## - 기술스택
-<h3 align="left"><b>Code Lang</b></h3>
+<h2 align="left"><b>기술스택</b></h3>
   <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=OpenJDK&logoColor=white"/>
   <img src="https://img.shields.io/badge/intellijidea-##F57C00?style=flat&logo=intellijidea&logoColor=#white"/>
+   <img src="https://img.shields.io/badge/mariadb-#003545?style=flat&logo=intellijidea&logoColor=#white"/>
 ## ✏️주요 기능
 #### 로그인
 #### 회원가입
