@@ -5,7 +5,7 @@
 ## ✏️프로젝트 소개
 |서비스 명|아트 인 홈|
 |------|------|
-|------|![logo 4](https://github.com/user-attachments/assets/c9092b44-2a21-4bfc-99a0-391adb6085ce)|
+|서비스 로고|![logo 4](https://github.com/user-attachments/assets/c9092b44-2a21-4bfc-99a0-391adb6085ce)|
 |서비스 설명 |셀프 인테리어를 희망하는 2030세대를 위한 웹사이트입니다.|
 
 #### 서비스 명: Art In Home
