@@ -48,5 +48,40 @@
 ## 📽️시현영상 및 PPT 링크 참조
 https://drive.google.com/drive/folders/1fNqljigny3Kaieq7AMtRs83iW48MsGyU?usp=drive_link
 
+## 프로젝트 구조
+📦src
+ ┣ 📂main
+ ┃ ┣ 📂java
+ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┗ 📂keduit
+ ┃ ┃ ┃ ┃ ┗ 📂interiors
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂constant
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂exception
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂service
+ ┃ ┣ 📂resources
+ ┃ ┃ ┣ 📂static
+ ┃ ┃ ┃ ┣ 📂css
+ ┃ ┃ ┃ ┗ 📂img
+ ┃ ┃ ┣ 📂templates
+ ┃ ┃ ┃ ┣ 📂boards
+ ┃ ┃ ┃ ┣ 📂cs
+ ┃ ┃ ┃ ┣ 📂fragments
+ ┃ ┃ ┃ ┣ 📂layout
+ ┃ ┃ ┃ ┣ 📂megazine
+ ┃ ┃ ┃ ┣ 📂member
+ ┃ ┃ ┃ ┣ 📂product
+ ┃ ┃ ┃ ┣ 📂search
+ ┣ 📂test
+ ┃ ┗ 📂java
+ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┗ 📂keduit
+ ┃ ┃ ┃ ┃ ┗ 📂interiors
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜InteriorsApplicationTests.java
+ ┗ 📜.DS_Store
 
 
