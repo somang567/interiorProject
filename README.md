@@ -1,4 +1,4 @@
-# SpringBoot-interiorProject
+# 2030세대를 위한 셀프인테리어 웹사이트
 ---
 스프링 부트 : thymeleaf + ajax + api 프로젝트
 
