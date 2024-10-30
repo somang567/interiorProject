@@ -31,11 +31,28 @@
     </tr>
     <tr>
       <td>Java</td>
-      <td>11</td>
+      <td>OpenJDK 11</td>
     </tr>
+    <tr>
+      <td>Gradle</td>
+      <td>2.7.18</td>
+    </tr>
+    <tr>
+      <td>IDE</td>
+      <td>IntelliJ IDEA 2024.2.3</td>
+    </tr>
+    <tr>
+      <td>FrameWork</td>
+      <td>springBoot 2.7.18</td>
+    </tr>
+    <tr>
+      <td>DB</td>
+      <td>MariaDB (Tools : HeidiSQL)</td>
+    </tr>
+    
 </table>
 - java 11
-- JDK: 2.7.18
+- Gradle: 2.7.18 Version
 - IDEA: 2024.2.3
 - **Framework** : springBoot(2.7.18)
 - **Database**: Maria DB (HeidiSQL)
