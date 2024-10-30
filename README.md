@@ -29,6 +29,10 @@
       <th>속성</th>
       <th>버전/도구</th>
     </tr>
+    <tr>
+      <td>Java</td>
+      <td>11</td>
+    </tr>
 </table>
 - java 11
 - JDK: 2.7.18
