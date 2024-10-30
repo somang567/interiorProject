@@ -80,20 +80,30 @@
                 margin-bottom: 1vw;
             }
 
-            .pagination {
+            .pageNation-wrap{
                 display: flex;
+                justify-content: center;
                 align-items: center;
+                font-size: 1vw;
+                width:20vw;
+                height:3vw;
+                /*background-color: #28a745;*/
+                margin:3vw auto;
             }
 
-            .pagination a {
-                margin: 0 0.5vw;
-                text-decoration: none;
-                color: #3498db;
+            .btn{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width:2.3vw;
+                height:2.3vw;
+                border-radius: 0.5vw;
+                margin: 0.2vw;
+                background-color: #F4F2F0;
             }
 
-            .pagination strong {
-                margin: 0 0.5vw;
-                color: red;
+            .next_prev_btn{
+                background-color: #C6BAAA;
             }
 
             .search-form {
@@ -189,27 +199,32 @@
         </table>
 
         <!-- 페이지네이션 -->
-        <div class="pagination-container">
-            <div class="pagination">
-                <!-- 이전 페이지 링크 -->
-                <a th:if="${nowPage > 1}"
-                   th:href="@{/board/list(page=${(nowPage - 2)}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">이전
-                    페이지</a>
 
-                <!-- 페이지 번호 반복 -->
-                <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
-                    <a th:if="${page > 0 && page != nowPage}"
-                       th:href="@{/board/list(page=${(page - 1)}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}"
-                       th:text="${page}"></a>
-                    <strong th:if="${page == nowPage}" th:text="${page}"></strong>
+            <div class="pageNation-wrap">
+                <a th:if="${nowPage > 1}" class="btn next_prev_btn"
+                   th:href="@{/megazines/list(page=${(nowPage - 2)}, searchKeyword=${param.searchKeyword})}">
+                    <img
+                            th:src="@{/img/back.png}"
+                            alt=""
+                            style="cursor: pointer; width: 1.5vw; height: 1.5vw;"
+                    >
+                </a>
+
+                <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}" >
+                    <a th:if="${page != nowPage}" th:href="@{/megazines/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}" class="btn"></a>
+                    <strong th:if="${page == nowPage}" th:text="${page}" style="color: red" class="btn"></strong>
                 </th:block>
 
-                <!-- 다음 페이지 링크 -->
-                <a th:if="${nowPage < endPage}"
-                   th:href="@{/board/list(page=${nowPage}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">다음
-                    페이지</a>
+                <a th:if="${nowPage < endPage}" class="btn next_prev_btn"
+                   th:href="@{/megazines/list(page=${nowPage}, searchType=${param.searchType}, searchKeyword=${param.searchKeyword})}">
+                    <img
+                            th:src="@{/img/next2.png}"
+                            alt=""
+                            style="cursor: pointer; width: 1.5vw; height: 1.5vw;"
+                    >
+                </a>
             </div>
-        </div>
+
 
         <!-- 검색 폼 -->
         <form class="search-form" th:action="@{/board/list}" method="get">

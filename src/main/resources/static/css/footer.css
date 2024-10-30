@@ -54,17 +54,17 @@ body {
     height:2vw;
     display: flex;
     align-items:center;
-    margin:0.5vw;
+    margin:0.4vw;
     justify-content: space-between;
     /*background-color: #75a8dd;*/
 }
 .etc_wrap{
     width:25vw;
-    height:2vw;
+    height:1.5vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.6vw;
+    font-size: 0.7vw;
     /*background-color: #75a8dd;*/
 }
 
