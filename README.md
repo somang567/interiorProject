@@ -49,6 +49,7 @@
 https://drive.google.com/drive/folders/1fNqljigny3Kaieq7AMtRs83iW48MsGyU?usp=drive_link
 
 ## 프로젝트 구조
+```
 📦src
  ┣ 📂main
  ┃ ┣ 📂java
@@ -83,5 +84,6 @@ https://drive.google.com/drive/folders/1fNqljigny3Kaieq7AMtRs83iW48MsGyU?usp=dri
  ┃ ┃ ┃ ┃ ┗ 📂interiors
  ┃ ┃ ┃ ┃ ┃ ┗ 📜InteriorsApplicationTests.java
  ┗ 📜.DS_Store
+```
 
 
