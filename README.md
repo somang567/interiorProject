@@ -25,12 +25,13 @@
 - **Framework** : springBoot(2.7.18)
 - **Database**: Maria DB (HeidiSQL)
 
-<h2 align="left"><b>기술스택</b></h3>
+
 <div style="display: flex">
   <h2>Main Stack</h2>
-  <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=OpenJDK&logoColor=white"/>
-  <img src="https://img.shields.io/badge/intellijidea-F57C00?style=flat&logo=intellijidea&logoColor=#white"/>
-  <img src="https://img.shields.io/badge/mariadb-003545?style=flat&logo=mariadb&logoColor=#white"/>
+  <h2><img src="https://img.shields.io/badge/Java-007396?style=flat&logo=OpenJDK&logoColor=white"/></h2>
+  <h2><img src="https://img.shields.io/badge/intellijidea-F57C00?style=flat&logo=intellijidea&logoColor=#white"/></h2>
+  <h2><img src="https://img.shields.io/badge/mariadb-003545?style=flat&logo=mariadb&logoColor=#white"/></h2>
+  
 
 ## ✏️주요 기능
 #### 로그인
