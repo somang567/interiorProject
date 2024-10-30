@@ -1,5 +1,6 @@
 package com.keduit.interiors.service;
 
+import com.keduit.interiors.constant.CS;
 import com.keduit.interiors.dto.CsDTO;
 import com.keduit.interiors.entity.CSEntity;
 import com.keduit.interiors.entity.Member;
@@ -25,13 +26,9 @@ public class CsService {
 				.orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다. ID: " + csDTO.getMemberId()));
 
 		CSEntity csEntity = csDTO.createCS();
-		// CsWriteType 확인
-		System.out.println("CsWriteType in entity: " + csEntity.getCsWriteType());
-
 		csEntity.setMember(member);
 
 		return csRepository.save(csEntity);
-
 	}
 
 	// 페이지네이션 적용한 CS 목록 전체 조회
@@ -100,5 +97,14 @@ public class CsService {
 				throw new IllegalArgumentException("잘못된 검색 카테고리입니다: " + category);
 		}
 		return csPage.map(CsDTO::of);
+	}
+
+	// CS 상태 업데이트
+	public void updateCsStatus(Long csId, CS status) {
+		CSEntity csEntity = csRepository.findById(csId)
+				.orElseThrow(() -> new IllegalArgumentException("해당 CS를 찾을 수 없습니다. ID: " + csId));
+
+		csEntity.setCsStatus(status);  // 엔티티의 상태 업데이트
+		csRepository.save(csEntity);  // 변경 사항 저장
 	}
 }

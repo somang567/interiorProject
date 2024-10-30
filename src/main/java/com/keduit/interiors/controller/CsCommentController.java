@@ -1,7 +1,10 @@
 package com.keduit.interiors.controller;
 
+import com.keduit.interiors.constant.CS;
 import com.keduit.interiors.dto.CsCommentDTO;
+import com.keduit.interiors.dto.CsDTO;
 import com.keduit.interiors.service.CsCommentService;
+import com.keduit.interiors.service.CsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -17,14 +20,14 @@ import java.util.List;
 public class CsCommentController {
 
 	private final CsCommentService csCommentService;
-
+	private final CsService csService;
 	// 댓글 추가 (리다이렉트 방식으로 처리)
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/add")
 	public String addComment(@ModelAttribute CsCommentDTO csCommentDTO, Principal principal) {
 		// 로그인한 사용자의 이메일로 댓글 추가
 		csCommentService.addComment(csCommentDTO, principal.getName());
-
+		csService.updateCsStatus(csCommentDTO.getCsId(), CS.SUCCESS);
 		// 댓글 작성 후 해당 게시물의 상세보기 페이지로 리다이렉트
 		return "redirect:/view/" + csCommentDTO.getCsId();  // 상세보기 페이지로 리다이렉트
 	}

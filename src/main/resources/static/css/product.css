@@ -213,9 +213,9 @@
 }
 
 .crudButtonContainer {
-    width: 100vw;
+    width: 7vw;
+    margin: 0 auto;
     text-align: center;
-    margin-top: 20px;
 }
 .addImageButton{
     display: block;

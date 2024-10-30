@@ -10,7 +10,7 @@
             <span class="view_all_text" style="color: #806C61;">전체 글 보기</span>
         </div>
         <!-- 글쓰기 버튼 -->
-        <button class="write_btn" th:onclick="|location.href='/cs/write'|">글쓰기</button>
+        <button class="write_btn" style="margin-bottom: 0.5vw;" th:onclick="|location.href='/cs/write'|">글쓰기</button>
 
         <table>
             <thead>
@@ -22,7 +22,6 @@
                 <th>작성일</th>
             </tr>
             </thead>
-            <hr class="cs_list_line">
             <tbody>
             <!-- th:each로 CS 리스트 데이터를 반복해서 출력 -->
             <tr th:each="cs : ${csList}">
@@ -31,7 +30,7 @@
                     <a th:href="@{/view/{id}(id=${cs.id})}" th:text="${cs.title}">제목</a>
                 </td>
                 <td th:text="${cs.memberEmail}">작성자</td>
-                <td th:text="${cs.csStatus == 'ACCEPT' ? '접수중' : '문의완료'}"></td>
+                <td th:text="${cs.getCsStatusLabel()}"></td>
                 <td th:text="${#temporals.format(cs.regTime, 'yyyy-MM-dd')}">작성일</td>
 
             </tr>
@@ -63,8 +62,8 @@
                     <option value="content">내용</option>
                     <option value="member.email">작성자</option>
                 </select>
-                <input type="text" name="keyword" placeholder="검색어를 입력하세요" style="width: 15vw; height: 2vw;">
-                <button type="submit" style="width: 5vw; height: 2vw;">검색</button>
+                <input type="text" name="keyword" placeholder="검색어를 입력하세요">
+                <button type="submit" style="width: 5vw; height: 2.4vw;">검색</button>
             </form>
         </div>
     </div>

@@ -60,4 +60,7 @@ public class CsDTO {
 
 		return csDTO;
 	}
+	public String getCsStatusLabel() {
+		return this.csStatus == CS.SUCCESS ? "답변완료" : "접수중";
+	}
 }
