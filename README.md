@@ -30,9 +30,7 @@
   <img src="https://img.shields.io/badge/Java-007396?style=flat&logo=OpenJDK&logoColor=white"/>
   <img src="https://img.shields.io/badge/intellijidea-#F57C00?style=flat&logo=intellijidea&logoColor=#white"/>
   <img src="https://img.shields.io/badge/mariadb-#003545?style=flat&logo=mariadb&logoColor=#white"/>
-</div>
 
-<div>
 ## ✏️주요 기능
 #### 로그인
 #### 회원가입
@@ -43,7 +41,6 @@
 #### ajax 스크랩 및 찜목록 기능
 #### 검색 기능
 #### 공공데이터 API(업체찾기, 구글 맵) 
-</div>
 
 
 ## 📺화면 구성
