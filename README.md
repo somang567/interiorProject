@@ -68,8 +68,9 @@
 
 |업체조회|게시판 (업체홍보, 셀프 인테리어, 묻고 답하기)|마이페이지|
 |---|---|---|
-|![searchFirm2](https://github.com/user-attachments/assets/7d5fa659-b95e-450c-afa6-8ebd616171aa)|![boardGroup](https://github.com/user-attachments/assets/deca4c6d-5c81-4e90-a306-1af965135c5c)|![myPage](https://github.com/user-attachments/assets/ed2b571d-7f40-4a22-8631-33e5d33174ea)|
+|![searchFirm2](https://github.com/user-attachments/assets/8f0440e4-bda5-4ba3-9967-149103fe18f1)|![boardGroup](https://github.com/user-attachments/assets/deca4c6d-5c81-4e90-a306-1af965135c5c)|![myPage](https://github.com/user-attachments/assets/ed2b571d-7f40-4a22-8631-33e5d33174ea)|
 
+![searchFirm2](https://github.com/user-attachments/assets/8f0440e4-bda5-4ba3-9967-149103fe18f1)
 
 
 ## 📽️시현영상 및 PPT 링크 참조
