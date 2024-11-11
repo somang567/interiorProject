@@ -47,7 +47,7 @@ public class SecurityConfig {
                 ).hasRole("ADMIN")
                 // 2. 관리자와 사용자 권한이 필요한 URL 패턴
                 .mvcMatchers(
-                        "/megazines/user/write/new",
+//                        "/megazines/user/write/new",
                         "/board/delete/**",
                         "/board/update/**",
                         "/board/modify/**",
@@ -58,11 +58,13 @@ public class SecurityConfig {
                 // 3. 모든 사용자가 접근 가능한 URL 패턴 (로그인 불필요)
                 .mvcMatchers(
                         "/",
+                        "/megazines/user/write/new",
                         "/members/**",
                         "/board/list/**",
                         "/board/write/**",
                         "/board/view/**",
                         "/board/writedo/**",
+                        "/selfinterior/list",
                         "/selfinterior/list/**",
                         "/selfinterior/view/**",
                         "/img/**",

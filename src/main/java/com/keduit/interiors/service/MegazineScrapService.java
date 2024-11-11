@@ -29,7 +29,7 @@ public class MegazineScrapService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원이 존재하지 않습니다. ID: " + memberId));
         Megazine megazine = megazineRepository.findById(megazineId)
-                .orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다. ID: " + megazineId));
+                .orElseThrow(() -> new EntityNotFoundException("매거진이 존재하지 않습니다. ID: " + megazineId));
 
         // 이미 스크랩이 존재하는지 확인
         if (megazineScrapRepository.existsByMemberAndMegazine(member, megazine)) {
@@ -51,7 +51,7 @@ public class MegazineScrapService {
         Megazine megazine = megazineRepository.findById(megazineId)
                 .orElseThrow(() -> new EntityNotFoundException("상품이 존재하지 않습니다. ID: " + megazineId));
 
-        // ProductScrap 엔티티 삭제
+        // MegazineScrap 엔티티 삭제
         megazineScrapRepository.deleteByMemberAndMegazine(member, megazine);
     }
 

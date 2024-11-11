@@ -436,6 +436,7 @@
             height:3vw;
             /*background-color: #28a745;*/
             margin:3vw auto;
+            background-image: url("../../static/img/next2.png");
         }
         .btn{
             display: flex;
@@ -550,7 +551,7 @@
                         >
                     </a>
 
-                    <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}" >
+                    <th:block th:each="page: ${#numbers.sequence(startPage, endPage)}">
                         <a th:if="${page != nowPage}" th:href="@{/megazines/list(page = ${page - 1}, searchKeyword = ${param.searchKeyword})}" th:text="${page}" class="btn"></a>
                         <strong th:if="${page == nowPage}" th:text="${page}" style="color: red" class="btn"></strong>
                     </th:block>

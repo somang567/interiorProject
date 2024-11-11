@@ -501,7 +501,11 @@
 
       // Previous 버튼 (맨 처음으로)
       const firstButton = document.createElement('button');
-      firstButton.textContent = 'Prev';
+      const img = document.createElement('img');
+      img.src = '../../static/img/next2.png'; // 여기에 이미지 링크를 넣으세요.
+      img.alt = '이전 버튼 이미지'; // 이미지의 대체 텍스트
+
+      firstButton.textContent = 'Prev';S
       firstButton.disabled = currentPage === 1;       // 첫 페이지일 때 비활성화
       firstButton.onclick = () => {
         currentPage = 1;
