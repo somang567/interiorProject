@@ -50,7 +50,7 @@ public class SelfInteriorController {
             Member member = memberService.findByEmail(principal.getName());
             model.addAttribute("authorName", member.getName());
         }
-        return "selfinteriors/selfwrite";
+        return "selfInteriors/selfwrite";
     }
 
     // 게시글 작성 처리
@@ -107,7 +107,7 @@ public class SelfInteriorController {
             model.addAttribute("endPage", endPage);
             model.addAttribute("totalPages", list.getTotalPages());
 
-            return "selfinteriors/selflist";
+            return "selfInteriors/selflist";
         } catch (Exception e) {
             logger.error("게시글 목록 조회 중 오류 발생: ", e);
             model.addAttribute("errorMessage", "게시글 목록 조회 중 오류가 발생했습니다: " + e.getMessage());
@@ -138,7 +138,7 @@ public class SelfInteriorController {
                 model.addAttribute("currentUserName", member.getName());
             }
 
-            return "selfinteriors/selfview";
+            return "selfInteriors/selfview";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "게시글 조회 중 오류가 발생했습니다: " + e.getMessage());
             return "error/500"; // 서버 오류 페이지
@@ -157,7 +157,7 @@ public class SelfInteriorController {
             SelfInteriorDTO selfInteriorDTO = selfInteriorService.view(id);
 
             model.addAttribute("selfinterior", selfInteriorDTO);
-            return "selfinteriors/selfmodify";
+            return "selfInteriors/selfmodify";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "게시글 수정 폼 로딩 중 오류가 발생했습니다: " + e.getMessage());
             return "error/500"; // 서버 오류 페이지
