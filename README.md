@@ -77,87 +77,346 @@
   
 
 <h1>주요 기능</h1>
-<ul> 로그인
-  <li>사용자는 회원가입된 사용자/관리자 게정으로 로그인이 가능합니다.</li>
+<ul>개인 블로그 크롤링 Data Read
+  <li>크롤링한 데이터를 SpringBoot 엔티티를 하나 만들어 MySQL Database에 저장하였습니다.</li>
 </ul>
-<ul> 회원가입
-  <li>비회원인 사용자는 홈페이지의 이용목적에 따라 사용자와 관리자(업체)로 회원가입 할 수 있습니다.</li>
+<ul>JSOUP 크롤링 라이브러리 사용 
+  <li>정적인 데이터를 사용자에게 보다 빠르게 보여지기 위해 JSOUP 라이브러리를 사용하여 크롤링을 진행하였습니다. 135개의 블로그 중 총 20개의 블로그를 가져올 수 있도록 구성하였습니다.</li>
 </ul>
-<ul> 회원정보 수정
-  <li>로그인된 사용자는 자신의 정보를 수정할 수 있습니다.</li>
-</ul>
-<ul> 상품찾기
-  <li>유저는 등록된 각 인테리어자재소품들을 찾아볼 수 있습니다.</li>
-  <li>관리자는 상품을 등록 수정 삭제를 할 수 있습니다.</li>
-  <li>유저와 사용자 모두 자신의 게시물이 아니면 조회만 가능합니다.</li>
-</ul>
-<ul> *Ajax 댓글 기능*
-  <li>사용자는 댓글을 작성할 수 있습니다.</li>
-  <li>상품 문의게시판의 경우 관리자만 댓글등록이 가능합니다.</li>
-</ul>
-<ul> *Ajax 스크랩 및 찜목록 기능*
-  <li>회원은 매거진을 스크랩하여 마이페이지에서 조회가 가능합니다.</li>
-  <li>회원은 상품을 찜하여 마이페이지에서 조회가 가능합니다.</li>
-</ul>
-<ul> *검색*
-  <li>상품찾기에서의 검색은 상품명,상품 상세내용,작성자로 구분하여 검색 가능합니다.</li>
-  <li>매거진 , 게시판탭에서는 제목 , 제목+내용등 키워드로 검색이 가능합니다.</li>
-</ul>
-<ul> 공공데이터 API(업체찾기, 구글 맵)
-  <li>사용자는 각 도시별 시/군/구로 각 상품업체를 조회할 수 있습니다.</li>
+<ul> 페이지네이션
+  <li>데이터베이스에 저장된 크롤링 데이터를 Ajax GET 요청으로 읽어와서 태그를 동적으로 생성하여 화면에 보이도록 하였고 페이지네이션 함수를 작성하여 함께 화면에 보이도록 구성하였습니다.
+    <br>한 한 화면에 4개의 블로그가 보이도록 구성하였고 총 5페이지의 페이지 번호가 보이도록 하였습니다. 왼쪽 및 오른쪽 화살표로 화면 이동이 가능합니다.</li>
 </ul>
 
-
-## 📺화면 구성
-|메인페이지|상품보기|팁 앤 매거진|
-|------|---|---|
-|![main](https://github.com/user-attachments/assets/6935f248-f2f3-4e04-be0a-c36b83dbe411)|![product](https://github.com/user-attachments/assets/98397960-d54f-4852-9d23-5099b8eecd83)|![tipNmegazine](https://github.com/user-attachments/assets/a684f125-3cf7-415c-8444-146eb942e668)|
-
-
-|업체조회|게시판 (업체홍보, 셀프 인테리어, 묻고 답하기)|마이페이지|
-|---|---|---|
-|![searchFirm2](https://github.com/user-attachments/assets/8f0440e4-bda5-4ba3-9967-149103fe18f1)|![boardGroup](https://github.com/user-attachments/assets/deca4c6d-5c81-4e90-a306-1af965135c5c)|![myPage](https://github.com/user-attachments/assets/ed2b571d-7f40-4a22-8631-33e5d33174ea)|
-
-
-## 📽️시현영상 및 PPT 링크 참조
-https://drive.google.com/drive/folders/1fNqljigny3Kaieq7AMtRs83iW48MsGyU?usp=drive_link
 
 ## 프로젝트 구조
 ```
-📦src
- ┣ 📂main
- ┃ ┣ 📂java
- ┃ ┃ ┗ 📂com
- ┃ ┃ ┃ ┗ 📂keduit
- ┃ ┃ ┃ ┃ ┗ 📂interiors
- ┃ ┃ ┃ ┃ ┃ ┣ 📂config
- ┃ ┃ ┃ ┃ ┃ ┣ 📂constant
- ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
- ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
- ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
- ┃ ┃ ┃ ┃ ┃ ┣ 📂exception
- ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
- ┃ ┃ ┃ ┃ ┃ ┣ 📂service
- ┃ ┣ 📂resources
- ┃ ┃ ┣ 📂static
- ┃ ┃ ┃ ┣ 📂css
- ┃ ┃ ┃ ┗ 📂img
- ┃ ┃ ┣ 📂templates
- ┃ ┃ ┃ ┣ 📂boards
- ┃ ┃ ┃ ┣ 📂cs
- ┃ ┃ ┃ ┣ 📂fragments
- ┃ ┃ ┃ ┣ 📂layout
- ┃ ┃ ┃ ┣ 📂megazine
- ┃ ┃ ┃ ┣ 📂member
- ┃ ┃ ┃ ┣ 📂product
- ┃ ┃ ┃ ┣ 📂search
- ┣ 📂test
- ┃ ┗ 📂java
- ┃ ┃ ┗ 📂com
- ┃ ┃ ┃ ┗ 📂keduit
- ┃ ┃ ┃ ┃ ┗ 📂interiors
- ┃ ┃ ┃ ┃ ┃ ┗ 📜InteriorsApplicationTests.java
- ┗ 📜.DS_Store
+D:.
+│  .gitattributes
+│  .gitignore
+│  build.gradle
+│  gradlew
+│  gradlew.bat
+│  HELP.md
+│  README.md
+│  settings.gradle
+│  
+├─.gradle
+│  │  file-system.probe
+│  │  
+│  ├─8.11.1
+│  │  │  gc.properties
+│  │  │  
+│  │  ├─checksums
+│  │  │      checksums.lock
+│  │  │      md5-checksums.bin
+│  │  │      sha1-checksums.bin
+│  │  │      
+│  │  ├─executionHistory
+│  │  │      executionHistory.bin
+│  │  │      executionHistory.lock
+│  │  │      
+│  │  ├─expanded
+│  │  ├─fileChanges
+│  │  │      last-build.bin
+│  │  │      
+│  │  ├─fileHashes
+│  │  │      fileHashes.bin
+│  │  │      fileHashes.lock
+│  │  │      resourceHashesCache.bin
+│  │  │      
+│  │  └─vcsMetadata
+│  ├─buildOutputCleanup
+│  │      buildOutputCleanup.lock
+│  │      cache.properties
+│  │      outputFiles.bin
+│  │      
+│  └─vcs-1
+│          gc.properties
+│          
+├─.idea
+│  │  .gitignore
+│  │  compiler.xml
+│  │  dbnavigator.xml
+│  │  gradle.xml
+│  │  jarRepositories.xml
+│  │  misc.xml
+│  │  modules.xml
+│  │  uiDesigner.xml
+│  │  vcs.xml
+│  │  workspace.xml
+│  │  
+│  └─modules
+│          Resume.main.iml
+│          
+├─build
+│  │  resolvedMainClassName
+│  │  
+│  ├─classes
+│  │  └─java
+│  │      ├─main
+│  │      │  └─com
+│  │      │      └─eco
+│  │      │          └─Resume
+│  │      │              │  ResumeApplication.class
+│  │      │              │  
+│  │      │              ├─constant
+│  │      │              │      Role.class
+│  │      │              │      
+│  │      │              ├─controller
+│  │      │              │      BlogApiController.class
+│  │      │              │      MainController.class
+│  │      │              │      TestController.class
+│  │      │              │      
+│  │      │              ├─dto
+│  │      │              │      BlogsDTO$BlogsDTOBuilder.class
+│  │      │              │      BlogsDTO.class
+│  │      │              │      BlogsScrapDTO.class
+│  │      │              │      ImageUrlRequest.class
+│  │      │              │      
+│  │      │              ├─entity
+│  │      │              │      BaseEntity.class
+│  │      │              │      BaseTimeEntity.class
+│  │      │              │      Blogs.class
+│  │      │              │      
+│  │      │              ├─initializer
+│  │      │              │      DataInitializer.class
+│  │      │              │      
+│  │      │              ├─repository
+│  │      │              │      BlogsRepository.class
+│  │      │              │      
+│  │      │              ├─restTemplate
+│  │      │              │      AppConfig.class
+│  │      │              │      
+│  │      │              └─service
+│  │      │                      BlogsService.class
+│  │      │                      ExternalService.class
+│  │      │                      
+│  │      └─test
+│  │          └─com
+│  │              └─eco
+│  │                  └─Resume
+│  │                          CrawlingServiceTest.class
+│  │                          ResumeApplicationTests.class
+│  │                          
+│  ├─generated
+│  │  └─sources
+│  │      ├─annotationProcessor
+│  │      │  └─java
+│  │      │      ├─main
+│  │      │      └─test
+│  │      └─headers
+│  │          └─java
+│  │              ├─main
+│  │              └─test
+│  ├─libs
+│  │      Resume-0.0.1-SNAPSHOT-plain.jar
+│  │      Resume-0.0.1-SNAPSHOT.jar
+│  │      
+│  ├─reports
+│  │  └─tests
+│  │      └─test
+│  │          │  index.html
+│  │          │  
+│  │          ├─classes
+│  │          │      com.eco.Resume.CrawlingServiceTest.html
+│  │          │      com.eco.Resume.ResumeApplicationTests.html
+│  │          │      
+│  │          ├─css
+│  │          │      base-style.css
+│  │          │      style.css
+│  │          │      
+│  │          ├─js
+│  │          │      report.js
+│  │          │      
+│  │          └─packages
+│  │                  com.eco.Resume.html
+│  │                  
+│  ├─resources
+│  │  └─main
+│  │      │  application.properties
+│  │      │  
+│  │      ├─driver
+│  │      ├─static
+│  │      │  ├─css
+│  │      │  │      common.css
+│  │      │  │      footer.css
+│  │      │  │      header.css
+│  │      │  │      information.css
+│  │      │  │      main.css
+│  │      │  │      skill.css
+│  │      │  │      
+│  │      │  ├─img
+│  │      │  │      artInHome.png
+│  │      │  │      back.png
+│  │      │  │      default-img.png
+│  │      │  │      ecoLogo.png
+│  │      │  │      faceImg.png
+│  │      │  │      next.png
+│  │      │  │      plasticWorld.png
+│  │      │  │      publicApi.png
+│  │      │  │      tourUs.png
+│  │      │  │      
+│  │      │  └─javascript
+│  │      │          blogPagination.js
+│  │      │          information.js
+│  │      │          skill.js
+│  │      │          
+│  │      └─templates
+│  │          │  main.html
+│  │          │  
+│  │          ├─fragments
+│  │          │      footer.html
+│  │          │      header.html
+│  │          │      
+│  │          ├─layout
+│  │          │      layout.html
+│  │          │      
+│  │          └─member
+│  │                  login.html
+│  │                  memberForm.html
+│  │                  memberRegisterForm.html
+│  │                  myPage.html
+│  │                  
+│  ├─test-results
+│  │  └─test
+│  │      │  TEST-com.eco.Resume.CrawlingServiceTest.xml
+│  │      │  TEST-com.eco.Resume.ResumeApplicationTests.xml
+│  │      │  
+│  │      └─binary
+│  │              output.bin
+│  │              output.bin.idx
+│  │              results.bin
+│  │              
+│  └─tmp
+│      ├─bootJar
+│      │      MANIFEST.MF
+│      │      
+│      ├─compileJava
+│      │      previous-compilation-data.bin
+│      │      
+│      ├─compileTestJava
+│      │      previous-compilation-data.bin
+│      │      
+│      ├─jar
+│      │      MANIFEST.MF
+│      │      
+│      └─test
+├─gradle
+│  └─wrapper
+│          gradle-wrapper.jar
+│          gradle-wrapper.properties
+│          
+└─src
+    ├─main
+    │  ├─java
+    │  │  └─com
+    │  │      └─eco
+    │  │          └─Resume
+    │  │              │  ResumeApplication.java
+    │  │              │  
+    │  │              ├─config
+    │  │              │      CustomAuthenticationEntryPoint.java
+    │  │              │      SecurityConfig.java
+    │  │              │      
+    │  │              ├─constant
+    │  │              │      Role.java
+    │  │              │      
+    │  │              ├─controller
+    │  │              │      BlogApiController.java
+    │  │              │      MainController.java
+    │  │              │      MemberController.java
+    │  │              │      TestController.java
+    │  │              │      
+    │  │              ├─driver
+    │  │              │      WebDriverConfig.java
+    │  │              │      
+    │  │              ├─dto
+    │  │              │      BlogsDTO.java
+    │  │              │      BlogsScrapDTO.java
+    │  │              │      ImageUrlRequest.java
+    │  │              │      MemberDTO.java
+    │  │              │      
+    │  │              ├─entity
+    │  │              │      BaseEntity.java
+    │  │              │      BaseTimeEntity.java
+    │  │              │      Blogs.java
+    │  │              │      BlogsScrap.java
+    │  │              │      Member.java
+    │  │              │      
+    │  │              ├─initializer
+    │  │              │      DataInitializer.java
+    │  │              │      
+    │  │              ├─repository
+    │  │              │      BlogsRepository.java
+    │  │              │      BlogsScrapRepository.java
+    │  │              │      MemberRepository.java
+    │  │              │      
+    │  │              ├─restTemplate
+    │  │              │      AppConfig.java
+    │  │              │      
+    │  │              └─service
+    │  │                      BlogCrawlingService.java
+    │  │                      BlogScrapService.java
+    │  │                      BlogsService.java
+    │  │                      CrawlingExample.java
+    │  │                      ExternalService.java
+    │  │                      MemberService.java
+    │  │                      
+    │  └─resources
+    │      │  application.properties
+    │      │  
+    │      ├─driver
+    │      ├─static
+    │      │  ├─css
+    │      │  │      common.css
+    │      │  │      footer.css
+    │      │  │      header.css
+    │      │  │      information.css
+    │      │  │      main.css
+    │      │  │      skill.css
+    │      │  │      
+    │      │  ├─img
+    │      │  │      artInHome.png
+    │      │  │      back.png
+    │      │  │      default-img.png
+    │      │  │      ecoLogo.png
+    │      │  │      faceImg.png
+    │      │  │      next.png
+    │      │  │      plasticWorld.png
+    │      │  │      publicApi.png
+    │      │  │      tourUs.png
+    │      │  │      
+    │      │  └─javascript
+    │      │          blogPagination.js
+    │      │          information.js
+    │      │          skill.js
+    │      │          
+    │      └─templates
+    │          │  main.html
+    │          │  
+    │          ├─fragments
+    │          │      footer.html
+    │          │      header.html
+    │          │      
+    │          ├─layout
+    │          │      layout.html
+    │          │      
+    │          └─member
+    │                  login.html
+    │                  memberForm.html
+    │                  memberRegisterForm.html
+    │                  myPage.html
+    │                  
+    └─test
+        └─java
+            └─com
+                └─eco
+                    └─Resume
+                            CrawlingServiceTest.java
+                            ResumeApplicationTests.java
+                            
+
 ```
 
 
